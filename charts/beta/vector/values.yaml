@@ -1,0 +1,176 @@
+# Default values for vector
+
+## Sub-chart value overrides
+vector:
+  # role -- Run the aggregator as a Deployment instead of a Statefulset.
+  role: "Stateless-Aggregator"
+
+  # fullnameOverride -- Application name for all resources.
+  fullnameOverride: vector-aggregator
+
+  # sinks -- Sinks to push logs to
+  sinks: {}
+
+  # transforms -- Transformations to apply to logs before sending to the sinks.
+  # in is the default route transform that will categorize events ingested from
+  # the upstream daemonset based on the vector .source_type field
+  # https://vector.dev/docs/reference/configuration/global-options/#log_schema.source_type_key
+  # https://vector.dev/docs/reference/configuration/transforms/route/
+  transforms:
+    in:
+      type: route
+      inputs:
+        - daemonset
+      reroute_unmatched: false
+      route:
+        kube-pods: .source_type == "kubernetes_logs"
+
+  # env -- Set environment variables for Vector containers.
+  env: []
+
+  # logLevel -- Log level for Vector.
+  logLevel: "info"
+
+  # commonLabels - Labels to add to all created resources.
+  commonLabels:
+    apollo-app: vector-aggregator
+
+  # podLabels -- Labels to be set on vector pods.
+  podLabels:
+    apollo-app: vector-aggregator
+
+  # replicas -- Number of pods to create.
+  replicas: 2
+
+  # autoscaling -- Configures a HorizontalPodAutoscaler for Vector
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+
+  # podDisruptionBudget -- Configures a PodDisruptionBudget for vector.
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+  # existingConfigMaps -- List of ConfigMaps to use for Vector's configuration.
+  existingConfigMaps:
+    - vector-aggregator-config
+
+  # dataDir -- Path for vectors data.
+  dataDir: /vector-data-dir
+
+  # extraVolumeMounts -- Additional Volumes to mount into vector containers.
+  extraVolumeMounts:
+    - name: cert-secret-volume
+      mountPath: "/mnt/secrets/certs"
+    - name: tls-external-ca-bundle
+      mountPath: "/etc/ssl/rubix-ca"
+
+  # extraVolumes -- Additional Volumes to use with vector pods.
+  extraVolumes:
+    - name: cert-secret-volume
+      secret:
+        secretName: "cert-vector-aggregator"
+    - name: tls-external-ca-bundle
+      configMap:
+        name: "tls-external-ca-pem-bundle"
+        items:
+          - key: ca.pem
+            path: ca.pem
+
+  # containerPorts -- Ports to use for vector containers.
+  # These map 1:1 with the existingConfigMap ports for the API and daemonset respectively.
+  containerPorts:
+    - name: api
+      protocol: TCP
+      containerPort: 8686
+    - name: vector
+      protocol: TCP
+      containerPort: 6000
+
+  # livenessProbe - liveness probe that queries the aggregator API health endpoint
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: api
+
+  # readinessProbe - readiness probe that queries the aggregator API health endpoint
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: api
+
+  # service -- Configuration for the vector service resource.
+  # Exposes the default port for the daemonset source to push logs to and adds the TLS cert annotation for cert generation.
+  service:
+    ports:
+      - name: vector
+        port: 6000
+        protocol: TCP
+    annotations:
+      com.palantir.rubix.service/pod-cert: "{}"
+
+  # serviceAccount -- Create a ServiceAccount with the specific name.
+  serviceAccount:
+    create: true
+    name: vector-aggregator
+
+  # serviceHeadless -- Configuration for vector's headless service.
+  serviceHeadless:
+    enabled: false
+
+  # resources -- Set vector's resource requests/limits
+  resources:
+    requests:
+      cpu: 1
+      memory: 512Mi
+    #limits:
+    #  cpu: 200m
+    #  memory: 256Mi
+
+  # podSecurityContext -- Ensures the pod is not run as root.
+  podSecurityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+  # securityContext -- SecurityContext for vector containers to ensure it is not run as root.
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+
+  # affinity -- Configures the affinity for vector pods.
+  # Ensures that workloads are mapped to nodes in the fedstart instance group
+  # and ensures pods are spread across different nodes.
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                apollo-app: vector-aggregator
+            topologyKey: topology.kubernetes.io/zone
+          weight: 100
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: apollo-app
+                operator: In
+                values:
+                  - vector-aggregator
+          topologyKey: kubernetes.io/hostname
+
