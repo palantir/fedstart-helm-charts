@@ -1,0 +1,118 @@
+# Default values for prometheus.
+
+## Subchart value overrides
+prometheus:
+  serverFiles:
+    prometheus.yml:
+      scrape_configs: []
+
+  server:
+    fullnameOverride: prometheus
+
+    statefulSet:
+      enabled: true
+
+    persistentVolume:
+      enabled: true
+      size: 100Gi
+
+    resources:
+      #limits:
+      #  cpu: 500m
+      #  memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+
+    extraFlags:
+      - web.config.file=/etc/config/apollo/prometheus-web-config.yml
+      - web.enable-remote-write-receiver
+      # Retention size here should be kept consistent with PVC since. Make retention 80% of PVC size as retention based
+      # on size is only done on WAL truncation
+      - storage.tsdb.retention.size=80GB
+      - log.format=json
+      - log.level=info
+
+    probeScheme: HTTPS
+    extraConfigmapMounts:
+      - name: prometheus-apollo-config
+        mountPath: /etc/config/apollo
+        configMap: prometheus-apollo-config
+
+
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile: null
+
+    podLabels:
+      apollo-app: prometheus
+
+  alertmanager:
+    enabled: false
+
+    replicaCount: 1
+
+    podLabels:
+      apollo-app: prometheus
+
+    securityContext:
+      runAsGroup: null
+      runAsUser: null
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+
+    podSecurityContext:
+      runAsUser: null
+      runAsNonRoot: true
+      runAsGroup: null
+      fsGroup: null
+      seccompProfile:
+        type: RuntimeDefault
+
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+
+    extraArgs:
+      web.config.file: /etc/config/apollo/alertmanager-web-config.yml
+      cluster.tls-config: /etc/config/apollo/alertmanager-cluster-config.yml
+      log.format: json
+      log.level: info
+
+    extraVolumes:
+      - name: alertmanager-apollo-config
+        configMap:
+          name: alertmanager-apollo-config
+
+    extraVolumeMounts:
+      - name: alertmanager-apollo-config
+        mountPath: /etc/config/apollo
+
+    livenessProbe:
+      httpGet:
+        scheme: HTTPS
+
+    readinessProbe:
+      httpGet:
+        scheme: HTTPS
+
+  configmapReload:
+    prometheus:
+      enabled: false
+
+  kube-state-metrics:
+    enabled: false
+
+  prometheus-node-exporter:
+    enabled: false
+
+  prometheus-pushgateway:
+    enabled: false

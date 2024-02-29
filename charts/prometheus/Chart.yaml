@@ -1,0 +1,24 @@
+apiVersion: v2
+name: prometheus
+description: A Prometheus chart that can be used with Palantir FedStart
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# version and appVersion will be overwritten with correct values by the godel helm plugin
+version: 0.0.0
+appVersion: "0.0.0"
+
+# Don't expclitly declare dependencies because of weird helm chart merging behavior:
+# https://github.com/helm/helm/issues/9027
+# dependencies:
+# - name: prometheus
+#   version: "25.1.0"
+#   charts: prometheus
