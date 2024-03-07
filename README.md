@@ -10,8 +10,8 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 
 ## Versioning
 
-This repository uses chart specific labels to tag versions of each chart. The label structure should following the following convention: `<chart-name>/v<oss-version-number>-<fedstart-version-number`. Ex: `prometheus/v25.10.0-0002`, where:
+This repository uses chart specific labels to tag versions of each chart. The label structure should following the following convention: `<chart-name>/v<oss-version-number><fedstart-version-number>`. Ex: `prometheus/v25.10.3002`, where:
 
 * `chart-name` is the name of the Helm Chart, and matches the `charts/<chart-name>` subdirectory. Ie: `prometheus`
 * `oss-version-number` is the Chart version number in the open source subchart; ie., the `version` found in `charts/prometheus/charts/prometheus/Chart.yaml`
-* `fedstart-version-number` is the version associated with the version of the outer chart found in `charts/<chart-name>` and should be the `version` found in the `chart/<chart-name>/Chart.yaml`. This number should be represented as a monotonically increasing integer with 4 characters of padding.
+* `fedstart-version-number` is the version associated with the version of the outer chart found in `charts/<chart-name>` and should be the `version` found in the `chart/<chart-name>/Chart.yaml`. This number should be represented as a monotonically increasing integer with at most 3 digits of padding. The digits used for this version will be reduced if the `<oss-version-number>` uses more than one digit, such that the `<oss-version-number><fedstart-version-number>` portion is always exactly 4 digits.
