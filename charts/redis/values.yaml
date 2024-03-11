@@ -1,0 +1,57 @@
+redis:
+  networkPolicy:
+  # we turn network policies off by default as the network policy included does not adhere to the minimum
+  # requirements of Rubix-auth, in that every egress statement must inclued at least one To: block.
+    enabled: false
+  master:
+    affinity:
+      nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: com.palantir.rubix/instance-group
+                  operator: In
+                  values:
+                  - fedstart
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  rubix-app: "{{ $.Release.Name }}-master"
+              topologyKey: topology.kubernetes.io/zone
+            weight: 100
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: rubix-app
+                  operator: In
+                  values:
+                    - "{{ $.Release.Name }}-master"
+            topologyKey: kubernetes.io/hostname
+  replica:
+    affinity:
+      nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: com.palantir.rubix/instance-group
+                  operator: In
+                  values:
+                  - fedstart
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  rubix-app: "{{ $.Release.Name }}-replica"
+              topologyKey: topology.kubernetes.io/zone
+            weight: 100
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: rubix-app
+                  operator: In
+                  values:
+                    - "{{ $.Release.Name }}-replica"
+            topologyKey: kubernetes.io/hostname

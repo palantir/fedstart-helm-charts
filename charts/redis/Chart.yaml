@@ -1,0 +1,23 @@
+apiVersion: v2
+name: redis
+description: A Redis chart that can be used with Palantir FedStart
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+version: 18.19.2007
+
+# Don't expclitly declare dependencies because of weird helm chart merging behavior:
+# https://github.com/helm/helm/issues/9027
+dependencies:
+  - name: redis
+    version: "18.19.2"
+    charts: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
