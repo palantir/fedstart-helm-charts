@@ -14,7 +14,9 @@ type: application
 
 version: 18.19.2007
 
-# Don't expclitly declare dependencies because of weird helm chart merging behavior:
+# Be aware that using helm dependencies has undesirable side affects, where you cannot remove
+# subchart config keys by setting them to null. If this type of configuration override is necessary,
+# comment out the dependencies block below. See the following github issue for more details:
 # https://github.com/helm/helm/issues/9027
 dependencies:
   - name: redis
