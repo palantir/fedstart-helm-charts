@@ -77,9 +77,11 @@ data:
 {{- else }}
       - kubernetes_sd_configs:
           - role: pod
+        scheme: https
         tls_config:
-          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          ca_file: /mnt/secrets/certs/ca.crt
+          cert_file: /mnt/secrets/certs/tls.crt
+          key_file: /mnt/secrets/certs/tls.key
         {{- if $root.Values.alertmanager.prefixURL }}
         path_prefix: {{ $root.Values.alertmanager.prefixURL }}
         {{- end }}

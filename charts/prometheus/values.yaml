@@ -47,13 +47,38 @@ prometheus:
         - ALL
       seccompProfile: null
 
+    service:
+      annotations:
+        com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":1}'
+
     podLabels:
       apollo-app: prometheus
+
+    extraVolumeMounts:
+      - name: cert-secret-volume
+        mountPath: "/mnt/secrets/certs"
+      - name: rubix-ca-bundle
+        mountPath: "/etc/ssl/rubix-ca"
+
+    extraVolumes:
+      - name: cert-secret-volume
+        secret:
+          secretName: cert-prometheus-1
+      - name: rubix-ca-bundle
+        configMap:
+          name: "tls-external-ca-pem-bundle"
+          items:
+            - key: ca.pem
+              path: ca.pem
 
   alertmanager:
     enabled: false
 
     replicaCount: 1
+
+    service:
+      annotations:
+        com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":1}'
 
     podLabels:
       apollo-app: prometheus
@@ -91,10 +116,23 @@ prometheus:
       - name: alertmanager-apollo-config
         configMap:
           name: alertmanager-apollo-config
+      - name: cert-secret-volume
+        secret:
+          secretName: cert-prometheus-alertmanager-1
+      - name: rubix-ca-bundle
+        configMap:
+          name: "tls-external-ca-pem-bundle"
+          items:
+            - key: ca.pem
+              path: ca.pem
 
     extraVolumeMounts:
       - name: alertmanager-apollo-config
         mountPath: /etc/config/apollo
+      - name: cert-secret-volume
+        mountPath: "/mnt/secrets/certs"
+      - name: rubix-ca-bundle
+        mountPath: "/etc/ssl/rubix-ca"
 
     livenessProbe:
       httpGet:

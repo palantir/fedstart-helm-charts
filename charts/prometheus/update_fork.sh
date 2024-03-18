@@ -3,7 +3,7 @@ set -euo pipefail
 
 # VARIABLES
 GITREPO="https://github.com/prometheus-community/helm-charts.git"
-GITTAG="prometheus-25.15.0"
+GITTAG="prometheus-25.17.0"
 
 # GITREPO_SUBCHART_PATHS and SUBCHART_DIRS are two lists that are directly related. The lengths and indices of entries
 # should correspond with one another.
