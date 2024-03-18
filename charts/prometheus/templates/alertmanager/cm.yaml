@@ -7,35 +7,44 @@ metadata:
 data:
   alertmanager-web-config.yml: |
     tls_server_config:
-      cert_file: /mnt/secrets/certs/cert.pem
-      key_file: /mnt/secrets/certs/key.pem
-      client_ca_file: /etc/ssl/rubix-ca/ca.pem
+      cert_file: /mnt/secrets/certs/tls.crt
+      key_file: /mnt/secrets/certs/tls.key
+      client_ca_file: /mnt/secrets/certs/ca.crt
       client_auth_type: VerifyClientCertIfGiven
       # required because Go's default for server is TLS v1.0 https://pkg.go.dev/crypto/tls#Config:~:text=and%20TLS%201.0%20when%20acting%20as%20a%20server
       min_version: "TLS12"
       cipher_suites:
-        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        - TLS_CHACHA20_POLY1305_SHA256
+        - TLS_AES_128_GCM_SHA256
+        - TLS_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
         - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        - TLS_RSA_WITH_AES_256_GCM_SHA384
-        - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
-        - TLS_RSA_WITH_AES_256_CBC_SHA
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
   alertmanager-cluster-config.yml: |
     tls_client_config:
-      ca_file: /etc/ssl/rubix-ca/ca.pem
-      cert_file: /mnt/secrets/certs/cert.pem
+      ca_file: /mnt/secrets/certs/ca.crt
+      cert_file: /mnt/secrets/certs/tls.crt
       insecure_skip_verify: false
-      key_file: /mnt/secrets/certs/key.pem
+      key_file: /mnt/secrets/certs/tls.key
+      server_name: prometheus-alertmanager.{{ .Release.Namespace }}.svc
     tls_server_config:
-      cert_file: /mnt/secrets/certs/cert.pem
-      key_file: /mnt/secrets/certs/key.pem
-      client_ca_file: /etc/ssl/rubix-ca/ca.pem
+      cert_file: /mnt/secrets/certs/tls.crt
+      key_file: /mnt/secrets/certs/tls.key
+      client_ca_file: /mnt/secrets/certs/ca.crt
       client_auth_type: RequireAndVerifyClientCert
       # required because Go's default for server is TLS v1.0 https://pkg.go.dev/crypto/tls#Config:~:text=and%20TLS%201.0%20when%20acting%20as%20a%20server
       min_version: "TLS12"
       cipher_suites:
-        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        - TLS_CHACHA20_POLY1305_SHA256
+        - TLS_AES_128_GCM_SHA256
+        - TLS_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
         - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        - TLS_RSA_WITH_AES_256_GCM_SHA384
-        - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
-        - TLS_RSA_WITH_AES_256_CBC_SHA
-
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+  apolloenvironmentid.txt: {{ .Values.apollo.environment.id }}
