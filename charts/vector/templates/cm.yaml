@@ -23,9 +23,14 @@ data:
           ca_file: "/etc/ssl/rubix-ca/ca.pem"
           crt_file: "/mnt/secrets/certs/tls.crt"
           key_file: "/mnt/secrets/certs/tls.key"
-    {{- with .Values.vector.sinks }}
     sinks:
-      {{- toYaml . | nindent 6 }}
+    {{- if .Values.vector.sinks }}
+      {{- toYaml .Values.vector.sinks | nindent 6 }}
+    {{- else }}
+      void:
+        type: blackhole
+        inputs:
+          - "*"
     {{- end }}
     {{- with .Values.vector.transforms }}
     transforms:

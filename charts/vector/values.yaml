@@ -124,7 +124,7 @@ vector:
   # resources -- Set vector's resource requests/limits
   resources:
     requests:
-      cpu: 1000m
+      cpu: 1
       memory: 512Mi
     #limits:
     #  cpu: 200m
