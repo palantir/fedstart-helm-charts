@@ -1,0 +1,6 @@
+dependencies:
+- name: vector
+  repository: ""
+  version: 0.31.1
+digest: sha256:be5c525d3d6e54a2370e3f2b2665c4789deb7d6e2f3cfbe9e39928e169650fdc
+generated: "2024-03-14T16:35:01.663587-07:00"

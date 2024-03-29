@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vector-aggregator-config
+  labels:
+    rubix-app: vector
+data:
+  aggregator.yaml: |
+    data_dir: {{ .Values.vector.dataDir }}
+    expire_metrics_secs: 60
+    api:
+      enabled: true
+      address: 0.0.0.0:8686
+      playground: false
+    # https://vector.dev/docs/reference/configuration/sources/vector/
+    sources:
+      daemonset:
+        type: vector
+        address: 0.0.0.0:6000
+        version: "2"
+        tls:
+          enabled: true
+          ca_file: "/etc/ssl/rubix-ca/ca.pem"
+          crt_file: "/mnt/secrets/certs/tls.crt"
+          key_file: "/mnt/secrets/certs/tls.key"
+    sinks:
+    {{- if .Values.vector.sinks }}
+      {{- toYaml .Values.vector.sinks | nindent 6 }}
+    {{- else }}
+      void:
+        type: blackhole
+        inputs:
+          - "*"
+    {{- end }}
+    {{- with .Values.vector.transforms }}
+    transforms:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+---
