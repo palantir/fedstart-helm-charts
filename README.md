@@ -30,13 +30,16 @@ helm push ./build/<packaged-helm-chart> <helm-repository-url>
 ```
 
 ### Example: Using Amazon Elastic Container Registry (ECR)
+
 The following example packages the [vector](./charts/vector) helm-chart, pushes it to ECR, and creates a new product-release in Apollo.
 
 Pre-requisites:
+
 1. An ECR registry exists with a repository named `vector`
    1. We will use `12345.dkr.ecr.us-east-1.amazonaws.com` where `accountID=12345` and `region=us-east-1`
 2. `helm`, `aws`, and `apollo-cli` are on the users `$PATH`
 3. `apollo-cli` is configured for the correct Apollo hub
+
 ```shell
 # Package the vector helm-chart
 $ helm package -d ./build ./charts/vector
@@ -53,6 +56,7 @@ Digest: sha256:83fde30c20f51e3e1a071bddc21d0f0b4662002678dc5eb3b62c666bd0d568b9
 ```
 
 Once the packaged helm-chart is pushed to the container registry, we can now create an Apollo product-release which will be used to create a helm-chart entity in an Apollo environment.
+
 ```shell
 $ apollo-cli publish helm-chart \
     --chart-file ./build/vector-0.31.1001.tgz \
