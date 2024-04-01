@@ -4,7 +4,13 @@ This repository provides reference implementations of open source helm charts wi
 
 ## Repository Organization
 
-Each reference Helm Chart in this repository is organized under the `charts/<name of helm chart>` directory. Each of these helm charts is structured to have a base chart that contains the Palantir Fedstart specific values.yaml configurations, with the open source chart referenced as a subchart.
+Charts in this repository are organized into categories based on their production-readiness:
+
+* *Generally Available (GA)* charts are deployed by one or more Palantir Fedstart partner and are expected to be production ready. Users can use these at their own discretion, with no need to ask Palantir before doing so. Generally Available charts are organized under the `charts/<name of helm chart>` directory.
+* *Beta* charts have been tested internally and are ready to be tested by Fedstart partners. Users who are interested in deploying a Beta chart should reach out to Palantir before doing so. Beta charts are organized under the `charts/beta/<name of helm chart>` directory.
+* *Alpha* charts are works in progress, and have not passed internal Palantir testing. Users who are interested in deploying an Alpha chart should reach out to Palantir to provide detail about your use case. Alpha charts are organized under the `charts/alpha/<name of helm chart>` directory.
+
+Each helm chart is structured to have a base chart that contains the Palantir Fedstart specific values.yaml configurations, with the open source chart referenced as a subchart.
 
 Each Helm chart subdirectory should include the LICENSE of the original open source helm chart.
 
@@ -30,13 +36,16 @@ helm push ./build/<packaged-helm-chart> <helm-repository-url>
 ```
 
 ### Example: Using Amazon Elastic Container Registry (ECR)
+
 The following example packages the [vector](./charts/vector) helm-chart, pushes it to ECR, and creates a new product-release in Apollo.
 
 Pre-requisites:
+
 1. An ECR registry exists with a repository named `vector`
    1. We will use `12345.dkr.ecr.us-east-1.amazonaws.com` where `accountID=12345` and `region=us-east-1`
 2. `helm`, `aws`, and `apollo-cli` are on the users `$PATH`
 3. `apollo-cli` is configured for the correct Apollo hub
+
 ```shell
 # Package the vector helm-chart
 $ helm package -d ./build ./charts/vector
@@ -53,6 +62,7 @@ Digest: sha256:83fde30c20f51e3e1a071bddc21d0f0b4662002678dc5eb3b62c666bd0d568b9
 ```
 
 Once the packaged helm-chart is pushed to the container registry, we can now create an Apollo product-release which will be used to create a helm-chart entity in an Apollo environment.
+
 ```shell
 $ apollo-cli publish helm-chart \
     --chart-file ./build/vector-0.31.1001.tgz \
