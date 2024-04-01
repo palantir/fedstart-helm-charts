@@ -37,7 +37,7 @@ helm push ./build/<packaged-helm-chart> <helm-repository-url>
 
 ### Example: Using Amazon Elastic Container Registry (ECR)
 
-The following example packages the [vector](./charts/vector) helm-chart, pushes it to ECR, and creates a new product-release in Apollo.
+The following example packages the [vector](./charts/beta/vector) helm-chart, pushes it to ECR, and creates a new product-release in Apollo.
 
 Pre-requisites:
 
