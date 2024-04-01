@@ -48,7 +48,7 @@ Pre-requisites:
 
 ```shell
 # Package the vector helm-chart
-$ helm package -d ./build ./charts/vector
+$ helm package -d ./build ./charts/beta/vector
 Successfully packaged chart and saved it to: build/vector-0.31.1001.tgz
 
 # Get an AWS access-token and log into ECR using helm
