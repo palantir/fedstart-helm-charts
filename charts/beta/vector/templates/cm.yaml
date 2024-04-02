@@ -20,6 +20,7 @@ data:
         version: "2"
         tls:
           enabled: true
+          verify_certificate: true
           ca_file: "/etc/ssl/rubix-ca/ca.pem"
           crt_file: "/mnt/secrets/certs/tls.crt"
           key_file: "/mnt/secrets/certs/tls.key"
