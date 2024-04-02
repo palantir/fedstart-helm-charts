@@ -2,16 +2,26 @@
 
 ## Sub-chart value overrides
 loki:
+  fullnameOverride: loki
+  serviceAccount:
+    name: loki
+    labels:
+      rubix-app: loki
   loki:
     auth_enabled: false
     commonConfig:
       replication_factor: 1
     storage:
       type: 'filesystem'
+    podLabels:
+      rubix-app: loki
+    serviceLabels:
+      rubix-app: loki
     server:
-      client_ca_file: "/etc/ssl/rubix-ca/ca.pem"
-      cert_file: "/mnt/secrets/certs/tls.crt"
-      key_file: "/mnt/secrets/certs/tls.key"
+      http_tls_config:
+        client_ca_file: "/etc/ssl/rubix-ca/ca.pem"
+        cert_file: "/mnt/secrets/certs/tls.crt"
+        key_file: "/mnt/secrets/certs/tls.key"
 
   rbac:
     namespaced: true
@@ -34,13 +44,9 @@ loki:
   # singleBinary configuration
   singleBinary:
     replicas: 1
-    podLabels:
-      rubix-app: loki
     selectorLabels:
       rubix-app: loki
     service:
-      labels:
-        rubix-app: loki
       annotations:
         com.palantir.rubix.service/pod-cert: "{}"
     extraVolumeMounts:
@@ -90,13 +96,7 @@ loki:
     enabled: true
     replicas: 1
     verboseLogging: true
-    podLabels:
-      rubix-app: loki-gateway
-    selectorLabels:
-      rubix-app: loki-gateway
     service:
-      labels:
-        rubix-app: loki-gateway
       annotations:
         com.palantir.rubix.service/pod-cert: "{}"
     extraVolumeMounts:
@@ -128,7 +128,7 @@ loki:
           - podAffinityTerm:
               labelSelector:
                 matchLabels:
-                  rubix-app: loki-gateway
+                  rubix-app: loki
               topologyKey: topology.kubernetes.io/zone
             weight: 100
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -137,5 +137,5 @@ loki:
                 - key: rubix-app
                   operator: In
                   values:
-                    - loki-gateway
+                    - loki
             topologyKey: kubernetes.io/hostname
