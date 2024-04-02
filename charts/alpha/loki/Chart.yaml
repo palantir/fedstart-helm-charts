@@ -1,6 +1,6 @@
 apiVersion: v2
 name: loki
-description: A Loki helm-chart that can be used with Palantir FedStart
+description: A Loki chart that can be used with Palantir FedStart
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -12,13 +12,13 @@ description: A Loki helm-chart that can be used with Palantir FedStart
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-version: 0.31.1001
+version: 5.47.2001
 
-# Be aware that using helm dependencies has undesirable side affects, where you cannot remove
-# subchart config keys by setting them to null. If this type of configuration override is necessary,
-# comment out the dependencies block below. See the following github issue for more details:
+# Be aware that using helm dependencies has undesirable side effects, where you cannot remove
+# sub-chart config keys by setting them to null. If this type of configuration override is necessary,
+# comment out the dependencies block below. See the following GitHub issue for more details:
 # https://github.com/helm/helm/issues/9027
-#dependencies:
-#  - name: vector
-#    version: "0.31.1"
-#    charts: vector
+dependencies:
+  - name: loki
+    version: "5.47.2"
+    charts: loki
