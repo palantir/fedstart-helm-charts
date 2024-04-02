@@ -1,0 +1,6 @@
+dependencies:
+- name: loki
+  repository: ""
+  version: 5.47.2
+digest: sha256:90ccdcf2448a96f9920e749c59b0408b6b556a9a61851d506e9785473ac55638
+generated: "2024-04-02T11:30:30.988976-07:00"
