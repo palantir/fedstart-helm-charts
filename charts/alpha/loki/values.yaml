@@ -1,4 +1,141 @@
 # Default values for loki
 
 ## Sub-chart value overrides
-loki: {}
+loki:
+  loki:
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    storage:
+      type: 'filesystem'
+    server:
+      client_ca_file: "/etc/ssl/rubix-ca/ca.pem"
+      cert_file: "/mnt/secrets/certs/tls.crt"
+      key_file: "/mnt/secrets/certs/tls.key"
+
+  rbac:
+    namespaced: true
+  test:
+    enabled: false
+  monitoring:
+    dashboards:
+      enabled: false
+    rules:
+      enabled: false
+    serviceMonitor:
+      enabled: false
+    selfMonitoring:
+      enabled: false
+      grafanaAgent:
+        installOperator: false
+    lokiCanary:
+      enabled: false
+
+  # singleBinary configuration
+  singleBinary:
+    replicas: 1
+    podLabels:
+      rubix-app: loki
+    selectorLabels:
+      rubix-app: loki
+    service:
+      labels:
+        rubix-app: loki
+      annotations:
+        com.palantir.rubix.service/pod-cert: "{}"
+    extraVolumeMounts:
+      - name: cert-secret-volume
+        mountPath: "/mnt/secrets/certs"
+      - name: tls-external-ca-bundle
+        mountPath: "/etc/ssl/rubix-ca"
+    extraVolumes:
+      - name: cert-secret-volume
+        secret:
+          secretName: "cert-loki"
+      - name: tls-external-ca-bundle
+        configMap:
+          name: "tls-external-ca-pem-bundle"
+          items:
+            - key: ca.pem
+              path: ca.pem
+    extraEnvFrom: []
+    affinity: |
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: com.palantir.rubix/instance-group
+                  operator: In
+                  values:
+                    - fedstart
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  rubix-app: loki
+              topologyKey: topology.kubernetes.io/zone
+            weight: 100
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: rubix-app
+                  operator: In
+                  values:
+                    - loki
+            topologyKey: kubernetes.io/hostname
+
+  # gateway configuration
+  gateway:
+    enabled: true
+    replicas: 1
+    verboseLogging: true
+    podLabels:
+      rubix-app: loki-gateway
+    selectorLabels:
+      rubix-app: loki-gateway
+    service:
+      labels:
+        rubix-app: loki-gateway
+      annotations:
+        com.palantir.rubix.service/pod-cert: "{}"
+    extraVolumeMounts:
+      - name: cert-secret-volume
+        mountPath: "/mnt/secrets/certs"
+      - name: tls-external-ca-bundle
+        mountPath: "/etc/ssl/rubix-ca"
+    extraVolumes:
+      - name: cert-secret-volume
+        secret:
+          secretName: "cert-loki-gateway"
+      - name: tls-external-ca-bundle
+        configMap:
+          name: "tls-external-ca-pem-bundle"
+          items:
+            - key: ca.pem
+              path: ca.pem
+    affinity: |
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: com.palantir.rubix/instance-group
+                  operator: In
+                  values:
+                    - fedstart
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  rubix-app: loki-gateway
+              topologyKey: topology.kubernetes.io/zone
+            weight: 100
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: rubix-app
+                  operator: In
+                  values:
+                    - loki-gateway
+            topologyKey: kubernetes.io/hostname
