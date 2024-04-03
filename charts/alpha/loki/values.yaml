@@ -13,6 +13,9 @@ loki:
       replication_factor: 1
     storage:
       type: 'filesystem'
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
     podLabels:
       rubix-app: loki
     serviceLabels:
@@ -97,6 +100,9 @@ loki:
     enabled: true
     replicas: 1
     verboseLogging: true
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
     service:
       annotations:
         com.palantir.rubix.service/pod-cert: "{}"
