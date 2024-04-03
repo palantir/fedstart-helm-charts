@@ -19,9 +19,10 @@ loki:
       rubix-app: loki
     server:
       http_tls_config:
-        client_ca_file: "/etc/ssl/rubix-ca/ca.pem"
         cert_file: "/mnt/secrets/certs/tls.crt"
         key_file: "/mnt/secrets/certs/tls.key"
+        client_ca_file: "/etc/ssl/rubix-ca/ca.pem"
+        client_auth_type: "VerifyClientCertIfGiven"
 
   rbac:
     namespaced: true
