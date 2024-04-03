@@ -20,7 +20,16 @@ loki:
       rubix-app: loki
     serviceLabels:
       rubix-app: loki
+
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: http-metrics
+        scheme: HTTPS
+    initialDelaySeconds: 45
     server:
+      log_format: json
+      log_level: info
       http_tls_config:
         cert_file: "/mnt/secrets/certs/tls.crt"
         key_file: "/mnt/secrets/certs/tls.key"
