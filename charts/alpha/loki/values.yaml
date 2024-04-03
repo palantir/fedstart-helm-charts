@@ -95,6 +95,10 @@ loki:
                     - loki
             topologyKey: kubernetes.io/hostname
 
+  memberlist:
+    service:
+      publishNotReadyAddresses: true
+
   # gateway configuration
   gateway:
     enabled: true
