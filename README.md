@@ -1,3 +1,7 @@
+<p align="right">
+<a href="https://autorelease3.general.dmz.palantir.tech/repos/palantir/fedstart-helm-charts"><img src="https://img.shields.io/badge/Perform%20an-Autorelease-success.svg" alt="Autorelease"></a>
+</p>
+
 # Fedstart Helm Charts
 
 This repository provides reference implementations of open source helm charts with configurations that will work in Palantir's Fedstart environments. These helm chart configurations are intended to work in environments where cluster wide permissions are heavily restricted and/or unavailable.
