@@ -65,6 +65,11 @@ http {
       auth_basic off;
     }
 
+    # Pass through to the loki readiness endpoint
+    location = /ready {
+      proxy_pass       {{ $writeUrl }}$request_uri;
+    }
+
     # Distributor
     location = /loki/api/v1/push {
       proxy_pass       {{ $writeUrl }}$request_uri;
