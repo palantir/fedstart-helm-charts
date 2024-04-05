@@ -59,6 +59,12 @@ http {
 
     {{- $writeUrl    := printf "https://%s:%s" $serverName (.Values.loki.server.http_listen_port | toString) }}
 
+
+    location = / {
+      return 200 'OK';
+      auth_basic off;
+    }
+
     # Distributor
     location = /loki/api/v1/push {
       proxy_pass       {{ $writeUrl }}$request_uri;
