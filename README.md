@@ -16,7 +16,7 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 
 ## Versioning
 
-This repository uses chart specific labels to tag versions of each chart. The label structure should following the following convention: `<chart-name>/v<oss-version-number><fedstart-version-number>`. Ex: `prometheus/v25.10.3002`, where:
+This repository uses chart specific labels to tag versions of each chart. The label structure should following the following convention: `<chart-name>-<oss-version-number><fedstart-version-number>`. Ex: `prometheus-25.10.3002`, where:
 
 * `chart-name` is the name of the Helm Chart, and matches the `charts/<chart-name>` subdirectory. Ie: `prometheus`
 * `oss-version-number` is the Chart version number in the open source subchart; ie., the `version` found in `charts/prometheus/charts/prometheus/Chart.yaml`
