@@ -9,5 +9,7 @@ release_groups:
   redis:
     paths: [ "charts/alpha/redis" ]
     tag_prefix: "redis-"
+intoto:
+  disable: true
 options:
   allowed_branches: ["develop"]
