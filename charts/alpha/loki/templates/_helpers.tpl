@@ -49,12 +49,7 @@ http {
     {{- $serverName := printf "%s.%s.svc.%s" $writeHost .Release.Namespace .Values.global.clusterDomain }}
 
   server {
-    listen             8080;
-    server_name        {{ $serverName }};
-    return             301 https://{{ $serverName }}$request_uri;
-  }
-  server {
-    listen             443 default_server ssl;
+    listen             8080 default_server ssl;
     server_name        {{ $serverName }};
 
     ssl_certificate     /mnt/secrets/certs/tls.crt;
