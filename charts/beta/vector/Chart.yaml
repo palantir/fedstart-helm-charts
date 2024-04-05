@@ -22,3 +22,4 @@ dependencies:
   - name: vector
     version: "0.31.1"
     charts: vector
+    repository: https://helm.vector.dev
