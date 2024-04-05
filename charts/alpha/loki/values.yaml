@@ -122,6 +122,7 @@ loki:
     service:
       annotations:
         com.palantir.rubix.service/pod-cert: "{}"
+      port: 443
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"

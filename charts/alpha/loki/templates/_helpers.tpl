@@ -42,28 +42,32 @@ http {
   tcp_nopush   on;
   resolver {{ .Values.global.dnsService }}.{{ .Values.global.dnsNamespace }}.svc.{{ .Values.global.clusterDomain }}.;
 
-  server {
-    listen             8080;
-    location = / {
-      return 200 'OK';
-      auth_basic off;
-    }
-
     {{- $writeHost := include "loki.writeFullname" .}}
     {{- if gt (int .Values.singleBinary.replicas) 0 }}
     {{- $writeHost = include "loki.singleBinaryFullname" .}}
     {{- end }}
+    {{- $serverName := printf "%s.%s.svc.%s" $writeHost .Release.Namespace .Values.global.clusterDomain }}
 
-    {{- $writeUrl    := printf "http://%s.%s.svc.%s:%s" $writeHost   .Release.Namespace .Values.global.clusterDomain (.Values.loki.server.http_listen_port | toString) }}
-    {{- if .Values.gateway.nginxConfig.customWriteUrl }}
-    {{- $writeUrl  = .Values.gateway.nginxConfig.customWriteUrl }}
-    {{- end }}
+  server {
+    listen             8080;
+    server_name        {{ $serverName }};
+    return             301 https://{{ $serverName }}$request_uri;
+  }
+  server {
+    listen             443 default_server ssl;
+    server_name        {{ $serverName }};
+
+    ssl_certificate     /mnt/secrets/certs/tls.crt;
+    ssl_certificate_key /mnt/secrets/certs/tls.key;
+    # add Strict-Transport-Security to prevent man in the middle attacks
+    add_header Strict-Transport-Security "max-age=31536000" always;
+
+    {{- $writeUrl    := printf "https://%s:%s" $serverName (.Values.loki.server.http_listen_port | toString) }}
 
     # Distributor
     location = /loki/api/v1/push {
       proxy_pass       {{ $writeUrl }}$request_uri;
     }
-
   }
 }
 {{- end }}
