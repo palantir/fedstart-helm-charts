@@ -1,0 +1,13 @@
+version: 3
+release_groups:
+  prometheus:
+    paths: [ "charts/beta/prometheus" ]
+    tag_prefix: "prometheus-"
+  vector:
+    paths: [ "charts/beta/vector" ]
+    tag_prefix: "vector-"
+  redis:
+    paths: [ "charts/alpha/redis" ]
+    tag_prefix: "redis-"
+options:
+  allowed_branches: ["develop"]
