@@ -111,6 +111,9 @@ loki:
   # gateway configuration
   gateway:
     enabled: true
+    nginxConfig:
+      file: |
+        {{- include "myloki.nginxFile" . | indent 2 -}}
     replicas: 1
     verboseLogging: true
     podSecurityContext:
