@@ -12,4 +12,5 @@ release_groups:
 intoto:
   disable: true
 options:
+  allow_patch_releases_on_major_series_branches: true
   allowed_branches: ["develop"]
