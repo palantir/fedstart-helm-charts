@@ -10,7 +10,7 @@ This repository provides reference implementations of open source helm charts wi
 
 Charts in this repository are organized into categories based on their production-readiness:
 
-* *Generally Available (GA)* charts are deployed by one or more Palantir Fedstart partners and are expected to be production ready. Users can use these at their own discretion, with no need to ask Palantir before doing so. Generally Available charts are organized under the `charts/<name of helm chart>` directory.
+* *Generally Available (GA)* charts are deployed by one or more Palantir Fedstart partners and are expected to be production ready. Users can use these at their own discretion, with no need to ask Palantir before doing so. Generally Available charts are organized under the `charts/ga/<name of helm chart>` directory.
 * *Beta* charts have been tested internally and are ready to be tested by Fedstart partners. Users who are interested in deploying a Beta chart should reach out to Palantir before doing so. Beta charts are organized under the `charts/beta/<name of helm chart>` directory.
 * *Alpha* charts are works in progress, and have not passed internal Palantir testing. Users who are interested in deploying an Alpha chart should reach out to Palantir to provide details about your use case. Alpha charts are organized under the `charts/alpha/<name of helm chart>` directory.
 
