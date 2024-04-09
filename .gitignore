@@ -1,2 +1,5 @@
+.DS_Store
 .idea/
 build
+# Chart dependencies
+**/charts/*.tgz
