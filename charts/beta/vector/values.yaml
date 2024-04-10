@@ -33,11 +33,11 @@ vector:
 
   # commonLabels - Labels to add to all created resources.
   commonLabels:
-    rubix-app: vector-aggregator
+    apollo-app: vector-aggregator
 
   # podLabels -- Labels to be set on vector pods.
   podLabels:
-    rubix-app: vector-aggregator
+    apollo-app: vector-aggregator
 
   # replicas -- Number of pods to create.
   replicas: 2
@@ -162,13 +162,13 @@ vector:
         - podAffinityTerm:
             labelSelector:
               matchLabels:
-                rubix-app: vector-aggregator
+                apollo-app: vector-aggregator
             topologyKey: topology.kubernetes.io/zone
           weight: 100
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
             matchExpressions:
-              - key: rubix-app
+              - key: apollo-app
                 operator: In
                 values:
                   - vector-aggregator
