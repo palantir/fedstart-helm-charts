@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: vector-aggregator-config
   labels:
-    rubix-app: vector
+    apollo-app: vector
 data:
   aggregator.yaml: |
     data_dir: {{ .Values.vector.dataDir }}
