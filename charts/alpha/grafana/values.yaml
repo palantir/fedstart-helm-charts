@@ -1,0 +1,102 @@
+# Default values for grafana
+
+## Sub-chart value overrides
+grafana:
+  # baseURL -- Configures the root URL for grafana (required)
+  baseURL: ""
+  contextPath: "/grafana"
+  fullnameOverride: grafana
+
+  grafana.ini:
+    analytics:
+      check_for_updates: false
+      check_for_plugin_updates: false
+    server:
+      protocol: https
+      cert_file: /mnt/secrets/certs/tls.crt
+      cert_key: /mnt/secrets/certs/tls.key
+      root_url: '{{ .Values.baseURL }}{{ .Values.contextPath }}'
+      serve_from_sub_path: true
+    plugins:
+      public_key_retrieval_disabled: true
+    auth.anonymous:
+      enabled: false
+    users:
+      auto_assign_org: true
+      auto_assign_org_role: "Admin"
+
+  extraLabels:
+    apollo-app: grafana
+
+  livenessProbe:
+    httpGet:
+      path: /grafana/api/health
+      port: 3000
+      scheme: HTTPS
+    initialDelaySeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 10
+
+  readinessProbe:
+    httpGet:
+      path: /grafana/api/health
+      port: 3000
+      scheme: HTTPS
+    initialDelaySeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 10
+
+  testFramework:
+    enabled: false
+  initChownData:
+    enabled: false
+  rbac:
+    namespaced: true
+
+  persistence:
+    enabled: true
+
+  service:
+    annotations:
+      com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "service", "prefix": "{{ .Values.contextPath }}", "domain-aliases": ["DEFAULT"]}]}'
+      com.palantir.rubix.service/pod-cert: '{}'
+  extraVolumeMounts:
+    - name: tls-external-ca-bundle
+      mountPath: "/etc/ssl/rubix-ca"
+  extraVolumes:
+    - name: tls-external-ca-bundle
+      configMap:
+        name: "tls-external-ca-pem-bundle"
+        items:
+          - key: ca.pem
+            path: ca.pem
+  extraSecretMounts:
+    - name: cert-secret-volume
+      secretName: cert-grafana
+      mountPath: /mnt/secrets/certs
+      readOnly: true
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                apollo-app: grafana
+            topologyKey: topology.kubernetes.io/zone
+          weight: 100
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: apollo-app
+                operator: In
+                values:
+                  - grafana
+          topologyKey: kubernetes.io/hostname
