@@ -1,0 +1,23 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Release charts
+        run: |
+          ./script/release.sh
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
