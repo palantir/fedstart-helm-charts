@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -uo pipefail
+set -euo pipefail
 
 main() {
   : "${GH_TOKEN:?Environment variable GH_TOKEN must be set}"
@@ -22,8 +22,11 @@ main() {
       if [[ -d "$chart" ]]; then
         chart_name=$(yq eval .name "${chart}/Chart.yaml")
         chart_version=$(yq eval .version "${chart}/Chart.yaml")
+        set +euo pipefail
         gh release view $chart_name-$chart_version >/dev/null 2>&1
-        if [ $? -eq 0 ];then
+        local exit_code=$?
+        set -euo pipefail
+        if [ $exit_code -eq 0 ];then
           echo "Release '$chart_name-$chart_version' already exists...skipping."
         else
           echo "Creating release '$chart_name-$chart_version'"
