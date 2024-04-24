@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 main() {
   : "${GH_TOKEN:?Environment variable GH_TOKEN must be set}"
 
