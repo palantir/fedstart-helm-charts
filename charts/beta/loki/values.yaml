@@ -1,0 +1,247 @@
+# Default values for loki
+
+## Sub-chart value overrides
+loki:
+  nameOverride: loki
+  fullnameOverride: loki
+  serviceAccount:
+    name: loki
+    labels:
+      apollo-app: loki
+
+  loki:
+    analytics:
+      reporting_enabled: false
+    commonConfig:
+      compactor_address: 'loki-backend'
+      replication_factor: 2
+    auth_enabled: false
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    podLabels:
+      apollo-app: loki
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: http-metrics
+        scheme: HTTPS
+      initialDelaySeconds: 45
+      timeoutSeconds: 1
+    server:
+      log_format: json
+      http_tls_config:
+        cert_file: /mnt/secrets/certs/tls.crt
+        key_file: /mnt/secrets/certs/tls.key
+        client_ca_file: /etc/ssl/rubix-ca/ca.pem
+        client_auth_type: VerifyClientCertIfGiven
+    schemaConfig:
+      configs:
+        - from: 2024-04-01
+          store: tsdb
+          object_store: s3
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    storage:
+      type: s3
+      #s3:
+      #  region: us-east-1
+      #  endpoint: s3-fips.us-east-1.amazonaws.com
+      bucketNames:
+        chunks: chunks
+        ruler: ruler
+    storage_config:
+      tsdb_shipper:
+        active_index_directory: /var/loki/tsdb-shipper-active
+        cache_location: /var/loki/tsdb-shipper-cache
+        cache_ttl: 24h
+
+  # Disable chunks + results cache which use memcached (enabled by default)
+  chunksCache:
+    enabled: false
+  resultsCache:
+    enabled: false
+
+  rbac:
+    namespaced: true
+  test:
+    enabled: false
+  lokiCanary:
+    enabled: false
+
+  write:
+    service:
+      annotations:
+        com.palantir.rubix.service/pod-cert: '{}'
+    extraVolumeMounts:
+      - name: cert-secret-volume
+        mountPath: "/mnt/secrets/certs"
+      - name: tls-external-ca-bundle
+        mountPath: "/etc/ssl/rubix-ca"
+      - name: storage-secret
+        mountPath: /home/loki/.aws/credentials
+        subPath: credential
+      - name: storage-secret
+        mountPath: /home/loki/.aws/config
+        subPath: config
+    extraVolumes:
+      - name: cert-secret-volume
+        secret:
+          secretName: "cert-loki-write"
+      - name: tls-external-ca-bundle
+        configMap:
+          name: "tls-external-ca-pem-bundle"
+          items:
+            - key: ca.pem
+              path: ca.pem
+      - name: storage-secret
+        secret:
+          secretName: storage-secret
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+
+  read:
+    legacyReadTarget: false
+    service:
+      annotations:
+        com.palantir.rubix.service/pod-cert: '{}'
+    extraVolumeMounts:
+      - name: cert-secret-volume
+        mountPath: "/mnt/secrets/certs"
+      - name: tls-external-ca-bundle
+        mountPath: "/etc/ssl/rubix-ca"
+      - name: storage-secret
+        mountPath: /home/loki/.aws/credentials
+        subPath: credential
+      - name: storage-secret
+        mountPath: /home/loki/.aws/config
+        subPath: config
+    extraVolumes:
+      - name: cert-secret-volume
+        secret:
+          secretName: "cert-loki-read"
+      - name: tls-external-ca-bundle
+        configMap:
+          name: "tls-external-ca-pem-bundle"
+          items:
+            - key: ca.pem
+              path: ca.pem
+      - name: storage-secret
+        secret:
+          secretName: storage-secret
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+
+  backend:
+    service:
+      annotations:
+        com.palantir.rubix.service/pod-cert: '{}'
+    extraVolumeMounts:
+      - name: cert-secret-volume
+        mountPath: "/mnt/secrets/certs"
+      - name: tls-external-ca-bundle
+        mountPath: "/etc/ssl/rubix-ca"
+      - name: storage-secret
+        mountPath: /home/loki/.aws/credentials
+        subPath: credential
+      - name: storage-secret
+        mountPath: /home/loki/.aws/config
+        subPath: config
+    extraVolumes:
+      - name: cert-secret-volume
+        secret:
+          secretName: "cert-loki-backend"
+      - name: tls-external-ca-bundle
+        configMap:
+          name: "tls-external-ca-pem-bundle"
+          items:
+            - key: ca.pem
+              path: ca.pem
+      - name: storage-secret
+        secret:
+          secretName: storage-secret
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+
+  memberlist:
+    service:
+      publishNotReadyAddresses: true
+
+  gateway:
+    readinessProbe:
+      httpGet:
+        path: /
+        port: http-metrics
+        scheme: HTTPS
+      initialDelaySeconds: 45
+      timeoutSeconds: 1
+    nginxConfig:
+      schema: https
+      ssl: true
+      serverSnippet: |
+        ssl_certificate     /mnt/secrets/certs/tls.crt;
+        ssl_certificate_key /mnt/secrets/certs/tls.key;
+        add_header Strict-Transport-Security "max-age=31536000" always;
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    service:
+      annotations:
+        com.palantir.rubix.service/pod-cert: "{}"
+      port: 443
+    extraVolumeMounts:
+      - name: cert-secret-volume
+        mountPath: "/mnt/secrets/certs"
+      - name: tls-external-ca-bundle
+        mountPath: "/etc/ssl/rubix-ca"
+    extraVolumes:
+      - name: cert-secret-volume
+        secret:
+          secretName: "cert-loki-gateway"
+      - name: tls-external-ca-bundle
+        configMap:
+          name: "tls-external-ca-pem-bundle"
+          items:
+            - key: ca.pem
+              path: ca.pem
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+
+  sidecar:
+    rules:
+      enabled: false
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
