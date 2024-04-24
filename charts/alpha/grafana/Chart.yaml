@@ -1,0 +1,25 @@
+apiVersion: v2
+name: grafana
+description: A Grafana chart that can be used with Palantir FedStart
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+version: 7.3.7001
+
+# Be aware that using helm dependencies has undesirable side affects, where you cannot remove
+# subchart config keys by setting them to null. If this type of configuration override is necessary,
+# comment out the dependencies block below. See the following github issue for more details:
+# https://github.com/helm/helm/issues/9027
+dependencies:
+  - name: grafana
+    version: "7.3.7"
+    charts: grafana
+    repository: https://grafana.github.io/helm-charts
