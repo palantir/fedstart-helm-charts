@@ -70,3 +70,11 @@ $ apollo-cli publish helm-chart \
     --maven-coordinate "com.palantir.vector:vector-aggregator:0.31.1001"
 Publishing product release com.palantir.vector:vector-aggregator:0.31.1001 into Apollo ... done
 ```
+
+## Release Process
+
+Charts in this repository are tagged and released using the [Release Charts](.github/workflows/release.yaml) Github workflow and corresponding [release script](./script/release.sh), where the release name is `<chart-name>-<chart-version>` (e.g. `grafana-7.3.7001`). Every commit to the `develop` branch will trigger the workflow and charts with __any__ changes since the latest git tag are evaluated for a potential release as follows:
+
+1. The chart name and version are extracted from the corresponding `Chart.yaml` to construct the desired release name
+2. If a release already exists with the desired name, then no release will be made for this chart.
+3. If a release does not exist, then one will be created with the desired name
