@@ -6,8 +6,6 @@ loki:
   fullnameOverride: loki
   serviceAccount:
     name: loki
-    labels:
-      apollo-app: loki
 
   loki:
     analytics:
@@ -19,8 +17,6 @@ loki:
     podSecurityContext:
       seccompProfile:
         type: RuntimeDefault
-    podLabels:
-      apollo-app: loki
     readinessProbe:
       httpGet:
         path: /ready

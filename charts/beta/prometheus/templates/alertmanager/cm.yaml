@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-    apollo-app: prometheus
+    {{- include "alertmanager.labels" . | nindent 4 }}
   name: "alertmanager-apollo-config"
 data:
   alertmanager-web-config.yml: |

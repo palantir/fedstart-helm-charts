@@ -51,9 +51,6 @@ prometheus:
       annotations:
         com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":1}'
 
-    podLabels:
-      apollo-app: prometheus
-
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
@@ -79,9 +76,6 @@ prometheus:
     service:
       annotations:
         com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":1}'
-
-    podLabels:
-      apollo-app: prometheus
 
     securityContext:
       runAsGroup: null

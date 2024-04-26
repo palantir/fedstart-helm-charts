@@ -25,9 +25,6 @@ grafana:
       auto_assign_org: true
       auto_assign_org_role: "Admin"
 
-  extraLabels:
-    apollo-app: grafana
-
   livenessProbe:
     httpGet:
       path: /grafana/api/health
@@ -89,14 +86,11 @@ grafana:
         - podAffinityTerm:
             labelSelector:
               matchLabels:
-                apollo-app: grafana
+                app.kubernetes.io/name: grafana
             topologyKey: topology.kubernetes.io/zone
           weight: 100
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
-            matchExpressions:
-              - key: apollo-app
-                operator: In
-                values:
-                  - grafana
+            matchLabels:
+              app.kubernetes.io/name: grafana
           topologyKey: kubernetes.io/hostname
