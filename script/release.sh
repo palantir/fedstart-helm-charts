@@ -29,8 +29,12 @@ main() {
         if [ $exit_code -eq 0 ]; then
           echo "Release '$chart_name-$chart_version' already exists...skipping."
         else
+          echo "Creating annotated tag ($chart_name-$chart_version) for release..."
+          git tag -a $chart_name-$chart_version -m ""
+          echo "Pushing tag to origin..."
+          git push --tags
           echo "Creating release '$chart_name-$chart_version'"
-          gh release create $chart_name-$chart_version
+          gh release create $chart_name-$chart_version --notes-from-tag
         fi
       else
         echo "No changes found for '$chart'."
