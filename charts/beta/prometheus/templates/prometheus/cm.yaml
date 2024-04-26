@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-    apollo-app: prometheus
+    {{- include "prometheus.server.labels" . | nindent 4 }}
   name: "prometheus-apollo-config"
 data:
   prometheus-web-config.yml: |

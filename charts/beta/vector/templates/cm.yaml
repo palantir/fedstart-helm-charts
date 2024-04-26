@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: vector-aggregator-config
   labels:
-    apollo-app: vector
+    {{- include "vector.labels" . | nindent 4 }}
 data:
   aggregator.yaml: |
     data_dir: {{ .Values.vector.dataDir }}
