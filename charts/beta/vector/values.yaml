@@ -2,6 +2,10 @@
 
 ## Sub-chart value overrides
 vector:
+  image:
+    # image.repository -- use full repository name
+    repository: docker.io/timberio/vector
+
   # role -- Run the aggregator as a Deployment instead of a Statefulset.
   role: "Stateless-Aggregator"
 
