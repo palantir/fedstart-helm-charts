@@ -2,6 +2,9 @@
 
 ## Subchart value overrides
 prometheus:
+  rbac:
+    create: false
+
   serverFiles:
     prometheus.yml:
       scrape_configs: []
