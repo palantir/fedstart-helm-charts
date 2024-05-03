@@ -1,8 +1,9 @@
+{{ if .Values.prometheus.alertmanager.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-    {{- include "alertmanager.labels" . | nindent 4 }}
+    {{- include "alertmanager.labels" .Subcharts.prometheus.Subcharts.alertmanager | nindent 4 }}
   name: "alertmanager-apollo-config"
 data:
   alertmanager-web-config.yml: |
@@ -47,3 +48,4 @@ data:
         - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
         - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+{{ end }}
