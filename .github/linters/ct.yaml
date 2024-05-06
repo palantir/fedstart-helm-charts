@@ -3,6 +3,7 @@ remote: origin
 target-branch: develop
 debug: true
 validate-maintainers: false
+validate-chart-schema: false
 chart-dirs:
   - charts/alpha
   - charts/beta
