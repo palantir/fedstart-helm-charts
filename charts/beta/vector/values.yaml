@@ -118,9 +118,9 @@ vector:
     requests:
       cpu: 1
       memory: 512Mi
-    #limits:
-    #  cpu: 200m
-    #  memory: 256Mi
+    # limits:
+    #   cpu: 200m
+    #   memory: 256Mi
 
   # podSecurityContext -- Ensures the pod is not run as root.
   podSecurityContext:
@@ -164,4 +164,3 @@ vector:
               app.kubernetes.io/component: Stateless-Aggregator
               app.kubernetes.io/name: vector
           topologyKey: kubernetes.io/hostname
-
