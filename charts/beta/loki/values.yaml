@@ -42,9 +42,9 @@ loki:
             period: 24h
     storage:
       type: s3
-      #s3:
-      #  region: us-east-1
-      #  endpoint: s3-fips.us-east-1.amazonaws.com
+      # s3:
+      #   region: us-east-1
+      #   endpoint: s3-fips.us-east-1.amazonaws.com
       bucketNames:
         chunks: chunks
         ruler: ruler

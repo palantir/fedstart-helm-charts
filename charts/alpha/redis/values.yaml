@@ -6,13 +6,13 @@ redis:
   master:
     affinity:
       nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: com.palantir.rubix/instance-group
-                  operator: In
-                  values:
-                  - fedstart
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                - fedstart
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:
@@ -32,13 +32,13 @@ redis:
   replica:
     affinity:
       nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: com.palantir.rubix/instance-group
-                  operator: In
-                  values:
-                  - fedstart
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                - fedstart
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:
