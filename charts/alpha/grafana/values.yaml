@@ -50,13 +50,15 @@ grafana:
   rbac:
     namespaced: true
 
+  replicas: 2
   persistence:
     enabled: true
+    type: statefulset
 
   service:
     annotations:
       com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "service", "prefix": "{{ .Values.contextPath }}", "domain-aliases": ["DEFAULT"]}]}'
-      com.palantir.rubix.service/pod-cert: '{}'
+      com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":2}'
   extraVolumeMounts:
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
@@ -69,7 +71,7 @@ grafana:
             path: ca.pem
   extraSecretMounts:
     - name: cert-secret-volume
-      secretName: cert-grafana
+      secretName: cert-grafana-2
       mountPath: /mnt/secrets/certs
       readOnly: true
   affinity:
