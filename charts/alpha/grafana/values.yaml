@@ -43,6 +43,9 @@ grafana:
     timeoutSeconds: 30
     failureThreshold: 10
 
+  deploymentStrategy:
+    type: Recreate
+
   testFramework:
     enabled: false
   initChownData:
