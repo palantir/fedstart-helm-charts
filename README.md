@@ -14,6 +14,17 @@ Each helm chart is structured to have a base chart that contains the Palantir Fe
 
 Each Helm chart subdirectory should include the LICENSE of the original open source helm chart.
 
+## Current Charts
+
+| Helm Chart                                                                                          | Status |
+| --------------------------------------------------------------------------------------------------- | ------ |
+| [Prometheus](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/prometheus)  | Beta   |
+| [Loki](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/loki)              | Beta   |
+| [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/vector)          | Beta   |
+| [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)       | Alpha  |
+| [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)           | Alpha  |
+
+
 ## Versioning
 
 This repository uses chart specific labels to tag versions of each chart. The label structure should following the following convention: `<chart-name>-<oss-version-number><fedstart-version-number>`. Ex: `prometheus-25.10.3002`, where:
