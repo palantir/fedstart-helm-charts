@@ -3,6 +3,7 @@ remote: origin
 target-branch: develop
 debug: true
 validate-maintainers: false
+helm-lint-extra-args: '--strict --with-subcharts'
 chart-dirs:
   - charts/alpha
   - charts/beta
