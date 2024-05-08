@@ -1,0 +1,6 @@
+dependencies:
+- name: splunk-operator
+  repository: file://../splunk-operator
+  version: 2.5.2
+digest: sha256:e38afc6b6da0d5054ff80ae567815cf6d2edbff2e787d7578f13919286ee3c4f
+generated: "2024-05-03T17:54:55.510737-04:00"

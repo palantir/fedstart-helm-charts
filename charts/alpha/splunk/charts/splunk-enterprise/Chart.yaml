@@ -1,0 +1,16 @@
+apiVersion: v2
+appVersion: 2.5.2
+dependencies:
+- condition: splunk-operator.enabled
+  name: splunk-operator
+  repository: file://../splunk-operator
+  version: 2.5.2
+description: A Helm chart for Splunk Enterprise managed by the Splunk Operator
+maintainers:
+- email: vivekr@splunk.com
+  name: Vivek Reddy
+- email: akondur@splunk.com
+  name: Arjun Kondur
+name: splunk-enterprise
+type: application
+version: 3.0.1

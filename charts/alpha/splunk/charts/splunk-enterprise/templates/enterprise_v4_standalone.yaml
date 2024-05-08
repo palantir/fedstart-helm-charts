@@ -1,0 +1,150 @@
+{{- if or .Values.sva.s1.enabled .Values.standalone.enabled }}
+apiVersion:  enterprise.splunk.com/v4
+kind: Standalone
+metadata:
+  name: {{ .Values.standalone.name }}
+  namespace: {{ default (include "splunk-enterprise.namespace" . ) .Values.standalone.namespaceOverride }}
+{{- with .Values.standalone.additionalLabels }}
+  labels:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.standalone.additionalAnnotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.standalone.serviceAccount }}
+  serviceAccount: {{ .Values.standalone.serviceAccount }}
+{{- end }}
+{{- if and .Values.sva.s1.enabled .Values.sva.s1.standalones }}
+  replicas: {{ .Values.sva.s1.standalones }}
+{{- else if and .Values.standalone.enabled .Values.standalone.replicaCount }}
+  replicas: {{ .Values.standalone.replicaCount }}
+{{- end }}
+{{- with .Values.standalone.appRepo }}
+  appRepo:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.standalone.smartstore }}
+  smartstore:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- if and .Values.existingClusterManager .Values.existingClusterManager.name }}
+  clusterManagerRef:
+    name: {{ .Values.existingClusterManager.name }}
+  {{- if .Values.existingClusterManager.namespace }}
+    namespace: {{ .Values.existingClusterManager.namespace }}
+  {{- end }}
+{{- else if .Values.clusterManager.enabled }}
+  clusterManagerRef:
+    name: {{ .Values.clusterManager.name }}
+  {{- if .Values.clusterManager.namespaceOverride }}
+    namespace: {{ .Values.clusterManager.namespaceOverride }}
+  {{- end }}
+{{- end }}
+{{- if and .Values.existingLicenseManager .Values.existingLicenseManager.name }}
+  licenseManagerRef:
+    name: {{ .Values.existingLicenseManager.name }}
+  {{- if .Values.existingLicenseManager.namespace }}
+    namespace: {{ .Values.existingLicenseManager.namespace }}
+  {{- end }}
+{{- else if .Values.licenseManager.enabled }}
+  licenseManagerRef:
+    name: {{ .Values.licenseManager.name }}
+  {{- if .Values.licenseManager.namespaceOverride }}
+    namespace: {{ .Values.licenseManager.namespaceOverride }}
+  {{- end }}
+{{- end }}
+{{- if and .Values.existingMonitoringConsole .Values.existingMonitoringConsole.name }}
+  monitoringConsoleRef:
+    name: {{ .Values.existingMonitoringConsole.name }}
+  {{- if .Values.existingMonitoringConsole.namespace }}
+    namespace: {{ .Values.existingMonitoringConsole.namespace }}
+  {{- end }}
+{{- else if .Values.monitoringConsole.enabled }}
+  monitoringConsoleRef:
+    name: {{ .Values.monitoringConsole.name }}
+  {{- if .Values.monitoringConsole.namespaceOverride }}
+    namespace: {{ .Values.monitoringConsole.namespaceOverride }}
+  {{- end }}
+{{- end }}
+{{- if .Values.image.repository }}
+  image: {{ .Values.image.repository }}
+{{- end }}
+{{- if .Values.image.imagePullPolicy }}
+  imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+{{- end }}
+{{- with .Values.image.imagePullSecrets }}
+  imagePullSecrets:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.standalone.volumes }}
+  volumes:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- if .Values.standalone.licenseUrl }}
+  licenseUrl: {{ .Values.standalone.licenseUrl }}
+{{- end }}
+{{- if .Values.standalone.defaultsUrl }}
+  defaultsUrl: {{ .Values.standalone.defaultsUrl }}
+{{- end }}
+{{- if .Values.standalone.defaults }}
+  defaults: |-
+{{ toYaml .Values.standalone.defaults | indent 4 }}
+{{- end }}
+{{- if .Values.standalone.defaultsUrlApps }}
+  defaultsUrlApps: {{ .Values.standalone.defaultsUrlApps }}
+{{- end }}
+{{- with .Values.standalone.extraEnv }}
+  extraEnv:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- if .Values.standalone.livenessInitialDelaySeconds }}
+  livenessInitialDelaySeconds: {{ .Values.standalone.livenessInitialDelaySeconds }}
+{{- end }}
+{{- if .Values.standalone.readinessInitialDelaySeconds }}
+  readinessInitialDelaySeconds: {{ .Values.standalone.readinessInitialDelaySeconds }}
+{{- end }}
+{{- if .Values.standalone.startupProbe }}
+  startupProbe:
+{{ toYaml .Values.standalone.startupProbe | indent 4 }}
+{{- end }}
+{{- if .Values.standalone.livenessProbe }}
+  livenessProbe:
+{{ toYaml .Values.standalone.livenessProbe | indent 4 }}
+{{- end }}
+{{- if .Values.standalone.readinessProbe }}
+  readinessProbe:
+{{ toYaml .Values.standalone.readinessProbe | indent 4 }}
+{{- end }}
+{{- with .Values.standalone.etcVolumeStorageConfig }}
+  etcVolumeStorageConfig:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.standalone.varVolumeStorageConfig }}
+  varVolumeStorageConfig:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.standalone.resources }}
+  resources:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.standalone.serviceTemplate }}
+  serviceTemplate:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.standalone.tolerations }}
+  tolerations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- if .Values.standalone.topologySpreadConstraints }}
+{{- with .Values.standalone.topologySpreadConstraints }}
+  topologySpreadConstraints:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}
+{{- with .Values.standalone.affinity }}
+  affinity:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}

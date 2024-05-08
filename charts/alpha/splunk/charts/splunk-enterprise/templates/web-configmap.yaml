@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+  namespace: justins-vault
+data:
+  web.conf: |-
+    [settings]
+    mgmtHostPort = 0.0.0.0:8089
+    enableSplunkWebSSL = true
+    privKeyPath = /opt/splunk/etc/auth/palantircerts/tls.key
+    serverCert = /opt/splunk/etc/auth/palantircerts/ca.pem;

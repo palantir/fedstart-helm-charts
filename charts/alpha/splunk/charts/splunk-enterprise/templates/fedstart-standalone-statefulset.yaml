@@ -1,0 +1,196 @@
+{{- if .Values.fedstartStandalone.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+  namespace: {{ .Release.Namespace }}
+spec:
+  persistentVolumeClaimRetentionPolicy:
+{{- toYaml .Values.fedstartStandalone.pvcRetentionPolicy | nindent 4 }}
+  podManagementPolicy: Parallel
+  replicas: {{ .Values.fedstartStandalone.replicas }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: standalone
+      app.kubernetes.io/instance: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+      app.kubernetes.io/managed-by: splunk-operator
+      app.kubernetes.io/name: standalone
+      app.kubernetes.io/part-of: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+  serviceName: splunk-{{ .Values.fedstartStandalone.name }}-standalone-headless
+  template:
+    metadata:
+      annotations:
+        traffic.sidecar.istio.io/excludeOutboundPorts: 8089,8191,9997
+        traffic.sidecar.istio.io/includeInboundPorts: 8000,8088
+      labels:
+        app.kubernetes.io/component: standalone
+        app.kubernetes.io/instance: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+        app.kubernetes.io/managed-by: splunk-operator
+        app.kubernetes.io/name: standalone
+        app.kubernetes.io/part-of: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                  - splunk-{{ .Values.fedstartStandalone.name }}-standalone
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - env:
+        - name: SPLUNK_DECLARATIVE_ADMIN_PASSWORD
+          value: "true"
+        - name: SPLUNK_DEFAULTS_URL
+          value: /mnt/splunk-secrets/default.yml
+        - name: SPLUNK_HOME
+          value: /opt/splunk
+        - name: SPLUNK_HOME_OWNERSHIP_ENFORCEMENT
+          value: "false"
+        - name: SPLUNK_OPERATOR_K8_LIVENESS_DRIVER_FILE_PATH
+          value: /tmp/splunk_operator_k8s/probes/k8_liveness_driver.sh
+        - name: SPLUNK_ROLE
+          value: splunk_standalone
+        - name: SPLUNK_START_ARGS
+          value: --accept-license
+        image: docker.io/splunk/splunk:9.1.3
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /mnt/probes/livenessProbe.sh
+          failureThreshold: 3
+          initialDelaySeconds: 300
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: splunk
+        ports:
+        - containerPort: 8000
+          name: http-splunkweb
+          protocol: TCP
+        - containerPort: 8088
+          name: http-hec
+          protocol: TCP
+        - containerPort: 8089
+          name: https-splunkd
+          protocol: TCP
+        - containerPort: 9997
+          name: tcp-s2s
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /mnt/probes/readinessProbe.sh
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "4"
+            memory: 8Gi
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+            - NET_BIND_SERVICE
+            drop:
+            - ALL
+          privileged: false
+          runAsNonRoot: true
+          runAsUser: 41812
+          seccompProfile:
+            type: RuntimeDefault
+        startupProbe:
+          exec:
+            command:
+            - /mnt/probes/startupProbe.sh
+          failureThreshold: 12
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 30
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+{{- with .Values.fedstartStandalone.volumeMounts }}
+        volumeMounts:
+{{ toYaml . | indent 8 }}
+{{- end }}
+        - mountPath: /mnt/splunk-secrets
+          name: mnt-splunk-secrets
+        - mountPath: /opt/splunk/etc
+          name: pvc-etc
+        - mountPath: /opt/splunk/var
+          name: pvc-var
+        - mountPath: /mnt/probes
+          name: splunk-justins-vault-probe-configmap
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 41812
+        runAsNonRoot: true
+        runAsUser: 41812
+      terminationGracePeriodSeconds: 30
+{{- with .Values.fedstartStandalone.volumes }}
+      volumes:
+{{- toYaml . | nindent 6}}
+{{- end }}
+      - name: mnt-splunk-secrets
+        secret:
+          defaultMode: 420
+          secretName: splunk-stdln-standalone-secret-v1
+      - configMap:
+          defaultMode: 365
+          name: splunk-justins-vault-probe-configmap
+        name: splunk-justins-vault-probe-configmap
+  updateStrategy:
+    type: OnDelete
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      labels:
+        app.kubernetes.io/component: standalone
+        app.kubernetes.io/instance: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+        app.kubernetes.io/managed-by: splunk-operator
+        app.kubernetes.io/name: standalone
+        app.kubernetes.io/part-of: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+      name: pvc-etc
+      namespace: {{ .Release.Namespace }}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      volumeMode: Filesystem
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      labels:
+        app.kubernetes.io/component: standalone
+        app.kubernetes.io/instance: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+        app.kubernetes.io/managed-by: splunk-operator
+        app.kubernetes.io/name: standalone
+        app.kubernetes.io/part-of: splunk-{{ .Values.fedstartStandalone.name }}-standalone
+      name: pvc-var
+      namespace: {{ .Release.Namespace }}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Gi
+      volumeMode: Filesystem
+  {{- end }}
