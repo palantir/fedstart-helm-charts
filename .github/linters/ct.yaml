@@ -9,6 +9,4 @@ chart-dirs:
   - charts/beta
   - charts/ga
 chart-repos:
-  - grafana=https://grafana.github.io/helm-charts
-  - prometheus=https://prometheus-community.github.io/helm-charts
-  - vector=https://helm.vector.dev
+# Repos get generated at CI time dynamically, see .github/workflows/lint.yaml
