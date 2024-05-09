@@ -701,42 +701,6 @@ licenseManager:
   #    nodeAffinityPolicy: [Honor|Ignore] # optional; beta since v1.26
   #    nodeTaintsPolicy: [Honor|Ignore] # optional; beta since v1.26
 
-fedstartStandalone:
-
-  enabled: false
-
-  name: "fedstart-stdln"
-
-  pvcRetentionPolicy:
-    whenDeleted: Retain
-    whenScaled: Retain
-
-  replicas: 1
-
-  volumes:
-    - name: "certs"
-      secret:
-        secretName: cert-splunk-fedstart-stdln-standalone-service
-    - name: tls-external-ca-bundle
-      configMap:
-        name: "tls-external-ca-pem-bundle"
-        items:
-          - key: ca.pem
-            path: ca.pem
-    - name: web-config
-      configMap:
-        name: "web-config"
-
-  volumeMounts:
-    - name: certs
-      mountPath: "$SPLUNK_HOME/etc/auth/palantircerts/"
-    - name: tls-external-ca-bundle
-      subPath: 'ca.pem'
-      mountPath: "$SPLUNK_HOME/etc/auth/palantircerts"
-    - name: web-conf
-      subPath: 'web.conf'
-      mountPath: "$SPLUNK_HOME/etc/system/local"
-
 standalone:
 
   enabled: false

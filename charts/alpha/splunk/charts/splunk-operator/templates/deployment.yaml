@@ -59,7 +59,7 @@ spec:
           securityContext:
 {{- toYaml .Values.splunkOperator.containerSecurityContext | nindent 12 }}
         - name: manager
-          image: "{{ .Values.splunkOperator.image.repository}}"
+          image: "{{ .Values.splunkOperator.image.repository}}:{{ .Values.splunkOperator.image.tag }}"
           imagePullPolicy: {{ .Values.splunkOperator.image.pullPolicy }}
           args:
           - --leader-elect
