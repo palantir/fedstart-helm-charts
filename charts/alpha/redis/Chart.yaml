@@ -12,7 +12,7 @@ description: A Redis chart that can be used with Palantir FedStart
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-version: 18.19.2008
+version: 18.19.2009
 
 # Be aware that using helm dependencies has undesirable side affects, where you cannot remove
 # subchart config keys by setting them to null. If this type of configuration override is necessary,
@@ -22,9 +22,3 @@ dependencies:
   - name: redis
     version: "18.19.2"
     repository: oci://registry-1.docker.io/bitnamicharts
-    # This is dependency for the bitnami redis chart and unfortunately helm only handles dependencies
-    # at the first level. https://github.com/helm/helm/issues/2247
-    # So we copy the dependency from teh upstream bitnami chart here.
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 2.x.x

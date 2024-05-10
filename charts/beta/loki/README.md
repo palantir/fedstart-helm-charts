@@ -4,7 +4,7 @@ A Palantir Fedstart compliant helm-chart for [loki](https://github.com/grafana/l
 
 ## Configuration
 
-Refer to the Loki [documentation](https://grafana.com/docs/loki/next/setup/install/helm/reference/) or the sub-chart [values.yaml](./charts/loki/values.yaml) for all available upstream configuration options
+Refer to the Loki [documentation](https://grafana.com/docs/loki/next/setup/install/helm/reference/) or the sub-chart [values.yaml](https://github.com/grafana/loki/blob/main/production/helm/loki/values.yaml) for all available upstream configuration options
 
 ### Pre-requisites
 

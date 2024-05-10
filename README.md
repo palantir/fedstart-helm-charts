@@ -37,12 +37,15 @@ This repository uses chart specific labels to tag versions of each chart. The la
 Each helm chart can be packaged separately and published to a container registry.
 
 ```shell
+# Build helm dependencies for a single helm-chart product
+$ helm dependency build ./charts/<helm-chart-path> --repository-config helm-repositories.yaml
+
 # Package a single helm-chart product
-helm package -d ./build ./charts/<helm-chart-name>
+$ helm package -d ./build ./charts/<helm-chart-path>
 
 # Publish the packaged helm-chart to a container registry
 # NOTE: You must be logged into the helm repository before trying to push
-helm push ./build/<packaged-helm-chart> <helm-repository-url>
+$ helm push ./build/<packaged-helm-chart> <helm-repository-url>
 ```
 
 ### Example: Using Amazon Elastic Container Registry (ECR)
@@ -56,7 +59,18 @@ Pre-requisites:
 2. `helm`, `aws`, and `apollo-cli` are on the users `$PATH`
 3. `apollo-cli` is configured for the correct Apollo hub
 
+From the root of this repository:
+
 ```shell
+# Build helm dependencies for the vector helm-chart
+$ helm dependency build ./charts/beta/vector --repository-config helm-repositories.yaml
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "vector" chart repository
+Update Complete. ⎈Happy Helming!⎈
+Saving 1 charts
+Downloading vector from repo https://helm.vector.dev
+Deleting outdated charts
+
 # Package the vector helm-chart
 $ helm package -d ./build ./charts/beta/vector
 Successfully packaged chart and saved it to: build/vector-0.31.1001.tgz
