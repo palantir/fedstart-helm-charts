@@ -4,7 +4,7 @@ A Palantir Fedstart compliant helm-chart that configures [Grafana](https://githu
 
 ## Configuration
 
-> Refer to the Grafana [README](./charts/grafana/README.md#configuration) for all available upstream configuration options
+> Refer to the Grafana [README](https://github.com/grafana/helm-charts/tree/main/charts/grafana#configuration) for all available upstream configuration options
 
 | Parameter            | Description                     | Default     |
 |----------------------|---------------------------------|-------------|

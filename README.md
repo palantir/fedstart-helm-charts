@@ -39,12 +39,13 @@ Each helm chart can be packaged separately and published to a container registry
 ```shell
 # Build helm dependencies for a single helm-chart product
 $ helm dependency build ./charts/<helm-chart-path> --repository-config helm-repositories.yaml
+
 # Package a single helm-chart product
-helm package -d ./build ./charts/<helm-chart-path>
+$ helm package -d ./build ./charts/<helm-chart-path>
 
 # Publish the packaged helm-chart to a container registry
 # NOTE: You must be logged into the helm repository before trying to push
-helm push ./build/<packaged-helm-chart> <helm-repository-url>
+$ helm push ./build/<packaged-helm-chart> <helm-repository-url>
 ```
 
 ### Example: Using Amazon Elastic Container Registry (ECR)
