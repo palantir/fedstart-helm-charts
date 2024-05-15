@@ -33,11 +33,13 @@ splunkOperator:
   image:
 #    repository: docker.io/splunk/splunk-operator:2.5.2
     repository: containers-fedstart-dev.palantirapollo.com/fedstart/splunk-operator
-    tag: 2.5.4
+#    repository: local/splunk-operator
+    tag: 2.5.6
     pullPolicy: IfNotPresent
 
   # Set image pull secrets to pull image from a private registry
-  imagePullSecrets: []
+  imagePullSecrets:
+    - name: fedstart-artifact-stores-containersdevcreds
 
   # Give operator cluster-wide access, otherwise access is limited to operator namespace
   clusterWideAccess: false
@@ -158,6 +160,7 @@ splunkOperator:
   # Set storageClassName for the PersistentVolumeClaim
   persistentVolumeClaim:
     storageClassName: "rubix-aws-provisioner-v5"
+#    storageClassName: ""
 
   # Specify volumes for Splunk Operator pod, append additional volumes to list
   # reference: https://kubernetes.io/docs/concepts/storage/volumes/

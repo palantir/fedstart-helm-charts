@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: splunk-{{ .Values.fedstartStandalone.name }}-standalone-service
+  name: {{ .Values.splunkWeb.service.name | default "splunk-web-service" }}
   labels:
     app.kubernetes.io/name: standalone
   annotations:
-{{ toYaml .Values.splunkWeb.annotations | nindent 4 }}
+{{ tpl (.Values.splunkWeb.service.annotations | toYaml) . | nindent 4 }}
 spec:
   type: {{ .Values.splunkWeb.service.type }}
 {{- with .Values.splunkWeb.service.ports }}

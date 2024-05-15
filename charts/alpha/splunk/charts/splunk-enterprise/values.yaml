@@ -1,3 +1,8 @@
+splunkoperator:
+  splunkOperator:
+    annotations:
+      com.palantir.rubix.service/pod-cert: "{}"
+
 # Image to use for Splunk pod containers
 # Overrides RELATED_IMAGE_SPLUNK_ENTERPRISE environment variable in Splunk Operator manager container
 image:
@@ -6,22 +11,19 @@ image:
   imagePullSecrets: []
 
 splunkWeb:
-
-  annotations:
-    com.palantir.rubix.service/pod-cert: "{}"
-    com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "http", "prefix": "/splunk-web", "domain-aliases": ["DEFAULT"]}]}'
-
   service:
+    name: ""
+
+    annotations:
+      com.palantir.rubix.service/pod-cert: "{}"
+      com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "http-splunkweb", "prefix": "/splunkweb", "domain-aliases": ["DEFAULT"]}]}'
+
     type: ClusterIP
     ports:
       - name: http-splunkweb
         port: 8000
         protocol: TCP
         targetPort: http-splunkweb
-      - name: https-splunkd
-        port: 8089
-        protocol: TCP
-        targetPort: https-splunkd
 
   podLabels:
     app.kubernetes.io/name: standalone
@@ -29,7 +31,7 @@ splunkWeb:
 # Deploy Splunk Operator chart
 # Disable if the Splunk Operator is already deployed
 splunk-operator:
-  enabled: true
+  enabled: false
 
 sva:
 
@@ -747,26 +749,14 @@ standalone:
   volumes:
     - name: "certs"
       secret:
-        secretName: cert-splunk-fedstart-stdln-standalone-service
+        secretName: "cert-{{ .Values.splunkWeb.service.name }}"
     - name: tls-external-ca-bundle
       configMap:
         name: "tls-external-ca-pem-bundle"
         items:
           - key: ca.pem
             path: ca.pem
-    - name: web-config
-      configMap:
-        name: "web-config"
 
-#  volumeMounts:
-#    - name: certs
-#      mountPath: '$SPLUNK_HOME/etc/auth/palantircerts/'
-#    - name: tls-external-ca-bundle
-#      subPath: 'ca.pem'
-#      mountPath: '$SPLUNK_HOME/etc/auth/palantircerts'
-#    - name: web-conf
-#      subPath: 'web.conf'
-#      mountPath: '$SPLUNK_HOME/etc/system/local'
 
   licenseUrl: ""
 
@@ -776,9 +766,28 @@ standalone:
 
   defaultsUrlApps: ""
 
-  extraEnv: []
-  # - name:
-  #   value:
+  extraEnv:
+    - name: SPLUNK_HTTP_ENABLESSL
+      value: 'true'
+    - name: SPLUNK_HTTP_ENABLESSL_CERT
+      value: /mnt/certs/tls.crt
+    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
+      value: /mnt/certs/tls.key
+    - name: SPLUNKD_SSL_ENABLE
+      value: 'true'
+    - name: SPLUNKD_SSL_CA
+      value: /mnt/tls-external-ca-bundle/ca.pem
+    - name: SPLUNKD_SSL_CERT
+      value: /mnt/cert-combined/combined_tls.crt
+    - name: SPLUNK_LAUNCH_CONF
+      value: "SPLUNK_FIPS=1"
+    - name: SPLUNK_ROOT_ENDPOINT
+      value: '/splunkweb'
+    - name: SPLUNK_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: "{{ preprocess .Values.apollo.secrets.splunkadminsecret.k8sSecretName }}"
+          key: SPLUNK_PASSWORD
 
   livenessInitialDelaySeconds: 300
 
