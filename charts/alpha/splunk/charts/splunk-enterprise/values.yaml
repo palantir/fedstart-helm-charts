@@ -175,6 +175,7 @@ clusterManager:
 
   # Specify Splunk default.yaml to override intial environment config
   defaults: {}
+
     ## Example: Deploy a multi-site cluster manager
     # splunk:
     #   site: site1
@@ -762,7 +763,16 @@ standalone:
 
   defaultsUrl: ""
 
-  defaults: {}
+  defaults:
+    server:
+      conf:
+        - key: server
+          value:
+            directory: /opt/splunk/etc/system/local
+            content:
+              sslConfig:
+                sslVerifyServerCert: 'true'
+                sslVerifyServerName: 'true'
 
   defaultsUrlApps: ""
 
