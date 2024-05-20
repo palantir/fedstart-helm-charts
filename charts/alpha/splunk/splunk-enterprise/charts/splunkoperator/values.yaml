@@ -32,14 +32,10 @@ splunkOperator:
   # reference: https://github.com/splunk/splunk-operator
   image:
     repository: docker.io/splunk/splunk-operator:2.5.2
-#    repository: containers-fedstart-dev.palantirapollo.com/fedstart/splunk-operator
-#    repository: local/splunk-operator
-    tag: 2.5.6
     pullPolicy: IfNotPresent
 
   # Set image pull secrets to pull image from a private registry
-  imagePullSecrets:
-    - name: fedstart-artifact-stores-containersdevcreds
+  imagePullSecrets: {}
 
   # Give operator cluster-wide access, otherwise access is limited to operator namespace
   clusterWideAccess: false
