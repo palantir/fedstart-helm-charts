@@ -1,0 +1,32 @@
+{{- range $volume := .Values.splunkOperator.volumes }}
+{{- if $volume.persistentVolumeClaim }}
+{{- if $volume.persistentVolumeClaim.claimName }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+  name:  {{ $volume.persistentVolumeClaim.claimName }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+{{- if and $volume.resources }}
+  resources:
+    {{- toYaml $volume.resources | default "" | nindent 4}}
+{{- else }}
+  resources:
+    requests:
+      storage: 10Gi
+{{- end }}
+  volumeMode: Filesystem
+{{- if $.Values.splunkOperator.persistentVolumeClaim.storageClassName }}
+  storageClassName: {{ $.Values.splunkOperator.persistentVolumeClaim.storageClassName }}
+{{- end }}
+{{- if (lookup "v1" "PersistentVolumeClaim" "dev-field-engineering" "splunk-operator-app-download") }}
+  volumeName: {{ (lookup "v1" "PersistentVolumeClaim" "dev-field-engineering" "splunk-operator-app-download").spec.volumeName }}
+{{- end }}
+
+---
+{{- end }}
+{{- end }}
+{{- end }}
