@@ -2,8 +2,8 @@ apiVersion: v2
 appVersion: 2.5.2
 dependencies:
 - condition: splunk-operator.enabled
-  name: splunkoperator
-  repository: file://charts/splunkoperator
+  name: splunk-operator
+  repository: file://charts/splunk-operator
   version: 2.5.4
 description: A Helm chart for Splunk Enterprise managed by the Splunk Operator
 maintainers:

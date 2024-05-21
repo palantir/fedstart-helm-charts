@@ -147,6 +147,22 @@ splunkOperator:
                 operator: In
                 values:
                   - fedstart
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: splunk-enterprise
+            topologyKey: topology.kubernetes.io/zone
+          weight: 100
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - splunk-enterprise
+          topologyKey: kubernetes.io/hostname
 
   # Set duration in seconds the pod needs to terminate gracefully
   # reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#pod-v1-core

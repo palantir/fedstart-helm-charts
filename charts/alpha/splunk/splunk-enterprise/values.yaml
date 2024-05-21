@@ -1,5 +1,5 @@
 # Overrides for Splunk Operator sub chart
-splunkoperator:
+splunk-operator:
   # Overrides for Splunk Operator
   splunkOperator:
     annotations:
@@ -40,11 +40,6 @@ splunkWeb:
 
   podLabels:
     app.kubernetes.io/name: standalone
-
-# Deploy Splunk Operator chart
-# Disable if the Splunk Operator is already deployed
-splunk-operator:
-  enabled: false
 
 sva:
 
@@ -859,7 +854,31 @@ standalone:
 
   tolerations: []
 
-  affinity: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: splunk-enterprise
+            topologyKey: topology.kubernetes.io/zone
+          weight: 100
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - splunk-enterprise
+          topologyKey: kubernetes.io/hostname
 
   # Configure a topology spread constraint
   #  https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
