@@ -67,3 +67,11 @@ Define namespace of release and allow for namespace override
 {{- define "splunk-enterprise.namespace" -}}
 {{- default .Release.Namespace .Values.namespaceOverride }}
 {{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "splunk.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

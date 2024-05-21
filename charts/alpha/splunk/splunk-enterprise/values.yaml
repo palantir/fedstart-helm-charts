@@ -16,6 +16,21 @@ splunk-operator:
       pullPolicy: IfNotPresent
       tag: "v0.16.0"
 
+
+networkPolicy:
+  enabled: false
+
+  egress:
+    enabled: false
+    to: []
+    ports: []
+
+  ingress:
+    enabled: false
+    from: []
+    ports: []
+
+
 # Image to use for Splunk pod containers. Defaults to docker.io/splunk/splunk:9.1.3
 # Overrides RELATED_IMAGE_SPLUNK_ENTERPRISE environment variable in Splunk Operator manager container
 image:
