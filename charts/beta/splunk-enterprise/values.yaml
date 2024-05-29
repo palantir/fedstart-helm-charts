@@ -73,12 +73,12 @@ sva:
     enabled: false
 
     indexerClusters: []
-      # - name: idx1
-      # - name: idx2
+    # - name: idx1
+    # - name: idx2
 
     searchHeadClusters: []
-      # - name: shc1
-      # - name: shc2
+    # - name: shc1
+    # - name: shc2
 
   # Distributed Clustered Deployment + SHC - Multi-Site (M4)
   # reference: https://www.splunk.com/pdfs/technical-briefs/splunk-validated-architectures.pdf#page=20
@@ -87,40 +87,40 @@ sva:
     enabled: false
 
     clusterManager: {}
-      # allSites: "site1,site2"
-      # site: site1
-      # zone: us-west-1a
+    # allSites: "site1,site2"
+    # site: site1
+    # zone: us-west-1a
 
     indexerClusters: []
       # - name: idx1
       #   site: site1
       #   zone: us-west-1a
-      # - name: idx2
-      #   site: site2
-      #   zone: us-west-1c
+    # - name: idx2
+    #   site: site2
+    #   zone: us-west-1c
 
     searchHeadClusters: []
-      # - name: shc1
-      #   site: site2
-      #   zone: us-west-1c
+    # - name: shc1
+    #   site: site2
+    #   zone: us-west-1c
 
 # Set name reference if ClusterManager is already deployed
 # Namespace is optional, set if the resource exists outside of the release namespace
 existingClusterManager: {}
-  # name:
-  # namespace:
+# name:
+# namespace:
 
 # Set name reference if MonitoringConsole is already deployed
 # Namespace is optional, set if the resource exists outside of the release namespace
 existingMonitoringConsole: {}
-  # name:
-  # namespace:
+# name:
+# namespace:
 
 # Set name reference if LicenseManager is already deployed
 # Namespace is optional, set if the resource exists outside of the release namespace
 existingLicenseManager: {}
-  # name:
-  # namespace:
+# name:
+# namespace:
 
 # Configure a Splunk Cluster Manager instance
 clusterManager:
@@ -139,7 +139,6 @@ clusterManager:
   additionalLabels: {}
 
   additionalAnnotations: {}
-
 
 
   # Splunk Enterprise App repository
@@ -161,9 +160,9 @@ clusterManager:
     #     storageType: s3
     #     provider: aws
     #     path: bucket-app-framework-us-west-2/idxcAndCmApps/
-    #     endpoint: https://s3-us-west-2.amazonaws.com
-    #     region: us-west-2
-    #     secretRef: s3-secret
+  #     endpoint: https://s3-us-west-2.amazonaws.com
+  #     region: us-west-2
+  #     secretRef: s3-secret
 
   # Splunk Smartstore configuration
   # reference: https://github.com/splunk/splunk-operator/blob/develop/docs/SmartStore.md
@@ -181,9 +180,9 @@ clusterManager:
     #   - name: <index_name_2>
     #     remotePath: $_index_name
     #     volumeName: <remote_volume_name>
-    #   - name: <index_name_3>
-    #     remotePath: $_index_name
-    #     volumeName: <remote_volume_name>
+  #   - name: <index_name_3>
+  #     remotePath: $_index_name
+  #     volumeName: <remote_volume_name>
 
   # List volumes to be mounted in all pod containers
   # reference: https://kubernetes.io/docs/concepts/storage/volumes/
@@ -208,9 +207,9 @@ clusterManager:
     #   multisite_replication_factor_total: 2
     #   multisite_search_factor_origin: 1
     #   multisite_search_factor_total: 2
-    #   idxc:
-    #     search_factor: 2
-    #     replication_factor: 2
+  #   idxc:
+  #     search_factor: 2
+  #     replication_factor: 2
 
   # Full path or URL for one or more defaults.yml files specific to App install, separated by commas
   defaultsUrlApps: ""
@@ -232,19 +231,19 @@ clusterManager:
   # reference: https://github.com/splunk/splunk-operator/blob/main/docs/HealthCheck.md
   startupProbe: {}
     # initialDelaySeconds: 40
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 12
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 12
   livenessProbe: {}
     # initialDelaySeconds: 30
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 3
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 3
   readinessProbe: {}
     # initialDelaySeconds: 10
-    # timeoutSeconds: 5
-    # periodSeconds: 5
-    # failureThreshold: 3
+  # timeoutSeconds: 5
+  # periodSeconds: 5
+  # failureThreshold: 3
 
   # Storage configuration for /opt/splunk/etc volume
   # To use a StorageClass other than your default StorageClass, specify the storageClassName
@@ -268,9 +267,9 @@ clusterManager:
     # requests:
     #   memory: "2Gi"
     #   cpu: "4"
-    # limits:
-    #   memory: "12Gi"
-    #   cpu: "24"
+  # limits:
+  #   memory: "12Gi"
+  #   cpu: "24"
 
   # Specify a service account used by the Splunk instance pods
   # Default uses the Default Service Account to access the API server
@@ -293,9 +292,9 @@ clusterManager:
     #     nodeSelectorTerms:
     #     - matchExpressions:
     #       - key: failure-domain.beta.kubernetes.io/zone
-    #         operator: In
-    #         values:
-    #         - zone-1a
+  #         operator: In
+  #         values:
+  #         - zone-1a
 
   # Configure a topology spread constraint
   #  https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
@@ -344,19 +343,19 @@ indexerCluster:
   # reference: https://github.com/splunk/splunk-operator/blob/main/docs/HealthCheck.md
   startupProbe: {}
     # initialDelaySeconds: 40
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 12
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 12
   livenessProbe: {}
     # initialDelaySeconds: 30
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 3
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 3
   readinessProbe: {}
     # initialDelaySeconds: 10
-    # timeoutSeconds: 5
-    # periodSeconds: 5
-    # failureThreshold: 3
+  # timeoutSeconds: 5
+  # periodSeconds: 5
+  # failureThreshold: 3
 
   etcVolumeStorageConfig:
     ephemeralStorage: false
@@ -372,9 +371,9 @@ indexerCluster:
     # requests:
     #   memory: "2Gi"
     #   cpu: "4"
-    # limits:
-    #   memory: "12Gi"
-    #   cpu: "24"
+  # limits:
+  #   memory: "12Gi"
+  #   cpu: "24"
 
   serviceAccount: ""
 
@@ -412,26 +411,26 @@ searchHeadCluster:
   replicaCount: 1
 
   appRepo: {}
-#     appsRepoPollIntervalSeconds:
-#     defaults:
-#       volumeName:
-#       scope:
-#     appSources:
-#       - name:
-#         location:
-#         scope: # options (local|cluster|premiumApps) default local
-#          premiumAppsProps: #only if scope is set to premiumApps
-#            type: enterpriseSecurity
-#            esDefaults:
-#              sslEnablement: 'strict' # options are ignore, strict, auto. default value is strict
-#     volumes:
-#       - name:
-#         storageType:
-#         provider:
-#         path:
-#         endpoint:
-#         region:
-#         secretRef:
+  #     appsRepoPollIntervalSeconds:
+  #     defaults:
+  #       volumeName:
+  #       scope:
+  #     appSources:
+  #       - name:
+  #         location:
+  #         scope: # options (local|cluster|premiumApps) default local
+  #          premiumAppsProps: #only if scope is set to premiumApps
+  #            type: enterpriseSecurity
+  #            esDefaults:
+  #              sslEnablement: 'strict' # options are ignore, strict, auto. default value is strict
+  #     volumes:
+  #       - name:
+  #         storageType:
+  #         provider:
+  #         path:
+  #         endpoint:
+  #         region:
+  #         secretRef:
 
   volumes: []
 
@@ -455,19 +454,19 @@ searchHeadCluster:
   # reference: https://github.com/splunk/splunk-operator/blob/main/docs/HealthCheck.md
   startupProbe: {}
     # initialDelaySeconds: 40
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 12
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 12
   livenessProbe: {}
     # initialDelaySeconds: 30
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 3
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 3
   readinessProbe: {}
     # initialDelaySeconds: 10
-    # timeoutSeconds: 5
-    # periodSeconds: 5
-    # failureThreshold: 3
+  # timeoutSeconds: 5
+  # periodSeconds: 5
+  # failureThreshold: 3
 
   etcVolumeStorageConfig:
     ephemeralStorage: false
@@ -483,9 +482,9 @@ searchHeadCluster:
     # requests:
     #   memory: "2Gi"
     #   cpu: "4"
-    # limits:
-    #   memory: "12Gi"
-    #   cpu: "24"
+  # limits:
+  #   memory: "12Gi"
+  #   cpu: "24"
 
   serviceAccount: ""
 
@@ -533,9 +532,9 @@ monitoringConsole:
     #     storageType:
     #     provider:
     #     path:
-    #     endpoint:
-    #     region:
-    #     secretRef:
+  #     endpoint:
+  #     region:
+  #     secretRef:
 
   volumes: []
 
@@ -559,19 +558,19 @@ monitoringConsole:
   # reference: https://github.com/splunk/splunk-operator/blob/main/docs/HealthCheck.md
   startupProbe: {}
     # initialDelaySeconds: 40
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 12
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 12
   livenessProbe: {}
     # initialDelaySeconds: 30
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 3
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 3
   readinessProbe: {}
     # initialDelaySeconds: 10
-    # timeoutSeconds: 5
-    # periodSeconds: 5
-    # failureThreshold: 3
+  # timeoutSeconds: 5
+  # periodSeconds: 5
+  # failureThreshold: 3
 
   etcVolumeStorageConfig:
     ephemeralStorage: false
@@ -587,9 +586,9 @@ monitoringConsole:
     # requests:
     #   memory: "2Gi"
     #   cpu: "4"
-    # limits:
-    #   memory: "12Gi"
-    #   cpu: "24"
+  # limits:
+  #   memory: "12Gi"
+  #   cpu: "24"
 
   serviceAccount: ""
 
@@ -625,26 +624,29 @@ licenseManager:
   additionalAnnotations: {}
 
   appRepo:
-     appsRepoPollIntervalSeconds:
-     defaults:
-       volumeName:
-       scope:
-     appSources:
-       - name:
-         location:
-         scope: # options (local|cluster|premiumApps) default local
-          premiumAppsProps: #only if scope is set to premiumApps
+    appsRepoPollIntervalSeconds:
+    defaults:
+      volumeName:
+      scope:
+    appSources:
+      - name:
+        location:
+        # options (local|cluster|premiumApps) default local
+        scope:
+          # only if scope is set to premiumApps
+          premiumAppsProps:
             type: enterpriseSecurity
             esDefaults:
-              sslEnablement:  # options are ignore, strict, auto. default value is strict
-     volumes:
-       - name:
-         storageType:
-         provider:
-         path:
-         endpoint:
-         region:
-         secretRef:
+              # options are ignore, strict, auto. default value is strict
+              sslEnablement:
+    volumes:
+      - name:
+        storageType:
+        provider:
+        path:
+        endpoint:
+        region:
+        secretRef:
 
   volumes: []
   ## Example: mounting volume containing license in Splunk instance pod container
@@ -674,19 +676,19 @@ licenseManager:
   # reference: https://github.com/splunk/splunk-operator/blob/main/docs/HealthCheck.md
   startupProbe: {}
     # initialDelaySeconds: 40
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 12
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 12
   livenessProbe: {}
     # initialDelaySeconds: 30
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 3
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 3
   readinessProbe: {}
     # initialDelaySeconds: 10
-    # timeoutSeconds: 5
-    # periodSeconds: 5
-    # failureThreshold: 3
+  # timeoutSeconds: 5
+  # periodSeconds: 5
+  # failureThreshold: 3
 
   etcVolumeStorageConfig:
     ephemeralStorage: false
@@ -702,9 +704,9 @@ licenseManager:
     # requests:
     #   memory: "2Gi"
     #   cpu: "4"
-    # limits:
-    #   memory: "12Gi"
-    #   cpu: "24"
+  # limits:
+  #   memory: "12Gi"
+  #   cpu: "24"
 
   serviceAccount: ""
 
@@ -754,9 +756,9 @@ standalone:
     #     storageType:
     #     provider:
     #     path:
-    #     endpoint:
-    #     region:
-    #     secretRef:
+  #     endpoint:
+  #     region:
+  #     secretRef:
 
   smartstore: {}
     # defaults:
@@ -767,9 +769,9 @@ standalone:
     #     remotePath:
     # volumes:
     #   - name:
-    #     path:
-    #     endpoint:
-    #     secretRef:
+  #     path:
+  #     endpoint:
+  #     secretRef:
   volumes:
     - name: "certs"
       secret:
@@ -828,19 +830,19 @@ standalone:
   # reference: https://github.com/splunk/splunk-operator/blob/main/docs/HealthCheck.md
   startupProbe: {}
     # initialDelaySeconds: 40
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 12
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 12
   livenessProbe: {}
     # initialDelaySeconds: 30
-    # timeoutSeconds: 30
-    # periodSeconds: 30
-    # failureThreshold: 3
+  # timeoutSeconds: 30
+  # periodSeconds: 30
+  # failureThreshold: 3
   readinessProbe: {}
     # initialDelaySeconds: 10
-    # timeoutSeconds: 5
-    # periodSeconds: 5
-    # failureThreshold: 3
+  # timeoutSeconds: 5
+  # periodSeconds: 5
+  # failureThreshold: 3
 
   etcVolumeStorageConfig:
     ephemeralStorage: false
@@ -856,9 +858,9 @@ standalone:
     # requests:
     #   memory: "2Gi"
     #   cpu: "4"
-    # limits:
-    #   memory: "12Gi"
-    #   cpu: "24"
+  # limits:
+  #   memory: "12Gi"
+  #   cpu: "24"
 
   serviceAccount: ""
 
