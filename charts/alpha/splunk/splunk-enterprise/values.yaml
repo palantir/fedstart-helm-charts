@@ -44,7 +44,7 @@ splunkWeb:
 
     annotations:
       com.palantir.rubix.service/pod-cert: '{"secretName": "splunk-web-service"}'
-      com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "http-splunkweb", "prefix": "/splunkweb", "domain-aliases": ["DEFAULT"]}]}'
+      com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "http-splunkweb", "prefix": "/", "domain-aliases": ["OSS"]}]}'
 
     type: ClusterIP
     ports:
@@ -814,8 +814,6 @@ standalone:
       value: /mnt/cert-combined/combined_tls.crt
     - name: SPLUNK_LAUNCH_CONF
       value: "SPLUNK_FIPS=1"
-    - name: SPLUNK_ROOT_ENDPOINT
-      value: '/splunkweb'
     - name: SPLUNK_PASSWORD
       valueFrom:
         secretKeyRef:
