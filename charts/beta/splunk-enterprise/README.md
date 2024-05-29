@@ -4,8 +4,6 @@ A Palantir Fedstart compliant helm-chart that configures [Splunk Operator](https
 
 ## Configuration
 
-Note: This chart has only been tested through deploying a single standalone Splunk instance.
-
 ### Resources
 
 * Refer to [this page from the Splunk documentation](https://splunk.github.io/splunk-ansible/ADVANCED.html) for a list of all environment variables you can set
@@ -49,3 +47,6 @@ Note: When setting up SSO, be sure to set the load balancer in the Splunk authen
   and will instead need to download apps from splunkbase.splunk.com and upload them to your instance of
   Splunk via the app manager page. All updates to apps on your Splunk instance will also need to follow
   this process.
+  
+## In Development
+* Highly available Splunk Enterprise deployment architecture by default
