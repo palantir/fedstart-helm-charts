@@ -21,3 +21,7 @@
 .idea/
 *.tmproj
 .vscode/
+# Debug resources
+debug/
+# Helm Chart Archives
+*.tgz

@@ -24,6 +24,37 @@ kubeRbacProxy:
       cpu: 5m
       memory: 64Mi
 
+# Splunk Web configurations
+splunkWeb:
+
+  # Splunk Web TLS configuration
+  tls:
+
+    # Configures the settings for combining the tls.key and tls.crt files contained within
+    # the Palantir provisioned TLS secret for the Splunk Web service via a cronjob. The
+    # combined secret will be named cert-splunk-web-service-combined-key-cert.
+    combine:
+      enabled: true
+      schedule: '0 0 * * 0'
+      image: fedstart-dev.palantirapollo.com/fedstart/kubectl
+      tag: 1.27.14
+
+  service:
+    name: "splunk-web-service"
+
+    annotations:
+      com.palantir.rubix.service/pod-cert: '{"secretName": "splunk-web-service"}'
+      com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "http-splunkweb", "prefix": "/", "domain-aliases": ["OSS"]}]}'
+
+    type: ClusterIP
+    ports:
+      - name: http-splunkweb
+        port: 8000
+        protocol: TCP
+        targetPort: http-splunkweb
+
+  podLabels:
+    app.kubernetes.io/name: standalone
 
 # Splunk Operator configurations
 splunkOperator:

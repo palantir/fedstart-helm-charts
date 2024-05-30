@@ -18,8 +18,8 @@ spec:
               command: ["/bin/sh", "-c"]
               args:
                 - |
-                  kubectl get secret cert-{{ .Values.splunkWeb.tls.secretName }} -o jsonpath="{.data.tls\.key}" | base64 -d > /tmp/combined.crt
-                  kubectl get secret cert-{{ .Values.splunkWeb.tls.secretName }} -o jsonpath="{.data.tls\.crt}" | base64 -d >> /tmp/combined.crt
-                  kubectl create secret generic {{ tpl .Values.splunkWeb.tls.combine.secretName }} --from-file=combined_tls.crt=/tmp/combined.crt --dry-run=client -o yaml | kubectl apply -f -
+                  kubectl get secret cert-splunk-web-service -o jsonpath="{.data.tls\.key}" | base64 -d > /tmp/combined.crt
+                  kubectl get secret cert-splunk-web-service -o jsonpath="{.data.tls\.crt}" | base64 -d >> /tmp/combined.crt
+                  kubectl create secret generic cert-splunk-web-service-combined-key-cert --from-file=combined_tls.crt=/tmp/combined.crt --dry-run=client -o yaml | kubectl apply -f -
           restartPolicy: OnFailure
 {{- end }}

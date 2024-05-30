@@ -38,34 +38,6 @@ image:
   imagePullPolicy: ""
   imagePullSecrets: []
 
-splunkWeb:
-  tls: 
-    combine:
-      enabled: true
-      schedule: '0 0 * * 0'
-      secretName: "cert-{{ .Values.splunkWeb.tls.secretName }}-combined-key-cert"
-      image: fedstart-dev.palantirapollo.com/fedstart/kubectl
-      tag: 1.27.14
-      
-    secretName: splunk-web-service
-  
-  service:
-    name: "splunk-web-service"
-
-    annotations:
-      com.palantir.rubix.service/pod-cert: '{"secretName": "{{ .Values.splunkWeb.tls.secretName }}"}'
-      com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "http-splunkweb", "prefix": "/", "domain-aliases": ["OSS"]}]}'
-
-    type: ClusterIP
-    ports:
-      - name: http-splunkweb
-        port: 8000
-        protocol: TCP
-        targetPort: http-splunkweb
-
-  podLabels:
-    app.kubernetes.io/name: standalone
-
 sva:
 
   # Single Server Deployment (S1)
@@ -783,16 +755,12 @@ standalone:
   #     endpoint:
   #     secretRef:
   volumes:
-    - name: "certs"
+    - name: certs
       secret:
         secretName: cert-splunk-web-service
-    - name: tls-external-ca-bundle
-      configMap:
-        name: "tls-external-ca-pem-bundle"
-        items:
-          - key: ca.pem
-            path: ca.pem
-
+    - name: cert-splunk-web-service-combined-key-cert
+      secret:
+        secretName: cert-splunk-web-service-combined-key-cert
 
   licenseUrl: ""
 
