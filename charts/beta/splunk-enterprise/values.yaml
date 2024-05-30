@@ -39,11 +39,21 @@ image:
   imagePullSecrets: []
 
 splunkWeb:
+  tls: 
+    combine:
+      enabled: true
+      schedule: '0 0 * * 0'
+      secretName: "cert-{{ .Values.splunkWeb.tls.secretName }}-combined-key-cert"
+      image: fedstart-dev.palantirapollo.com/fedstart/kubectl
+      tag: 1.27.14
+      
+    secretName: splunk-web-service
+  
   service:
     name: "splunk-web-service"
 
     annotations:
-      com.palantir.rubix.service/pod-cert: '{"secretName": "splunk-web-service"}'
+      com.palantir.rubix.service/pod-cert: '{"secretName": "{{ .Values.splunkWeb.tls.secretName }}"}'
       com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "http-splunkweb", "prefix": "/", "domain-aliases": ["OSS"]}]}'
 
     type: ClusterIP
