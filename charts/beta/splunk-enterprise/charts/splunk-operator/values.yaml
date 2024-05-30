@@ -24,6 +24,9 @@ kubeRbacProxy:
       cpu: 5m
       memory: 64Mi
 
+common:
+  imagePullSecrets: {}
+
 # Splunk Web configurations
 splunkWeb:
 
@@ -35,9 +38,10 @@ splunkWeb:
     # combined secret will be named cert-splunk-web-service-combined-key-cert.
     combine:
       enabled: true
-      schedule: '0 0 * * 0'
+      schedule: "0 0 * * 0"
       image: fedstart-dev.palantirapollo.com/fedstart/kubectl
       tag: 1.27.14
+      imagePullSecrets: {}
 
   service:
     name: "splunk-web-service"

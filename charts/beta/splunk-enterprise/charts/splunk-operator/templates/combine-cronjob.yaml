@@ -6,11 +6,22 @@ metadata:
 spec:
   failedJobsHistoryLimit: 2
   successfulJobsHistoryLimit: 2
-  schedule: {{ .Values.splunkWeb.tls.combine.schedule }}
+  schedule: {{ .Values.splunkWeb.tls.combine.schedule | quote }}
   jobTemplate:
     spec:
       template:
         spec:
+          {{- if .Values.common.imagePullSecrets }}
+          {{- with .Values.common.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12}}
+          {{- end }}
+          {{- else if .Values.splunkWeb.tls.combine.imagePullSecrets }}
+          {{- with .Values.splunkWeb.tls.combine.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
           serviceAccountName: {{ include "splunk-operator.operator.serviceAccountName" . }}
           containers:
             - name: combine-secrets

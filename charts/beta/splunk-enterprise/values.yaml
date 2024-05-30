@@ -16,6 +16,11 @@ splunk-operator:
       pullPolicy: IfNotPresent
       tag: "v0.16.0"
 
+  splunkWeb:
+    tls:
+      combine:
+        schedule: "* * * * *"
+
 
 networkPolicy:
   enabled: false
