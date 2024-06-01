@@ -1,5 +1,10 @@
 # Default values for loki
 
+fedstart:
+  s3:
+    aws_role_arn: "" # role in the format "arn:aws-us-gov:iam::<account_number>:role/fedstart-default-role"
+    aws_use_fips: true
+
 ## Sub-chart value overrides
 loki:
   nameOverride: loki
@@ -42,12 +47,12 @@ loki:
             period: 24h
     storage:
       type: s3
-      # s3:
-      #   region: us-east-1
-      #   endpoint: s3-fips.us-east-1.amazonaws.com
+      s3:
+        region: us-gov-west-1
       bucketNames:
-        chunks: chunks
-        ruler: ruler
+        # Enter the name(s) of the buckets to use
+        chunks: chunks-bucket-name
+        ruler: ruler-bucket-name
     storage_config:
       tsdb_shipper:
         active_index_directory: /var/loki/tsdb-shipper-active
@@ -71,17 +76,14 @@ loki:
     service:
       annotations:
         com.palantir.rubix.service/pod-cert: '{}'
+    extraEnvFrom:
+      - configMapRef:
+          name: loki-aws-s3-config
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
       - name: tls-external-ca-bundle
         mountPath: "/etc/ssl/rubix-ca"
-      - name: storage-secret
-        mountPath: /home/loki/.aws/credentials
-        subPath: credential
-      - name: storage-secret
-        mountPath: /home/loki/.aws/config
-        subPath: config
     extraVolumes:
       - name: cert-secret-volume
         secret:
@@ -92,9 +94,6 @@ loki:
           items:
             - key: ca.pem
               path: ca.pem
-      - name: storage-secret
-        secret:
-          secretName: storage-secret
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -110,17 +109,14 @@ loki:
     service:
       annotations:
         com.palantir.rubix.service/pod-cert: '{}'
+    extraEnvFrom:
+      - configMapRef:
+          name: loki-aws-s3-config
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
       - name: tls-external-ca-bundle
         mountPath: "/etc/ssl/rubix-ca"
-      - name: storage-secret
-        mountPath: /home/loki/.aws/credentials
-        subPath: credential
-      - name: storage-secret
-        mountPath: /home/loki/.aws/config
-        subPath: config
     extraVolumes:
       - name: cert-secret-volume
         secret:
@@ -131,9 +127,6 @@ loki:
           items:
             - key: ca.pem
               path: ca.pem
-      - name: storage-secret
-        secret:
-          secretName: storage-secret
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -148,17 +141,14 @@ loki:
     service:
       annotations:
         com.palantir.rubix.service/pod-cert: '{}'
+    extraEnvFrom:
+      - configMapRef:
+          name: loki-aws-s3-config
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
       - name: tls-external-ca-bundle
         mountPath: "/etc/ssl/rubix-ca"
-      - name: storage-secret
-        mountPath: /home/loki/.aws/credentials
-        subPath: credential
-      - name: storage-secret
-        mountPath: /home/loki/.aws/config
-        subPath: config
     extraVolumes:
       - name: cert-secret-volume
         secret:
@@ -169,9 +159,6 @@ loki:
           items:
             - key: ca.pem
               path: ca.pem
-      - name: storage-secret
-        secret:
-          secretName: storage-secret
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -208,6 +195,9 @@ loki:
       annotations:
         com.palantir.rubix.service/pod-cert: "{}"
       port: 443
+    extraEnvFrom:
+      - configMapRef:
+          name: loki-aws-s3-config
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
