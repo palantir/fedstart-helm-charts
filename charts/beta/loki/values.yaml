@@ -2,7 +2,8 @@
 
 fedstart:
   s3:
-    aws_role_arn: "" # role in the format "arn:aws-us-gov:iam::<account_number>:role/fedstart-default-role"
+    # role in the format "arn:aws-us-gov:iam::<account_number>:role/fedstart-default-role"
+    aws_role_arn: ""
     aws_use_fips: true
 
 ## Sub-chart value overrides
