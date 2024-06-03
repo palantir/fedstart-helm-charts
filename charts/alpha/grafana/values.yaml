@@ -19,6 +19,15 @@ grafana:
       serve_from_sub_path: true
     plugins:
       public_key_retrieval_disabled: true
+    database:
+      type: postgres
+      host: ""  # required
+      name: grafana
+      ssl_mode: require
+      # note, database username and password set in environment variables set by secret
+      ca_cert_path: /etc/ssl/rubix-ca/ca.pem
+      client_cert_path: /mnt/secrets/certs/tls.crt
+      client_key_path: /mnt/secrets/certs/tls.key
     auth.anonymous:
       enabled: false
     users:
@@ -52,8 +61,7 @@ grafana:
 
   replicas: 2
   persistence:
-    enabled: true
-    type: statefulset
+    enabled: false
 
   service:
     annotations:
@@ -72,6 +80,7 @@ grafana:
   extraSecretMounts:
     - name: cert-secret-volume
       secretName: cert-grafana-2
+      defaultMode: 0640
       mountPath: /mnt/secrets/certs
       readOnly: true
   affinity:
