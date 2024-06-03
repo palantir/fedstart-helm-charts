@@ -52,8 +52,8 @@ loki:
         region: us-gov-west-1
       bucketNames:
         # Enter the name(s) of the buckets to use
-        chunks: chunks-bucket-name
-        ruler: ruler-bucket-name
+        chunks: ""
+        ruler: ""
     storage_config:
       tsdb_shipper:
         active_index_directory: /var/loki/tsdb-shipper-active
