@@ -1,0 +1,3 @@
+{{ $req_chunks := required ".Values.loki.loki.storage.bucketNames.chunks bucket name is required" .Values.loki.loki.storage.bucketNames.chunks }}
+{{ $req_ruler := required ".Values.loki.loki.storage.bucketNames.ruler bucket name is required" .Values.loki.loki.storage.bucketNames.ruler }}
+---
