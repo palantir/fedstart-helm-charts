@@ -23,5 +23,6 @@
 .vscode/
 # Debug resources
 debug/
-# Helm Chart Archives
+# Helm Chart Details
 *.tgz
+manifest.yml

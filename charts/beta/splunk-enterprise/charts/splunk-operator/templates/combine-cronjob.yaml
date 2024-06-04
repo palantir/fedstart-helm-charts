@@ -3,11 +3,12 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: combine-{{ $tlsSecret }}-secrets-cronjob
+  name: {{ printf "combine-%s-secrets-cronjob" $tlsSecret | trunc 40 }}
 spec:
   failedJobsHistoryLimit: 2
   successfulJobsHistoryLimit: 2
   schedule: {{ $.Values.splunkWeb.tls.combine.schedule | quote }}
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
