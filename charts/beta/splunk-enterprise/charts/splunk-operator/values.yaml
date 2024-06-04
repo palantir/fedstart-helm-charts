@@ -37,13 +37,22 @@ splunkWeb:
     # the Palantir provisioned TLS secret for the Splunk Web service via a cronjob. The
     # combined secret will be named cert-splunk-web-service-combined-key-cert.
     combine:
+      # List of the services for which a combined certificate needs to be generated
+      serviceTLSSecrets: []
+#        - cert-splunk-web-service
+#        - cert-splunk-cm-cluster-manager-service
+#        - cert-splunk-idxc-indexer-service
+#        - cert-splunk-shc-search-head-service
+
       enabled: true
       schedule: "0 0 * * 0"
       image: fedstart-dev.palantirapollo.com/fedstart/kubectl
-      tag: 1.27.14
+      tag: 1.27.15
       imagePullSecrets: {}
 
   service:
+    enabled: false
+
     name: "splunk-web-service"
 
     annotations:
@@ -58,7 +67,7 @@ splunkWeb:
         targetPort: http-splunkweb
 
   podLabels:
-    app.kubernetes.io/name: standalone
+    app.kubernetes.io/name: search-head
 
 # Splunk Operator configurations
 splunkOperator:

@@ -73,12 +73,21 @@ sva:
 
     enabled: false
 
-    clusterManager: {}
+    clusterManager:
+      allSites: "site1"
+      site: site1
+      zone: us-east-1a
     # allSites: "site1,site2"
     # site: site1
     # zone: us-west-1a
 
-    indexerClusters: []
+    indexerClusters:
+      - name: idx1
+        site: site1
+        zone: us-east-1a
+#      - name: idx2
+#        site: site2
+#        zone: us-east-1b
       # - name: idx1
       #   site: site1
       #   zone: us-west-1a
@@ -86,7 +95,10 @@ sva:
     #   site: site2
     #   zone: us-west-1c
 
-    searchHeadClusters: []
+    searchHeadClusters:
+      - name: shc1
+        site: site1
+        zone: us-east-1a
     # - name: shc1
     #   site: site2
     #   zone: us-west-1c
@@ -113,43 +125,16 @@ existingLicenseManager: {}
 clusterManager:
 
   # Deploy a cluster manager instance
-  enabled: false
+  enabled: true
 
   # Specify the custom resource name
   name: "cm"
 
-  # Override the custom resource namespace
-  # Default deploys to the release namespace
-  namespaceOverride: ""
-
   # Specify additional labels
   additionalLabels: {}
 
-  additionalAnnotations: {}
-
-
-  # Splunk Enterprise App repository
-  # Specifies remote App location and scope for Splunk App management
-  # reference: https://github.com/splunk/splunk-operator/blob/develop/docs/AppFramework.md
-  appRepo: {}
-    ## Example: Deploy apps on cluster manager instance for local use
-    # appsRepoPollIntervalSeconds: 900
-    # appSources:
-    #   - name: networkApps
-    #     location: networkAppsLoc/
-    #   - name: clusterBase
-    #     location: clusterBaseLoc/
-    #   - name: adminApps
-    #     location: adminAppsLoc/
-    #     scope: local
-    # volumes:
-    #   - name: volume_app_repo_us
-    #     storageType: s3
-    #     provider: aws
-    #     path: bucket-app-framework-us-west-2/idxcAndCmApps/
-  #     endpoint: https://s3-us-west-2.amazonaws.com
-  #     region: us-west-2
-  #     secretRef: s3-secret
+  additionalAnnotations:
+    com.palantir.rubix.service/pod-cert: '{}'
 
   # Splunk Smartstore configuration
   # reference: https://github.com/splunk/splunk-operator/blob/develop/docs/SmartStore.md
@@ -173,8 +158,14 @@ clusterManager:
 
   # List volumes to be mounted in all pod containers
   # reference: https://kubernetes.io/docs/concepts/storage/volumes/
-  volumes: []
-
+  volumes:
+    - name: certs
+      secret:
+        secretName: cert-splunk-web-service
+    - name: combined-cert
+      secret:
+#        secretName: cert-splunk-cm-cluster-manager-service-combined-key-cert
+        secretName: cert-splunk-web-service-combined-key-cert
   # Full path or URL for a Splunk Enterprise license file
   # Ignore if deploying a license manager instance
   licenseUrl: ""
@@ -202,9 +193,28 @@ clusterManager:
   defaultsUrlApps: ""
 
   # List additional environment variables to passed to the Splunk instance container
-  extraEnv: []
-  # - name:
-  #   value:
+  extraEnv:
+    - name: SPLUNK_HTTP_ENABLESSL
+      value: 'true'
+    - name: SPLUNK_HTTP_ENABLESSL_CERT
+      value: /mnt/certs/tls.crt
+    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
+      value: /mnt/certs/tls.key
+    - name: SPLUNK_LAUNCH_CONF
+      value: "SPLUNK_FIPS=1"
+    - name: SPLUNKD_SSL_ENABLE
+      value: 'true'
+    - name: SPLUNKD_SSL_CA
+      value: /mnt/certs/ca.crt
+    - name: SPLUNKD_SSL_CERT
+      value: /mnt/combined-cert/combined_tls.crt
+    - name: SPLUNK_LAUNCH_CONF
+      value: "SPLUNK_FIPS=1"
+#    - name: SPLUNK_PASSWORD
+#      valueFrom:
+#        secretKeyRef:
+#          name: "{{ preprocess .Values.apollo.secrets.splunkadminpassword.k8sSecretName }}"
+#          key: SPLUNK_PASSWORD
 
   # Delay in seconds before probing liveness
   # refernece: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-command
@@ -263,9 +273,6 @@ clusterManager:
   # reference: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   serviceAccount: ""
 
-  # ServiceTemplate is a template used to create Kubernetes services
-  serviceTemplate: {}
-
   # Specify Splunk instance pod tolerations
   # reference: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
   tolerations: []
@@ -302,15 +309,20 @@ indexerCluster:
 
   name: "idxc"
 
-  namespaceOverride: ""
-
   additionalLabels: {}
 
-  additionalAnnotations: {}
+  additionalAnnotations:
+    com.palantir.rubix.service/pod-cert: '{}'
 
   replicaCount: 1
 
   volumes: []
+#    - name: certs
+#      secret:
+#        secretName: cert-splunk-idxc-indexer-service
+#    - name: combined-cert
+#      secret:
+#        secretName: cert-splunk-idxc-indexer-service-combined-key-cert
 
   licenseUrl: ""
 
@@ -318,9 +330,28 @@ indexerCluster:
 
   defaults: {}
 
-  extraEnv: []
-  # - name:
-  #   value:
+  extraEnv:
+    - name: SPLUNK_HTTP_ENABLESSL
+      value: 'true'
+    - name: SPLUNK_HTTP_ENABLESSL_CERT
+      value: /mnt/certs/tls.crt
+    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
+      value: /mnt/certs/tls.key
+    - name: SPLUNK_LAUNCH_CONF
+      value: "SPLUNK_FIPS=1"
+    - name: SPLUNKD_SSL_ENABLE
+      value: 'true'
+    - name: SPLUNKD_SSL_CA
+      value: /mnt/certs/ca.crt
+    - name: SPLUNKD_SSL_CERT
+      value: /mnt/combined-cert/combined_tls.crt
+    - name: SPLUNK_LAUNCH_CONF
+      value: "SPLUNK_FIPS=1"
+#    - name: SPLUNK_PASSWORD
+#      valueFrom:
+#        secretKeyRef:
+#          name: "{{ preprocess .Values.apollo.secrets.splunkadminpassword.k8sSecretName }}"
+#          key: SPLUNK_PASSWORD
 
   livenessInitialDelaySeconds: 300
 
@@ -364,62 +395,42 @@ indexerCluster:
 
   serviceAccount: ""
 
-  # ServiceTemplate is a template used to create Kubernetes services
-  serviceTemplate: {}
-
   tolerations: []
 
   affinity: {}
 
-  # Configure a topology spread constraint
-  #  https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
-  topologySpreadConstraints: []
-  #  - maxSkew: <integer>
-  #    minDomains: <integer> # optional; beta since v1.25
-  #    topologyKey: <string>
-  #    whenUnsatisfiable: <string>
-  #    labelSelector: <object>
-  #    matchLabelKeys: <list> # optional; alpha since v1.25
-  #    nodeAffinityPolicy: [Honor|Ignore] # optional; beta since v1.26
-  #    nodeTaintsPolicy: [Honor|Ignore] # optional; beta since v1.26
 
 searchHeadCluster:
 
-  enabled: false
+  enabled: true
 
   name: "shc"
 
-  namespaceOverride: ""
-
   additionalLabels: {}
 
-  additionalAnnotations: {}
+  additionalAnnotations:
+    com.palantir.rubix.service/pod-cert: '{}'
+    com.palantir.rubix.service.spp/v3: |
+      '{"endpoints": [
+         {
+           "name": "http-splunkweb", 
+           "prefix": "/", 
+           "domain-aliases": ["OSS"],
+           "experimental": {
+             "sticky-sessions":true
+           }
+         }
+       ]}'
 
   replicaCount: 1
 
-  appRepo: {}
-  #     appsRepoPollIntervalSeconds:
-  #     defaults:
-  #       volumeName:
-  #       scope:
-  #     appSources:
-  #       - name:
-  #         location:
-  #         scope: # options (local|cluster|premiumApps) default local
-  #          premiumAppsProps: #only if scope is set to premiumApps
-  #            type: enterpriseSecurity
-  #            esDefaults:
-  #              sslEnablement: 'strict' # options are ignore, strict, auto. default value is strict
-  #     volumes:
-  #       - name:
-  #         storageType:
-  #         provider:
-  #         path:
-  #         endpoint:
-  #         region:
-  #         secretRef:
-
   volumes: []
+#    - name: certs
+#      secret:
+#        secretName: cert-splunk-shc-search-head-service
+#    - name: combined-cert
+#      secret:
+#        secretName: cert-splunk-shc-search-head-service-combined-key-cert
 
   licenseUrl: ""
 
@@ -429,31 +440,29 @@ searchHeadCluster:
 
   defaultsUrlApps: ""
 
-  extraEnv: []
-  # - name:
-  #   value:
+  extraEnv:
+    - name: SPLUNK_HTTP_ENABLESSL
+      value: 'true'
+    - name: SPLUNK_HTTP_ENABLESSL_CERT
+      value: /mnt/certs/tls.crt
+    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
+      value: /mnt/certs/tls.key
+    - name: SPLUNK_LAUNCH_CONF
+      value: "SPLUNK_FIPS=1"
+    - name: SPLUNKD_SSL_ENABLE
+      value: 'true'
+    - name: SPLUNKD_SSL_CA
+      value: /mnt/certs/ca.crt
+    - name: SPLUNKD_SSL_CERT
+      value: /mnt/combined-cert/combined_tls.crt
+    - name: SPLUNK_LAUNCH_CONF
+      value: "SPLUNK_FIPS=1"
+    - name: SPLUNK_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: "{{ preprocess .Values.apollo.secrets.splunkadminpassword.k8sSecretName }}"
+          key: SPLUNK_PASSWORD
 
-  livenessInitialDelaySeconds: 300
-
-  readinessInitialDelaySeconds: 10
-
-  # Set Probes for Splunk instance pod containers
-  # reference: https://github.com/splunk/splunk-operator/blob/main/docs/HealthCheck.md
-  startupProbe: {}
-    # initialDelaySeconds: 40
-  # timeoutSeconds: 30
-  # periodSeconds: 30
-  # failureThreshold: 12
-  livenessProbe: {}
-    # initialDelaySeconds: 30
-  # timeoutSeconds: 30
-  # periodSeconds: 30
-  # failureThreshold: 3
-  readinessProbe: {}
-    # initialDelaySeconds: 10
-  # timeoutSeconds: 5
-  # periodSeconds: 5
-  # failureThreshold: 3
 
   etcVolumeStorageConfig:
     ephemeralStorage: false
@@ -475,24 +484,32 @@ searchHeadCluster:
 
   serviceAccount: ""
 
-  # ServiceTemplate is a template used to create Kubernetes services
-  serviceTemplate: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: splunk-enterprise
+            topologyKey: topology.kubernetes.io/zone
+          weight: 100
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - search-head
+          topologyKey: kubernetes.io/hostname
 
-  tolerations: []
-
-  affinity: {}
-
-  # Configure a topology spread constraint
-  #  https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
-  topologySpreadConstraints: []
-  #  - maxSkew: <integer>
-  #    minDomains: <integer> # optional; beta since v1.25
-  #    topologyKey: <string>
-  #    whenUnsatisfiable: <string>
-  #    labelSelector: <object>
-  #    matchLabelKeys: <list> # optional; alpha since v1.25
-  #    nodeAffinityPolicy: [Honor|Ignore] # optional; beta since v1.26
-  #    nodeTaintsPolicy: [Honor|Ignore] # optional; beta since v1.26
 
 monitoringConsole:
 
@@ -505,23 +522,6 @@ monitoringConsole:
   additionalLabels: {}
 
   additionalAnnotations: {}
-
-  appRepo: {}
-    # appsRepoPollIntervalSeconds:
-    # defaults:
-    #   volumeName:
-    #   scope:
-    # appSources:
-    #   - name:
-    #     location:
-    # volumes:
-    #   - name:
-    #     storageType:
-    #     provider:
-    #     path:
-  #     endpoint:
-  #     region:
-  #     secretRef:
 
   volumes: []
 
@@ -730,23 +730,6 @@ standalone:
 
   replicaCount: 1
 
-  appRepo: {}
-    # appsRepoPollIntervalSeconds:
-    # defaults:
-    #   volumeName:
-    #   scope:
-    # appSources:
-    #   - name:
-    #     location:
-    # volumes:
-    #   - name:
-    #     storageType:
-    #     provider:
-    #     path:
-  #     endpoint:
-  #     region:
-  #     secretRef:
-
   smartstore: {}
     # defaults:
     #   volumeName:
@@ -796,7 +779,7 @@ standalone:
     - name: SPLUNKD_SSL_CA
       value: /mnt/tls-external-ca-bundle/ca.pem
     - name: SPLUNKD_SSL_CERT
-      value: /mnt/cert-combined/combined_tls.crt
+      value: /mnt/combined-cert/combined_tls.crt
     - name: SPLUNK_LAUNCH_CONF
       value: "SPLUNK_FIPS=1"
     - name: SPLUNK_PASSWORD

@@ -1,36 +1,28 @@
-{{- if .Values.splunkWeb.tls.combine.enabled }}
+{{- range $tlsSecret := .Values.splunkWeb.tls.combine.serviceTLSSecrets}}
+{{- if $.Values.splunkWeb.tls.combine.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: combine-secrets-cronjob
+  name: combine-{{ $tlsSecret }}-secrets-cronjob
 spec:
   failedJobsHistoryLimit: 2
   successfulJobsHistoryLimit: 2
-  schedule: {{ .Values.splunkWeb.tls.combine.schedule | quote }}
+  schedule: {{ $.Values.splunkWeb.tls.combine.schedule | quote }}
   jobTemplate:
     spec:
       template:
         spec:
-          {{- if .Values.common.imagePullSecrets }}
-          {{- with .Values.common.imagePullSecrets }}
-          imagePullSecrets:
-            {{- toYaml . | nindent 12}}
-          {{- end }}
-          {{- else if .Values.splunkWeb.tls.combine.imagePullSecrets }}
-          {{- with .Values.splunkWeb.tls.combine.imagePullSecrets }}
-          imagePullSecrets:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- end }}
-          serviceAccountName: {{ include "splunk-operator.operator.serviceAccountName" . }}
+          serviceAccountName: {{ include "splunk-operator.operator.serviceAccountName" $ }}
           containers:
             - name: combine-secrets
-              image: {{ .Values.splunkWeb.tls.combine.image }}:{{ .Values.splunkWeb.tls.combine.tag }}
+              image: {{ $.Values.splunkWeb.tls.combine.image }}:{{ $.Values.splunkWeb.tls.combine.tag }}
               command: ["/bin/sh", "-c"]
               args:
                 - |
-                  kubectl get secret cert-splunk-web-service -o jsonpath="{.data.tls\.key}" | base64 -d > /tmp/combined.crt
-                  kubectl get secret cert-splunk-web-service -o jsonpath="{.data.tls\.crt}" | base64 -d >> /tmp/combined.crt
-                  kubectl create secret generic cert-splunk-web-service-combined-key-cert --from-file=combined_tls.crt=/tmp/combined.crt --dry-run=client -o yaml | kubectl apply -f -
+                  kubectl get secret {{ $tlsSecret }} -o jsonpath="{.data.tls\.key}" | base64 -d > /tmp/combined.crt
+                  kubectl get secret {{ $tlsSecret }} -o jsonpath="{.data.tls\.crt}" | base64 -d >> /tmp/combined.crt
+                  kubectl create secret generic {{ $tlsSecret }}-combined-key-cert --from-file=combined_tls.crt=/tmp/combined.crt --dry-run=client -o yaml | kubectl apply -f -
           restartPolicy: OnFailure
+{{- end }}
+---
 {{- end }}

@@ -22,6 +22,8 @@ refer to these [Splunk docs](https://docs.splunk.com/Documentation/SVA/current/A
 you are mounting your Splunk instance. Example: fedstart-splunk.palantirfedstart.com.
 * You will need to mount your Splunk instance at the root path of what ever front door domain you are using. Otherwise, app integrations
 may not work.
+* You will need to build the image defined by the Dockerfile in `charts/splunk-operator/` and push it to your container registry to enable the combine-cronjob
+to run and create a required TLS file for configuring TLS on the Splunk server.
 
 ### Images Used by This Chart
 
