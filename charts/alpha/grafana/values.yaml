@@ -66,7 +66,7 @@ grafana:
   service:
     annotations:
       com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "service", "prefix": "{{ .Values.contextPath }}", "domain-aliases": ["DEFAULT"]}]}'
-      com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":2}'
+      com.palantir.rubix.service/pod-cert: '{}'
   extraVolumeMounts:
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
@@ -79,7 +79,7 @@ grafana:
             path: ca.pem
   extraSecretMounts:
     - name: cert-secret-volume
-      secretName: cert-grafana-2
+      secretName: cert-grafana
       defaultMode: 0640
       mountPath: /mnt/secrets/certs
       readOnly: true
