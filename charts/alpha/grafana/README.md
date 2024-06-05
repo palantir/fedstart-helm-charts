@@ -24,9 +24,9 @@ Sample Apollo configuration overrides:
   overrides:
     grafana:
       # -- Overwrite default image registry for mirrored artifacts
-      image:
-        registry: 12345.dkr.ecr.us-east-1.amazonaws.com
-        repository: grafana/grafana
+      # image:
+      #   registry: 12345.dkr.ecr.us-east-1.amazonaws.com
+      #   repository: grafana/grafana
 
       # -- URL where grafana will be accessed from
       baseURL: https://<your-domain>.palantirfedstart.com
@@ -56,7 +56,7 @@ Sample Apollo configuration overrides:
           datasources:
           - name: Loki
             type: loki
-            url: https://loki-gateway.<loki-namespace>.svc.cluster.local:443
+            url: "https://loki-gateway.{{ .Release.Namespace }}.svc.cluster.local:443"
             access: proxy
             isDefault: true
             timeout: 360
@@ -74,7 +74,7 @@ Sample Apollo configuration overrides:
               timeout: 420
           - name: Prometheus
             type: prometheus
-            url: https://prometheus.<prometheus-namespace>.svc.cluster.local:80
+            url: "https://prometheus.{{ .Release.Namespace }}.svc.cluster.local:80"
             access: proxy
             isDefault: false
             timeout: 360

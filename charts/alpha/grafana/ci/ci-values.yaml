@@ -1,0 +1,12 @@
+grafana:
+  baseURL: https://example.palantirfedstart.com
+
+  admin:
+    existingSecret: "admin-test-secret"
+
+  envFromSecrets:
+    - name: "db-test-secret"
+
+  grafana.ini:
+    database:
+      host: "example.us-gov-west-1.rds.amazonaws.com:5432"
