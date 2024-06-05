@@ -3,10 +3,18 @@
 ## Sub-chart value overrides
 grafana:
   # baseURL -- Configures the root URL for grafana (required)
-  baseURL: ""
+  baseURL: "__REPLACE_ME_BASE_URL"
   contextPath: "/grafana"
   fullnameOverride: grafana
 
+  # Initialize admin user/password from an existing secret
+  admin:
+    existingSecret: "__REPLACE_ME_ADMIN_CREDENTIALS_SECRET_NAME"
+
+  # Load GF_DATABASE_USER and GF_DATABASE_PASSWORD environment variables from secret
+  envFromSecrets:
+    - name: "__REPLACE_ME_DB_CREDENTIALS_SECRET_NAME"
+    
   grafana.ini:
     analytics:
       check_for_updates: false
@@ -21,7 +29,7 @@ grafana:
       public_key_retrieval_disabled: true
     database:
       type: postgres
-      host: ""  # required
+      host: "__REPLACE_ME_DATABASE_HOST_DOMAIN"
       name: grafana
       ssl_mode: require
       # note, database username and password set in environment variables set by secret

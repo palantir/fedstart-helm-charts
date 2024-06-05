@@ -15,9 +15,24 @@ In Apollo create the following secrets:
   - `GF_DATABASE_USER` : `<RDS database username>`
   - `GF_DATABASE_PASSWORD` : `<RDS database password>`
 
+The following are the minimal required configuration overrides:
+
+```yaml
+  overrides:
+    grafana:
+      baseURL: "https://<your-domain>.palantirfedstart.com"
+      admin:
+        existingSecret: "{{ preprocess .Values.apollo.secrets.admincreds.k8sSecretName }}"
+      envFromSecrets:
+        - name: "{{ preprocess .Values.apollo.secrets.admincreds.k8sSecretName }}"
+      grafana.ini:
+        database:
+          host: "example.us-gov-west-1.rds.amazonaws.com:5432"
+```
+
 > Refer to the Grafana [README](https://github.com/grafana/helm-charts/tree/main/charts/grafana#configuration) for all available upstream configuration options.
 
-Sample Apollo configuration overrides:
+Sample Apollo configuration overrides with loki and prometheus datasources:
 
 ```yaml
 7.3.7005:
@@ -29,7 +44,7 @@ Sample Apollo configuration overrides:
       #   repository: grafana/grafana
 
       # -- URL where grafana will be accessed from
-      baseURL: https://<your-domain>.palantirfedstart.com
+      baseURL: "https://<your-domain>.palantirfedstart.com"
       # contextPath: "/grafana"
 
       # Initialize admin user/password from an existing secret

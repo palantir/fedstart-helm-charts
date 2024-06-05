@@ -1,6 +1,0 @@
-{{ $req_base_url := required ".Values.grafana.baseURL is required" .Values.grafana.baseURL }}
-{{ $req_db_host := required ".Values.grafana.grafana.ini.database.host is required" (index .Values "grafana" "grafana.ini" "database" "host") }}
-{{ $req_admin_secret := required "admincreds secret is required" .Values.grafana.admin.existingSecret }}
-{{ $req_dbcreds_secret := required "dbcreds secret is required" (get (first .Values.grafana.envFromSecrets) "name") }}
-
----
