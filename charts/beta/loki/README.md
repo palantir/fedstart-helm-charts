@@ -15,7 +15,7 @@ In order to deploy this helm-chart, a few pre-requisites must be satisfied:
 
 ### Config Overrides
 
-The following config overrides should be applied to Loki when installing for the first time
+The following config overrides must be applied to Loki when installing for the first time:
 
 ```yaml
 6.2.0004:

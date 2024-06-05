@@ -3,7 +3,7 @@
 fedstart:
   s3:
     # role in the format "arn:aws-us-gov:iam::<account_number>:role/fedstart-default-role"
-    aws_role_arn: ""
+    aws_role_arn: "__REPLACE_ME_ROLE_ARN"
     aws_use_fips: true
 
 ## Sub-chart value overrides
@@ -52,8 +52,8 @@ loki:
         region: us-gov-west-1
       bucketNames:
         # Enter the name(s) of the buckets to use
-        chunks: ""
-        ruler: ""
+        chunks: "__REPLACE_ME_BUCKET_NAME"
+        ruler: "__REPLACE_ME_BUCKET_NAME"
     storage_config:
       tsdb_shipper:
         active_index_directory: /var/loki/tsdb-shipper-active
