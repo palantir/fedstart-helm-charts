@@ -14,7 +14,7 @@ grafana:
   # Load GF_DATABASE_USER and GF_DATABASE_PASSWORD environment variables from secret
   envFromSecrets:
     - name: "__REPLACE_ME_DB_CREDENTIALS_SECRET_NAME"
-    
+
   grafana.ini:
     analytics:
       check_for_updates: false
