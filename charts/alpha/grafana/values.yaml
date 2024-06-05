@@ -3,9 +3,17 @@
 ## Sub-chart value overrides
 grafana:
   # baseURL -- Configures the root URL for grafana (required)
-  baseURL: ""
+  baseURL: "__REPLACE_ME_BASE_URL"
   contextPath: "/grafana"
   fullnameOverride: grafana
+
+  # Initialize admin user/password from an existing secret
+  admin:
+    existingSecret: "__REPLACE_ME_ADMIN_CREDENTIALS_SECRET_NAME"
+
+  # Load GF_DATABASE_USER and GF_DATABASE_PASSWORD environment variables from secret
+  envFromSecrets:
+    - name: "__REPLACE_ME_DB_CREDENTIALS_SECRET_NAME"
 
   grafana.ini:
     analytics:
@@ -19,6 +27,15 @@ grafana:
       serve_from_sub_path: true
     plugins:
       public_key_retrieval_disabled: true
+    database:
+      type: postgres
+      host: "__REPLACE_ME_DATABASE_HOST_DOMAIN"
+      name: grafana
+      ssl_mode: require
+      # note, database username and password set in environment variables set by secret
+      ca_cert_path: /etc/ssl/rubix-ca/ca.pem
+      client_cert_path: /mnt/secrets/certs/tls.crt
+      client_key_path: /mnt/secrets/certs/tls.key
     auth.anonymous:
       enabled: false
     users:
@@ -52,13 +69,12 @@ grafana:
 
   replicas: 2
   persistence:
-    enabled: true
-    type: statefulset
+    enabled: false
 
   service:
     annotations:
       com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "service", "prefix": "{{ .Values.contextPath }}", "domain-aliases": ["DEFAULT"]}]}'
-      com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":2}'
+      com.palantir.rubix.service/pod-cert: '{}'
   extraVolumeMounts:
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
@@ -71,7 +87,8 @@ grafana:
             path: ca.pem
   extraSecretMounts:
     - name: cert-secret-volume
-      secretName: cert-grafana-2
+      secretName: cert-grafana
+      defaultMode: 0640
       mountPath: /mnt/secrets/certs
       readOnly: true
   affinity:
