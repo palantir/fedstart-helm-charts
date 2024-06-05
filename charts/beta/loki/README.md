@@ -11,42 +11,23 @@ Refer to the Loki [documentation](https://grafana.com/docs/loki/next/setup/insta
 In order to deploy this helm-chart, a few pre-requisites must be satisfied:
 
 1. An Amazon S3 bucket must exist to store the Loki data files
-2. A K8s secret, named `storage-secret`, must exist in the namespace that loki is installed and must contain the following data.
-
-   ```yaml
-   apiVersion: v1
-   kind: Secret
-   data:
-     config: <base64-encoded-config>
-     credential: <base64-encoded-credential>
-   ```
-
-   ```yaml
-   # config format
-   [default]
-   region=<stack-region>
-   ```
-
-   ```yaml
-   # credential format
-   [default]
-   aws_access_key_id=<redacted>
-   aws_secret_access_key=<redacted>
-   ```
+2. Access configured for the loki service account to the S3 bucket
 
 ### Config Overrides
 
-The following config overrides should be applied to Loki when installing for the first time
+The following config overrides must be applied to Loki when installing for the first time:
 
 ```yaml
-6.2.0001:
+6.2.0004:
   overrides:
+    fedstart:
+      s3:
+        aws_role_arn: "arn:aws:iam::<account-number>:role/fedstart-default-role"
     loki:
       loki:
         storage:
           s3:
-            region: <region>      # us-east-1
-            endpoint: <endpoint>  # s3-fips.us-east-1.amazonaws.com
+            region: <region>      # us-gov-west-1
           bucketNames:
             chunks: <bucket-name> # loki-bucket
             ruler: <bucket-name>  # loki-bucket
