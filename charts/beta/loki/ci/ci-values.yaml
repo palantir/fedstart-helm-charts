@@ -1,3 +1,6 @@
+fedstart:
+  s3:
+    aws_role_arn: arn:aws:iam::example123456:role/fedstart-default-role
 loki:
   loki:
     storage:
