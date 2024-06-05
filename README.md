@@ -90,6 +90,7 @@ Once the packaged helm-chart is pushed to the container registry, we can now cre
 ```shell
 $ apollo-cli publish helm-chart \
     --chart-file ./build/vector-0.31.1001.tgz \
+    --helm-values ./charts/beta/vector/ci/ci-values.yaml
     --helm-repository-url "oci://12345.dkr.ecr.us-east-1.amazonaws.com/vector" \
     --maven-coordinate "com.palantir.vector:vector-aggregator:0.31.1001"
 Publishing product release com.palantir.vector:vector-aggregator:0.31.1001 into Apollo ... done
