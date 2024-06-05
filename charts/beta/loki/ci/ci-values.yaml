@@ -1,0 +1,6 @@
+loki:
+  loki:
+    storage:
+      bucketNames:
+        chunks: "test-chunks"
+        ruler: "test-ruler"
