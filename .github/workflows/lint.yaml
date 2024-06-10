@@ -30,3 +30,7 @@ jobs:
       - name: Run chart-testing (lint)
         run: ct lint --config .github/linters/ct.yaml
 
+      - name: Run markdown lint
+        uses: DavidAnson/markdownlint-cli2-action@v9
+        with:
+          config: .github/linters/.markdownlint-cli2.yaml
