@@ -55,7 +55,7 @@ The following example packages the [vector](./charts/beta/vector) helm-chart, pu
 Pre-requisites:
 
 1. An ECR registry exists with a repository named `vector`
-   1. We will use `12345.dkr.ecr.us-east-1.amazonaws.com` where `accountID=12345` and `region=us-east-1`
+   1. We will use `12345.dkr.ecr-fips.us-east-1.amazonaws.com` where `accountID=12345` and `region=us-east-1`
 2. `helm`, `aws`, and `apollo-cli` are on the users `$PATH`
 3. `apollo-cli` is configured for the correct Apollo hub
 
@@ -76,12 +76,12 @@ $ helm package -d ./build ./charts/beta/vector
 Successfully packaged chart and saved it to: build/vector-0.31.1001.tgz
 
 # Get an AWS access-token and log into ECR using helm
-$ aws ecr get-login-password | helm registry login --username AWS --password-stdin 12345.dkr.ecr.us-east-1.amazonaws.com
+$ aws ecr get-login-password | helm registry login --username AWS --password-stdin 12345.dkr.ecr-fips.us-east-1.amazonaws.com
 Login Succeeded
 
 # Push the packaged helm-chart to ECR
-$ helm push ./build/vector-0.31.1001.tgz 12345.dkr.ecr.us-east-1.amazonaws.com
-Pushed: 12345.dkr.ecr.us-east-1.amazonaws.com/vector:0.31.1001
+$ helm push ./build/vector-0.31.1001.tgz 12345.dkr.ecr-fips.us-east-1.amazonaws.com
+Pushed: 12345.dkr.ecr-fips.us-east-1.amazonaws.com/vector:0.31.1001
 Digest: sha256:83fde30c20f51e3e1a071bddc21d0f0b4662002678dc5eb3b62c666bd0d568b9
 ```
 
