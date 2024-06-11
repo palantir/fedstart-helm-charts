@@ -31,6 +31,6 @@ jobs:
         run: ct lint --config .github/linters/ct.yaml
 
       - name: Run markdown lint
-        uses: DavidAnson/markdownlint-cli2-action@v9
+        uses: DavidAnson/markdownlint-cli2-action@v16
         with:
           config: .github/linters/.markdownlint-cli2.yaml
