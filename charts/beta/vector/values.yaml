@@ -122,6 +122,10 @@ vector:
     #   cpu: 200m
     #   memory: 256Mi
 
+  # Use distroless-static images instead of distroless-libc to reduce CVE footprint
+  image:
+    base: distroless-static
+
   # podSecurityContext -- Ensures the pod is not run as root.
   podSecurityContext:
     runAsNonRoot: true
