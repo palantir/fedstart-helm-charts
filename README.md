@@ -102,3 +102,30 @@ Charts in this repository are tagged and released using the [Release Charts](.gi
 1. The chart name and version are extracted from the corresponding `Chart.yaml` to construct the desired release name
 2. If a release already exists with the desired name, then no release will be made for this chart.
 3. If a release does not exist, then one will be created with the desired name
+
+## Minimizing Vulnerabilities
+
+[Chainguard](https://www.chainguard.dev/) provides hardened container images for many of the charts included in this repository. If you are looking to minimize the number of vulnerabilities detected by Apollo when using these charts, we recommend browsing the [Chainguard Images](https://images.chainguard.dev/) to see if there is a suitable image for your chart (example - [Loki](https://images.chainguard.dev/directory/image/loki/versions).
+
+Apollo and FedStart require that all container images used must have a specific, unique version tag (e.g. version `2.1.9` is acceptable, tags such as `latest` are not). If you do not have a paid plan with Chainguard, only the `latest` tag of the Developer images will be made available for you to pull. If you are still interested in using Chainguard images, you will need to mirror the images into your own repository with specific tags on some frequency. Chainguard’s terms and policies can be found [here](https://www.chainguard.dev/software-license-agreement).
+
+Example usage:
+
+```shell
+# Pull the latest version from the Loki developer image
+$ docker pull cgr.dev/chainguard/loki:latest
+latest: Pulling from chainguard/loki
+6f125e15421f: Pull complete
+Digest: sha256:8c908e667a1fe5b3d90e29eb74a7b40ab6dafd9ac46908ee2f76117aae610575
+Status: Downloaded newer image for cgr.dev/chainguard/loki:latest
+cgr.dev/chainguard/loki:latest
+
+# Re-tag the image to your own ECR with a specific version tag
+$ docker tag cgr.dev/chainguard/loki:latest 12345.dkr.ecr-fips.us-east-1.amazonaws.com/loki:1.2.3
+
+# Push the image to your ECR repository
+$ docker push 12345.dkr.ecr-fips.us-east-1.amazonaws.com/loki:1.2.3
+The push refers to repository [12345.dkr.ecr.us-east-1.amazonaws.com/loki]
+f748f769d4a8: Pushed
+1.2.3: digest: sha256:b541bc93df42889bfbd4e2897e75d8564a7cc97e93ac04760cfa186e262d5b14 size: 528
+```
