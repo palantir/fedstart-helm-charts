@@ -8,7 +8,7 @@ spec:
   failedJobsHistoryLimit: 2
   successfulJobsHistoryLimit: 2
   schedule: {{ $.Values.splunkWeb.tls.combine.schedule | quote }}
-  concurrencyPolicy: Forbid
+  concurrencyPolicy: {{ $.Values.splunkWeb.tls.combine.concurrencyPolicy }}
   jobTemplate:
     spec:
       template:
@@ -17,6 +17,7 @@ spec:
           containers:
             - name: combine-secrets
               image: {{ $.Values.splunkWeb.tls.combine.image }}:{{ $.Values.splunkWeb.tls.combine.tag }}
+              imagePullPolicy: {{ $.Values.splunkWeb.tls.combine.imagePullPolicy }}
               command: ["/bin/sh", "-c"]
               args:
                 - |

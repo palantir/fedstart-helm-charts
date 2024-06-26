@@ -1,5 +1,8 @@
 # Overrides for Splunk Operator sub chart
 splunk-operator:
+  image:
+    repository: docker.io/splunk/splunk:9.1.3
+
   # Overrides for Splunk Operator
   splunkOperator:
     annotations:
@@ -19,22 +22,41 @@ splunk-operator:
   splunkWeb:
     tls:
       combine:
+        enabled: true
         schedule: "* * * * *"
+        serviceTLSSecrets: []
+        image: fedstart-dev.palantirapollo.com/fedstart/kubectl
+        imagePullPolicy: "IfNotPresent"
+        tag: 1.27.16
+        imagePullSecrets: {} 
+        
+    service:
+      enabled: false
 
 
 networkPolicy:
-  enabled: false
+  enabled: true
+
+  podSelector: {}
 
   egress:
     enabled: false
     to: []
     ports: []
 
+#  ingress:
+#    enabled: false
+#    from: []
+#    ports: []
   ingress:
-    enabled: false
-    from: []
-    ports: []
-
+    enabled: true
+    from:
+      - namespaceSelector:
+          matchExpressions:
+          - key: name
+            operator: In
+            values:
+              - fedstart-monitoring
 
 # Image to use for Splunk pod containers. Defaults to docker.io/splunk/splunk:9.1.3
 # Overrides RELATED_IMAGE_SPLUNK_ENTERPRISE environment variable in Splunk Operator manager container
@@ -77,55 +99,22 @@ sva:
       allSites: "site1"
       site: site1
       zone: us-east-1a
-    # allSites: "site1,site2"
-    # site: site1
-    # zone: us-west-1a
 
     indexerClusters:
       - name: idx1
         site: site1
         zone: us-east-1a
-#      - name: idx2
-#        site: site2
-#        zone: us-east-1b
-      # - name: idx1
-      #   site: site1
-      #   zone: us-west-1a
-    # - name: idx2
-    #   site: site2
-    #   zone: us-west-1c
 
     searchHeadClusters:
       - name: shc1
         site: site1
         zone: us-east-1a
-    # - name: shc1
-    #   site: site2
-    #   zone: us-west-1c
-
-# Set name reference if ClusterManager is already deployed
-# Namespace is optional, set if the resource exists outside of the release namespace
-existingClusterManager: {}
-# name:
-# namespace:
-
-# Set name reference if MonitoringConsole is already deployed
-# Namespace is optional, set if the resource exists outside of the release namespace
-existingMonitoringConsole: {}
-# name:
-# namespace:
-
-# Set name reference if LicenseManager is already deployed
-# Namespace is optional, set if the resource exists outside of the release namespace
-existingLicenseManager: {}
-# name:
-# namespace:
 
 # Configure a Splunk Cluster Manager instance
 clusterManager:
 
   # Deploy a cluster manager instance
-  enabled: true
+  enabled: false
 
   # Specify the custom resource name
   name: "cm"
@@ -158,14 +147,14 @@ clusterManager:
 
   # List volumes to be mounted in all pod containers
   # reference: https://kubernetes.io/docs/concepts/storage/volumes/
-  volumes:
-    - name: certs
-      secret:
-        secretName: cert-splunk-web-service
-    - name: combined-cert
-      secret:
-#        secretName: cert-splunk-cm-cluster-manager-service-combined-key-cert
-        secretName: cert-splunk-web-service-combined-key-cert
+  volumes: []
+#    - name: certs
+#      secret:
+#        secretName: cert-splunk-web-service
+#    - name: combined-cert
+#      secret:
+#        secretName: cert-splunk-web-service-combined-key-cert
+
   # Full path or URL for a Splunk Enterprise license file
   # Ignore if deploying a license manager instance
   licenseUrl: ""
@@ -194,27 +183,27 @@ clusterManager:
 
   # List additional environment variables to passed to the Splunk instance container
   extraEnv:
-    - name: SPLUNK_HTTP_ENABLESSL
-      value: 'true'
-    - name: SPLUNK_HTTP_ENABLESSL_CERT
-      value: /mnt/certs/tls.crt
-    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
-      value: /mnt/certs/tls.key
-    - name: SPLUNK_LAUNCH_CONF
-      value: "SPLUNK_FIPS=1"
-    - name: SPLUNKD_SSL_ENABLE
-      value: 'true'
-    - name: SPLUNKD_SSL_CA
-      value: /mnt/certs/ca.crt
-    - name: SPLUNKD_SSL_CERT
-      value: /mnt/combined-cert/combined_tls.crt
-    - name: SPLUNK_LAUNCH_CONF
-      value: "SPLUNK_FIPS=1"
-#    - name: SPLUNK_PASSWORD
-#      valueFrom:
-#        secretKeyRef:
-#          name: "{{ preprocess .Values.apollo.secrets.splunkadminpassword.k8sSecretName }}"
-#          key: SPLUNK_PASSWORD
+#    - name: SPLUNK_HTTP_ENABLESSL
+#      value: 'true'
+#    - name: SPLUNK_HTTP_ENABLESSL_CERT
+#      value: /mnt/certs/tls.crt
+#    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
+#      value: /mnt/certs/tls.key
+#    - name: SPLUNK_LAUNCH_CONF
+#      value: "SPLUNK_FIPS=1"
+#    - name: SPLUNKD_SSL_ENABLE
+#      value: 'true'
+#    - name: SPLUNKD_SSL_CA
+#      value: /mnt/certs/ca.crt
+#    - name: SPLUNKD_SSL_CERT
+#      value: /mnt/combined-cert/combined_tls.crt
+#    - name: SPLUNK_LAUNCH_CONF
+#      value: "SPLUNK_FIPS=1"
+    - name: SPLUNK_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: "{{ preprocess .Values.apollo.secrets.splunkadminpassword.k8sSecretName }}"
+          key: SPLUNK_PASSWORD
 
   # Delay in seconds before probing liveness
   # refernece: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-command
@@ -328,74 +317,30 @@ indexerCluster:
 
   defaultsUrl: ""
 
-  defaults: {}
-
   extraEnv:
-    - name: SPLUNK_HTTP_ENABLESSL
-      value: 'true'
-    - name: SPLUNK_HTTP_ENABLESSL_CERT
-      value: /mnt/certs/tls.crt
-    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
-      value: /mnt/certs/tls.key
-    - name: SPLUNK_LAUNCH_CONF
-      value: "SPLUNK_FIPS=1"
-    - name: SPLUNKD_SSL_ENABLE
-      value: 'true'
-    - name: SPLUNKD_SSL_CA
-      value: /mnt/certs/ca.crt
-    - name: SPLUNKD_SSL_CERT
-      value: /mnt/combined-cert/combined_tls.crt
-    - name: SPLUNK_LAUNCH_CONF
-      value: "SPLUNK_FIPS=1"
-#    - name: SPLUNK_PASSWORD
-#      valueFrom:
-#        secretKeyRef:
-#          name: "{{ preprocess .Values.apollo.secrets.splunkadminpassword.k8sSecretName }}"
-#          key: SPLUNK_PASSWORD
-
-  livenessInitialDelaySeconds: 300
-
-  readinessInitialDelaySeconds: 10
-
-  # Set Probes for Splunk instance pod containers
-  # reference: https://github.com/splunk/splunk-operator/blob/main/docs/HealthCheck.md
-  startupProbe: {}
-    # initialDelaySeconds: 40
-  # timeoutSeconds: 30
-  # periodSeconds: 30
-  # failureThreshold: 12
-  livenessProbe: {}
-    # initialDelaySeconds: 30
-  # timeoutSeconds: 30
-  # periodSeconds: 30
-  # failureThreshold: 3
-  readinessProbe: {}
-    # initialDelaySeconds: 10
-  # timeoutSeconds: 5
-  # periodSeconds: 5
-  # failureThreshold: 3
-
-  etcVolumeStorageConfig:
-    ephemeralStorage: false
-    storageCapacity: 10Gi
-  # storageClassName: gp2
-
-  varVolumeStorageConfig:
-    ephemeralStorage: false
-    storageCapacity: 100Gi
-  # storageClassName: gp2
-
-  resources: {}
-    # requests:
-    #   memory: "2Gi"
-    #   cpu: "4"
-  # limits:
-  #   memory: "12Gi"
-  #   cpu: "24"
+#    - name: SPLUNK_HTTP_ENABLESSL
+#      value: 'true'
+#    - name: SPLUNK_HTTP_ENABLESSL_CERT
+#      value: /mnt/certs/tls.crt
+#    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
+#      value: /mnt/certs/tls.key
+#    - name: SPLUNK_LAUNCH_CONF
+#      value: "SPLUNK_FIPS=1"
+#    - name: SPLUNKD_SSL_ENABLE
+#      value: 'true'
+#    - name: SPLUNKD_SSL_CA
+#      value: /mnt/certs/ca.crt
+#    - name: SPLUNKD_SSL_CERT
+#      value: /mnt/combined-cert/combined_tls.crt
+#    - name: SPLUNK_LAUNCH_CONF
+#      value: "SPLUNK_FIPS=1"
+    - name: SPLUNK_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: "{{ preprocess .Values.apollo.secrets.splunkadminpassword.k8sSecretName }}"
+          key: SPLUNK_PASSWORD
 
   serviceAccount: ""
-
-  tolerations: []
 
   affinity: {}
 
@@ -410,7 +355,7 @@ searchHeadCluster:
 
   additionalAnnotations:
     com.palantir.rubix.service/pod-cert: '{}'
-    com.palantir.rubix.service.spp/v3: |
+    com.palantir.rubix.service.spp/v3: > 
       '{"endpoints": [
          {
            "name": "http-splunkweb", 
@@ -441,22 +386,22 @@ searchHeadCluster:
   defaultsUrlApps: ""
 
   extraEnv:
-    - name: SPLUNK_HTTP_ENABLESSL
-      value: 'true'
-    - name: SPLUNK_HTTP_ENABLESSL_CERT
-      value: /mnt/certs/tls.crt
-    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
-      value: /mnt/certs/tls.key
-    - name: SPLUNK_LAUNCH_CONF
-      value: "SPLUNK_FIPS=1"
-    - name: SPLUNKD_SSL_ENABLE
-      value: 'true'
-    - name: SPLUNKD_SSL_CA
-      value: /mnt/certs/ca.crt
-    - name: SPLUNKD_SSL_CERT
-      value: /mnt/combined-cert/combined_tls.crt
-    - name: SPLUNK_LAUNCH_CONF
-      value: "SPLUNK_FIPS=1"
+#    - name: SPLUNK_HTTP_ENABLESSL
+#      value: 'true'
+#    - name: SPLUNK_HTTP_ENABLESSL_CERT
+#      value: /mnt/certs/tls.crt
+#    - name: SPLUNK_HTTP_ENABLESSL_PRIVKEY
+#      value: /mnt/certs/tls.key
+#    - name: SPLUNK_LAUNCH_CONF
+#      value: "SPLUNK_FIPS=1"
+#    - name: SPLUNKD_SSL_ENABLE
+#      value: 'true'
+#    - name: SPLUNKD_SSL_CA
+#      value: /mnt/certs/ca.crt
+#    - name: SPLUNKD_SSL_CERT
+#      value: /mnt/combined-cert/combined_tls.crt
+#    - name: SPLUNK_LAUNCH_CONF
+#      value: "SPLUNK_FIPS=1"
     - name: SPLUNK_PASSWORD
       valueFrom:
         secretKeyRef:

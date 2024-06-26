@@ -4,7 +4,7 @@ description: A Helm chart for Splunk Enterprise managed by the Splunk Operator t
 
 type: application
 
-version: 3.1.15
+version: 3.1.2001
 
 dependencies:
   - condition: splunk-operator.enabled

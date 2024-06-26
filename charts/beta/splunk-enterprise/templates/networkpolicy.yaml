@@ -12,8 +12,9 @@ spec:
     - Egress
     {{- end }}
   podSelector:
-    matchLabels:
-      {{- include "splunk.selectorLabels" . | nindent 6 }}
+    {{- with .Values.networkPolicy.podSelector}}
+    {{- toYaml . | nindent 8}}
+    {{- end }}
 
   {{- if .Values.networkPolicy.egress.enabled }}
   egress:
