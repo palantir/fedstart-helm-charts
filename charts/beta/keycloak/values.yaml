@@ -170,10 +170,10 @@ tls:
   keystoreFilename: "keycloak.keystore.jks"
   ## @param tls.keystorePassword Password to access the keystore when it's password-protected
   ##
-  keystorePassword: ""
+  keystorePassword: "palantir"
   ## @param tls.truststorePassword Password to access the truststore when it's password-protected
   ##
-  truststorePassword: ""
+  truststorePassword: "palantir"
   ## @param tls.passwordsSecret Secret containing the Keystore and Truststore passwords.
   ##
   passwordsSecret: ""
@@ -543,7 +543,7 @@ service:
   ##
   ports:
     http: 80
-    https: 443
+    https: 8443
   ## @param service.nodePorts [object] Specify the nodePort values for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
@@ -583,7 +583,8 @@ service:
   externalTrafficPolicy: Cluster
   ## @param service.annotations Additional custom annotations for Keycloak service
   ##
-  annotations: {}
+  annotations:
+    com.palantir.rubix.service/pod-cert: '{}'
   ## @param service.extraPorts Extra port to expose on Keycloak service
   ##
   extraPorts: []
