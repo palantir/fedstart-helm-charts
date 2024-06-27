@@ -1,0 +1,63 @@
+keycloak:
+  replicaCount: 1
+
+  auth:
+    existingSecret: ""
+    passwordSecretKey: password
+    adminUser: "admin"
+
+  networkPolicy:
+    enabled: false
+
+  postgresql:
+    enabled: false
+    primary:
+      networkPolicy:
+        enabled: false
+      containerSecurityContext:
+        enabled: false
+
+  httpRelativePath: "/keycloak/"
+  containerSecurityContext:
+    enabled: false
+
+  service:
+    annotations:
+      com.palantir.rubix.service.spp/v3: '{"endpoints":[{"name":"https","prefix":"/keycloak","domain-aliases":["DEFAULT"]}]}'
+      com.palantir.rubix.service/pod-cert: '{}'
+    ports:
+      https: 8443
+
+  tls:
+    enabled: true
+    existingSecret: "cert-{{ .Release.Name }}"
+    truststoreFilename: truststore.jks
+    keystoreFilename: keystore.jks
+    keystorePassword: palantir
+    truststorePassword: palantir
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: keycloak
+            topologyKey: topology.kubernetes.io/zone
+          weight: 100
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - keycloak
+          topologyKey: kubernetes.io/hostname
