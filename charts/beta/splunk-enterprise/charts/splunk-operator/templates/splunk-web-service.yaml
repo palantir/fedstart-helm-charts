@@ -1,0 +1,18 @@
+{{- if .Values.splunkWeb.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.splunkWeb.service.name }}
+  labels:
+{{ toYaml .Values.splunkWeb.podLabels | nindent 4 }}
+  annotations:
+{{ tpl (.Values.splunkWeb.service.annotations | toYaml) . | nindent 4 }}
+spec:
+  type: {{ .Values.splunkWeb.service.type }}
+{{- with .Values.splunkWeb.service.ports }}
+  ports:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  selector:
+{{ toYaml .Values.splunkWeb.podLabels | nindent 4 }}
+{{- end }}

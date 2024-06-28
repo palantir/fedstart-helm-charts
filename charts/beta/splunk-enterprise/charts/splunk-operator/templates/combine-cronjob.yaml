@@ -1,0 +1,30 @@
+{{- range $tlsSecret := .Values.splunkWeb.tls.combine.serviceTLSSecrets}}
+{{- if $.Values.splunkWeb.tls.combine.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ printf "combine-%s-secrets-cronjob" $tlsSecret | trunc 40 }}
+spec:
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 2
+  schedule: {{ $.Values.splunkWeb.tls.combine.schedule | quote }}
+  concurrencyPolicy: {{ $.Values.splunkWeb.tls.combine.concurrencyPolicy }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ include "splunk-operator.operator.serviceAccountName" $ }}
+          containers:
+            - name: combine-secrets
+              image: {{ $.Values.splunkWeb.tls.combine.image }}:{{ $.Values.splunkWeb.tls.combine.tag }}
+              imagePullPolicy: {{ $.Values.splunkWeb.tls.combine.imagePullPolicy }}
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  kubectl get secret {{ $tlsSecret }} -o jsonpath="{.data.tls\.key}" | base64 -d > /tmp/combined.crt
+                  kubectl get secret {{ $tlsSecret }} -o jsonpath="{.data.tls\.crt}" | base64 -d >> /tmp/combined.crt
+                  kubectl create secret generic {{ $tlsSecret }}-combined-key-cert --from-file=combined_tls.crt=/tmp/combined.crt --dry-run=client -o yaml | kubectl apply -f -
+          restartPolicy: OnFailure
+{{- end }}
+---
+{{- end }}

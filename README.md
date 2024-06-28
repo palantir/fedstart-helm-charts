@@ -16,13 +16,14 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 
 ## Current Charts
 
-| Helm Chart                                                                                          | Status |
-| --------------------------------------------------------------------------------------------------- | ------ |
-| [Prometheus](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/prometheus)  | Beta   |
-| [Loki](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/loki)              | Beta   |
-| [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/vector)          | Beta   |
-| [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)       | Alpha  |
-| [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)           | Alpha  |
+| Helm Chart                                                                                            | Status |
+|-------------------------------------------------------------------------------------------------------|--------|
+| [Prometheus](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/prometheus)    | Beta   |
+| [Loki](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/loki)                | Beta   |
+| [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/vector)            | Beta   |
+| [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)         | Alpha  |
+| [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)             | Alpha  |
+| [Splunk](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/splunk-enterprise) | Beta   |
 
 ## Versioning
 
