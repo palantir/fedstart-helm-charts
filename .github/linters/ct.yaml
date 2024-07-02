@@ -3,12 +3,10 @@ remote: origin
 target-branch: develop
 debug: true
 validate-maintainers: false
+helm-lint-extra-args: '--strict'
 chart-dirs:
   - charts/alpha
   - charts/beta
   - charts/ga
 chart-repos:
-  - bitnami=https://charts.bitnami.com/bitnami
-  - grafana=https://grafana.github.io/helm-charts
-  - prometheus-community=https://prometheus-community.github.io/helm-charts
-  - vector=https://helm.vector.dev
+# Repos get generated at CI time dynamically, see .github/workflows/lint.yaml

@@ -4,4 +4,4 @@ A Palantir Fedstart compliant helm-chart that configures [vector](https://github
 
 ## Configuration
 
-Refer to the Vector [README](./charts/vector/README.md#all-configuration-options) for all available upstream configuration options
+Refer to the Vector [README](https://github.com/vectordotdev/helm-charts/tree/develop/charts/vector#all-configuration-options) for all available upstream configuration options

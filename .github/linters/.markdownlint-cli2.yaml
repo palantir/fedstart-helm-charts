@@ -1,0 +1,5 @@
+config:
+  # line length
+  MD013: false
+globs:
+  - '**/*.md'
