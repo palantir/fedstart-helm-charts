@@ -17,13 +17,20 @@ keycloak:
       containerSecurityContext:
         enabled: false
 
+  externalDatabase:
+    existingSecret: "secret"
+    existingSecretDatabaseKey: ""
+    existingSecretHostKey: ""
+    existingSecretPasswordKey: ""
+    existingSecretPortKey: ""
+    existingSecretUserKey: ""
+
   httpRelativePath: "/keycloak/"
   containerSecurityContext:
     enabled: false
 
   service:
     annotations:
-      com.palantir.rubix.service.spp/v3: '{"endpoints":[{"name":"https","prefix":"/keycloak","domain-aliases":["DEFAULT"]}]}'
       com.palantir.rubix.service/pod-cert: '{}'
     ports:
       https: 8443
@@ -37,14 +44,6 @@ keycloak:
     truststorePassword: palantir
 
   affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: com.palantir.rubix/instance-group
-                operator: In
-                values:
-                  - fedstart
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
         - podAffinityTerm:
