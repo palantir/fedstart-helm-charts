@@ -5,7 +5,8 @@ configures [Keycloak](https://github.com/bitnami/charts/tree/main/bitnami/keyclo
 
 ## Configuration
 
-> Refer to the Grafana [README](./charts/keycloak/README.md#parameters) for all available upstream configuration options
+> Refer to the Grafana [README](https://github.com/bitnami/charts/tree/main/bitnami/keycloak#parameters) for all
+> available upstream configuration options
 
 ### General Configuration
 
@@ -19,7 +20,7 @@ configures [Keycloak](https://github.com/bitnami/charts/tree/main/bitnami/keyclo
 
 ### Database Configuration
 
-| Parameter                         | Description                                                                        | Default  | Notes                                                                                                                                                                                                                                                |
-|-----------------------------------|------------------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `postgresql.enabled`              | Switch to true to enable the PostgreSQL helm chart instead of using an external DB | `false`  | To ensure your Keycloak deployment is highly available, it's recommended that you use an external DB instance. Set up this connection using the overrides under the [`externalDatabase`](./charts/keycloak/README.md#database-parameters) parameter. |
-| `externalDatabase.existingSecret` | Name of an existing secret resource containing the database credentials            | `secret` | The default value is just a placeholder.                                                                                                                                                                                                             |
+| Parameter                         | Description                                                                        | Default  | Notes                                                                                                                                                                                                                                                                                 |
+|-----------------------------------|------------------------------------------------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `postgresql.enabled`              | Switch to true to enable the PostgreSQL helm chart instead of using an external DB | `false`  | To ensure your Keycloak deployment is highly available, it's recommended that you use an external DB instance. Set up this connection using the overrides under the [`externalDatabase`](https://github.com/bitnami/charts/tree/main/bitnami/keycloak#database-parameters) parameter. |
+| `externalDatabase.existingSecret` | Name of an existing secret resource containing the database credentials            | `secret` | The default value is just a placeholder.                                                                                                                                                                                                                                              |
