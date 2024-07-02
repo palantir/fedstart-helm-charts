@@ -12,7 +12,7 @@ description: A Keycloak chart that can be used with Palantir FedStart
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-version: 21.3.1003
+version: 21.3.1004
 
 # Be aware that using helm dependencies has undesirable side affects, where you cannot remove
 # subchart config keys by setting them to null. If this type of configuration override is necessary,
@@ -22,6 +22,3 @@ dependencies:
   - name: keycloak
     version: "21.3.1"
     repository: oci://registry-1.docker.io/bitnamicharts
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 2.x.x
