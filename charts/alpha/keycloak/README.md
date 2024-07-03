@@ -5,18 +5,20 @@ configures [Keycloak](https://github.com/bitnami/charts/tree/main/bitnami/keyclo
 
 ## Configuration
 
-> Refer to the Grafana [README](https://github.com/bitnami/charts/tree/main/bitnami/keycloak#parameters) for all
+> Refer to the Keycloak [README](https://github.com/bitnami/charts/tree/main/bitnami/keycloak#parameters) for all
 > available upstream configuration options
 
 ### General Configuration
 
-| Parameter                               | Description                                                                       | Default        | Notes                                   |
-|-----------------------------------------|-----------------------------------------------------------------------------------|----------------|-----------------------------------------|
-| `httpRelativePath`                      | Set the path relative to '/' for serving resources                                | `"/keycloak/"` | Ensure the path you provide ends in `/` |
-| `auth.adminUser`                        | Keycloak administrator user                                                       | `admin`        |                                         |
-| `auth.existingSecret`                   | Existing secret containing Keycloak admin password                                | `""`           |                                         |
-| `auth.passwordSecretKey` (**Required**) | Key where the Keycloak admin password is being stored inside the existing secret. | `""`           |                                         |
-| `service.annotations`                   | Additional custom annotations for Keycloak service                                |                |                                         |
+| Parameter                               | Description                                                                       | Default        | Notes                                      |
+|-----------------------------------------|-----------------------------------------------------------------------------------|----------------|--------------------------------------------|
+| `httpRelativePath`                      | Set the path relative to '/' for serving resources                                | `"/keycloak/"` | Ensure the path you provide ends in `/`    |
+| `auth.adminUser`                        | Keycloak administrator user                                                       | `admin`        |                                            |
+| `auth.existingSecret`                   | Existing secret containing Keycloak admin password                                | `""`           |                                            |
+| `auth.passwordSecretKey` (**Required**) | Key where the Keycloak admin password is being stored inside the existing secret. | `""`           |                                            |
+| `service.annotations`                   | Additional custom annotations for Keycloak service                                |                |                                            |
+| `tls.keystorePassword` (**Required**)   | Password to access the keystore when it's password-protected                      | `""`           | See the FedStart documentation for details |
+| `tls.truststorePassword` (**Required**) | Password to access the truststore when it's password-protected                    | `""`           | See the FedStart documentation for details |
 
 ### Database Configuration
 

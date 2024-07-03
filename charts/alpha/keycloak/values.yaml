@@ -15,7 +15,8 @@ keycloak:
       networkPolicy:
         enabled: false
       containerSecurityContext:
-        enabled: false
+        seLinuxOptions: null
+
 
   externalDatabase:
     existingSecret: "secret"
@@ -27,7 +28,7 @@ keycloak:
 
   httpRelativePath: "/keycloak/"
   containerSecurityContext:
-    enabled: false
+    seLinuxOptions: null
 
   service:
     annotations:
@@ -40,8 +41,8 @@ keycloak:
     existingSecret: "cert-{{ .Release.Name }}"
     truststoreFilename: truststore.jks
     keystoreFilename: keystore.jks
-    keystorePassword: palantir
-    truststorePassword: palantir
+    keystorePassword: ""
+    truststorePassword: ""
 
   affinity:
     podAntiAffinity:
@@ -60,3 +61,4 @@ keycloak:
                 values:
                   - keycloak
           topologyKey: kubernetes.io/hostname
+
