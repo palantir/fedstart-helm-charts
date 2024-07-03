@@ -23,7 +23,7 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 | [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/vector)         | Beta   |
 | [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)      | Alpha  |
 | [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)          | Alpha  |
-| [Keycloak](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/keycloak)    | Alpha  | 
+| [Keycloak](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/keycloak)    | Alpha  |
 
 ## Versioning
 
@@ -56,7 +56,7 @@ The following example packages the [vector](./charts/beta/vector) helm-chart, pu
 Pre-requisites:
 
 1. An ECR registry exists with a repository named `vector`
-  1. We will use `12345.dkr.ecr-fips.us-east-1.amazonaws.com` where `accountID=12345` and `region=us-east-1`
+    1. We will use `12345.dkr.ecr-fips.us-east-1.amazonaws.com` where `accountID=12345` and `region=us-east-1`
 2. `helm`, `aws`, and `apollo-cli` are on the users `$PATH`
 3. `apollo-cli` is configured for the correct Apollo hub
 

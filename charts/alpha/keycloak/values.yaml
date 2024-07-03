@@ -61,4 +61,3 @@ keycloak:
                 values:
                   - keycloak
           topologyKey: kubernetes.io/hostname
-
