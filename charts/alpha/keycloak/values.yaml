@@ -31,6 +31,9 @@ keycloak:
     seLinuxOptions: null
 
   service:
+    headless:
+      annotations:
+        com.palantir.rubix.service/pod-cert: '{}'
     annotations:
       com.palantir.rubix.service/pod-cert: '{}'
     ports:
