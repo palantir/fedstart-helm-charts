@@ -12,7 +12,7 @@ description: A Grafana chart that can be used with Palantir FedStart
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-version: 8.0.0003
+version: 8.3.2001
 
 # Be aware that using helm dependencies has undesirable side affects, where you cannot remove
 # subchart config keys by setting them to null. If this type of configuration override is necessary,
@@ -20,5 +20,5 @@ version: 8.0.0003
 # https://github.com/helm/helm/issues/9027
 dependencies:
   - name: grafana
-    version: "8.0.0"
+    version: "8.3.2"
     repository: https://grafana.github.io/helm-charts
