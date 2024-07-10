@@ -12,7 +12,7 @@ description: A Loki chart that can be used with Palantir FedStart
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-version: 6.6.3002
+version: 6.6.3003
 
 # Be aware that using helm dependencies has undesirable side effects, where you cannot remove
 # sub-chart config keys by setting them to null. If this type of configuration override is necessary,

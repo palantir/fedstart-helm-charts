@@ -5,6 +5,14 @@ redis:
     enabled: false
   master:
     affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                - fedstart
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:
@@ -23,6 +31,14 @@ redis:
             topologyKey: kubernetes.io/hostname
   replica:
     affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                - fedstart
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:

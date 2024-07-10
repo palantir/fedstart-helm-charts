@@ -142,8 +142,17 @@ vector:
         - ALL
 
   # affinity -- Configures the affinity for vector pods.
-  # Ensures that pods are spread across different nodes.
+  # Ensures that workloads are mapped to nodes in the fedstart instance group
+  # and ensures pods are spread across different nodes.
   affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
         - podAffinityTerm:

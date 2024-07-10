@@ -95,6 +95,15 @@ loki:
           items:
             - key: ca.pem
               path: ca.pem
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
 
   read:
     legacyReadTarget: false
@@ -119,6 +128,15 @@ loki:
           items:
             - key: ca.pem
               path: ca.pem
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
 
   backend:
     service:
@@ -142,6 +160,15 @@ loki:
           items:
             - key: ca.pem
               path: ca.pem
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
 
   memberlist:
     service:
@@ -191,6 +218,15 @@ loki:
           items:
             - key: ca.pem
               path: ca.pem
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
 
   sidecar:
     rules:

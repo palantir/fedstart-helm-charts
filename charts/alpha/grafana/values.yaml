@@ -92,6 +92,14 @@ grafana:
       mountPath: /mnt/secrets/certs
       readOnly: true
   affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
         - podAffinityTerm:

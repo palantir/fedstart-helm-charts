@@ -70,6 +70,15 @@ prometheus:
           items:
             - key: ca.pem
               path: ca.pem
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
 
   alertmanager:
     enabled: false
@@ -130,6 +139,16 @@ prometheus:
         mountPath: "/mnt/secrets/certs"
       - name: rubix-ca-bundle
         mountPath: "/etc/ssl/rubix-ca"
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
 
     livenessProbe:
       httpGet:
