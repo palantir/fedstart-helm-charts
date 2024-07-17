@@ -1,11 +1,4 @@
 keycloak:
-  replicaCount: 1
-
-  auth:
-    existingSecret: ""
-    passwordSecretKey: password
-    adminUser: "admin"
-
   networkPolicy:
     enabled: false
 
@@ -17,16 +10,9 @@ keycloak:
       containerSecurityContext:
         seLinuxOptions: null
 
-
   externalDatabase:
     existingSecret: "secret"
-    existingSecretDatabaseKey: ""
-    existingSecretHostKey: ""
-    existingSecretPasswordKey: ""
-    existingSecretPortKey: ""
-    existingSecretUserKey: ""
 
-  httpRelativePath: "/keycloak/"
   containerSecurityContext:
     seLinuxOptions: null
 
@@ -36,16 +22,12 @@ keycloak:
         com.palantir.rubix.service/pod-cert: '{}'
     annotations:
       com.palantir.rubix.service/pod-cert: '{}'
-    ports:
-      https: 8443
 
   tls:
     enabled: true
     existingSecret: "cert-{{ .Release.Name }}"
     truststoreFilename: truststore.jks
     keystoreFilename: keystore.jks
-    keystorePassword: ""
-    truststorePassword: ""
 
   affinity:
     podAntiAffinity:
@@ -58,9 +40,6 @@ keycloak:
           weight: 100
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
-            matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values:
-                  - keycloak
+            matchLabels:
+              app.kubernetes.io/name: keycloak
           topologyKey: kubernetes.io/hostname
