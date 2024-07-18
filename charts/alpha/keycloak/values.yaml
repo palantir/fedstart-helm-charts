@@ -8,7 +8,7 @@ keycloak:
       networkPolicy:
         enabled: false
       containerSecurityContext:
-        seLinuxOptions: null
+        enabled: false
 
   externalDatabase:
     existingSecret: "secret"
