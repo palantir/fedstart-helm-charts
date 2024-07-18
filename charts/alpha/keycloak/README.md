@@ -4,6 +4,7 @@ A Palantir Fedstart compliant helm-chart that
 configures [Keycloak](https://github.com/bitnami/charts/tree/main/bitnami/keycloak).
 
 ## Image
+
 You will need to mirror the [Keycloak image](https://hub.docker.com/r/bitnami/keycloak/tags) to your private containers registry and update the chart's image reference accordingly.
 See the section below for the relevant configuration overrides to do so.
 
