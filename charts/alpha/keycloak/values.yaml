@@ -23,8 +23,8 @@ keycloak:
     existingSecret: "cert-{{ .Release.Name }}"
     truststoreFilename: truststore.jks
     keystoreFilename: keystore.jks
-    keystorePassword: "palantir" # hardcoded since this does not provide any additional security
-    truststorePassword: "palantir" # hardcoded since this does not provide any additional security
+    keystorePassword: "palantir"    # hardcoded since this does not provide any additional security
+    truststorePassword: "palantir"  # hardcoded since this does not provide any additional security
 
   affinity:
     podAntiAffinity:
