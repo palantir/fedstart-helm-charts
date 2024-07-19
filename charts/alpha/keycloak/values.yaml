@@ -1,4 +1,8 @@
 keycloak:
+  auth:
+    passwordSecretKey: password
+    adminUser: admin
+
   networkPolicy:
     enabled: false
 
@@ -6,7 +10,12 @@ keycloak:
     enabled: false
 
   externalDatabase:
-    existingSecret: "secret"
+    existingSecret: secret
+    existingSecretDatabaseKey: db
+    existingSecretHostKey: host
+    existingSecretPortKey: port
+    existingSecretPasswordKey: password
+    existingSecretUserKey: user
 
   containerSecurityContext:
     seLinuxOptions: null
