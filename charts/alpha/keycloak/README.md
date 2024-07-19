@@ -8,6 +8,10 @@ configures [Keycloak](https://github.com/bitnami/charts/tree/main/bitnami/keyclo
 You will need to mirror the [Keycloak image](https://hub.docker.com/r/bitnami/keycloak/tags) to your private containers registry and update the chart's image reference accordingly.
 See the section below for the relevant configuration overrides to do so.
 
+## Accessing the Keycloak Application
+
+By default, Keycloak will be accessible at the `/keycloak` path on the default frontdoor domain of your FedStart environment.
+
 ## Configuration
 
 > Refer to the Keycloak [README](https://github.com/bitnami/charts/tree/main/bitnami/keycloak#parameters) for all
