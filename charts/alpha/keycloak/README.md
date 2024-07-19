@@ -21,7 +21,7 @@ In order to deploy this Helm chart, a few prerequisites must be satisfied:
    1. See the [External Database Configuration](#external-database-configuration) section below for details on creating this secret.
 3. An Apollo secret containing the password for the Keycloak admin user under the key `password` created.
    1. The admin user username is set as `admin` by default.
-4. The [Keycloak image](https://hub.docker.com/r/bitnami/keycloak/tags) mirrored to your private containers registry and the chart's image reference accordingly.
+4. The [Keycloak image](https://hub.docker.com/r/bitnami/keycloak/tags) mirrored to your private containers registry and the chart's image reference updated accordingly.
 See the [example configuration overrides](#sample-apollo-configuration-overrides) below for the relevant configuration overrides to do so.
 
 ### External Database Configuration
