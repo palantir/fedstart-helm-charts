@@ -47,8 +47,4 @@ See the section below for the relevant configuration overrides to do so.
       # Ensure the path you provide for this override ends in `/` and matches the frontdoor 
       # mount path you specify via the service.annotations override
       httpRelativePath: "/keycloak/"
-      
-      tls:
-        keystorePassword: example_password
-        truststorePassword: example_password
 ```
