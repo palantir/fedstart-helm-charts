@@ -13,18 +13,10 @@ See the section below for the relevant configuration overrides to do so.
 > Refer to the Keycloak [README](https://github.com/bitnami/charts/tree/main/bitnami/keycloak#parameters) for all
 > available upstream configuration options
 
-### General Configuration
-
-| Parameter                               | Description                                                                       | Default                                     | Notes                                                                                                    |
-|-----------------------------------------|-----------------------------------------------------------------------------------|---------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| `tls.keystorePassword` (**Required**)   | Password to access the keystore when it's password-protected                      | `""`                                        | See the FedStart documentation for details                                                               |
-| `tls.truststorePassword` (**Required**) | Password to access the truststore when it's password-protected                    | `""`                                        | See the FedStart documentation for details                                                               |
-
 ### Database Configuration
 
 | Parameter                         | Description                                                                        | Default  | Notes                                                                                                                                                                                                                                                                                 |
 |-----------------------------------|------------------------------------------------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `postgresql.enabled`              | Switch to true to enable the PostgreSQL helm chart instead of using an external DB | `false`  | To ensure your Keycloak deployment is highly available, it's recommended that you use an external DB instance. Set up this connection using the overrides under the [`externalDatabase`](https://github.com/bitnami/charts/tree/main/bitnami/keycloak#database-parameters) parameter. |
 | `externalDatabase.existingSecret` | Name of an existing secret resource containing the database credentials            | `secret` | The default value is just a placeholder. You should set this override to `""` if you opt to use the postgresql subchart instead of an external database.                                                                                                                              |
 
 ## Sample Apollo Configuration Overrides
