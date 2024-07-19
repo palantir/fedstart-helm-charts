@@ -4,11 +4,6 @@ keycloak:
 
   postgresql:
     enabled: false
-    primary:
-      networkPolicy:
-        enabled: false
-      containerSecurityContext:
-        enabled: false
 
   externalDatabase:
     existingSecret: "secret"
