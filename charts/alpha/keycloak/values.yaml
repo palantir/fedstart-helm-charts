@@ -21,7 +21,7 @@ keycloak:
       annotations:
         com.palantir.rubix.service/pod-cert: '{}'
     annotations:
-      com.palantir.rubix.service/pod-cert: '{}'
+      com.palantir.rubix.service/pod-cert: '{"additionalOutputFormats":["JKS"]}'
 
   tls:
     enabled: true
