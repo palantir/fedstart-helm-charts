@@ -3,11 +3,6 @@
 A Palantir Fedstart compliant helm-chart that
 configures [Keycloak](https://github.com/bitnami/charts/tree/main/bitnami/keycloak).
 
-## Image
-
-You will need to mirror the [Keycloak image](https://hub.docker.com/r/bitnami/keycloak/tags) to your private containers registry and update the chart's image reference accordingly.
-See the section below for the relevant configuration overrides to do so.
-
 ## Accessing the Keycloak Application
 
 By default, Keycloak will be accessible at the `/keycloak` path on the default frontdoor domain of your FedStart environment.
@@ -26,6 +21,8 @@ In order to deploy this Helm chart, a few prerequisites must be satisfied:
    1. See the [External Database Configuration](#external-database-configuration) section below for details on creating this secret.
 3. An Apollo secret containing the password for the Keycloak admin user under the key `password` created.
    1. The admin user username is set as `admin` by default.
+4. The [Keycloak image](https://hub.docker.com/r/bitnami/keycloak/tags) mirrored to your private containers registry and the chart's image reference accordingly.
+See the [example configuration overrides](#sample-apollo-configuration-overrides) below for the relevant configuration overrides to do so.
 
 ### External Database Configuration
 
@@ -49,6 +46,11 @@ The Apollo secret specified by `externalDatabase.existingSecret` should contain 
 21.3.1006:
   overrides:
     keycloak:
+      image:
+        registry: 1234.dkr.ecr-fips.us-gov-west-1.amazonaws.com
+        repository: charts/keycloak
+        tag: 24.0.4-debian-12-r1
+         
       # Set the admin user password using an existing secret
       auth:
         existingSecret: '{{ preprocess .Values.apollo.secrets.keycloakadmin.k8sSecretName }}'
