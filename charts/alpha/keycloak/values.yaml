@@ -17,6 +17,9 @@ keycloak:
         com.palantir.rubix.service/pod-cert: '{}'
     annotations:
       com.palantir.rubix.service/pod-cert: '{"additionalOutputFormats":["JKS"]}'
+      com.palantir.rubix.service.spp/v3: '{"endpoints":[{"name":"https","prefix":"/keycloak","domain-aliases":["DEFAULT"]}]}'
+
+  httpRelativePath: "/keycloak/"
 
   tls:
     enabled: true
