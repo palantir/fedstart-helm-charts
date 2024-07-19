@@ -16,8 +16,8 @@ See the section below for the relevant configuration overrides to do so.
 ### Database Configuration
 
 | Parameter                         | Description                                                                        | Default  | Notes                                                                                                                                                                                                                                                                                 |
-|-----------------------------------|------------------------------------------------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `externalDatabase.existingSecret` | Name of an existing secret resource containing the database credentials            | `secret` | The default value is just a placeholder. You should set this override to `""` if you opt to use the postgresql subchart instead of an external database.                                                                                                                              |
+|-----------------------------------|------------------------------------------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `externalDatabase.existingSecret` | Name of an existing secret resource containing the database credentials            | `secret` | The default value is just a placeholder. You should set this override to the appropriate value depending on the name of your secret.                                                                         |
 
 ## Sample Apollo Configuration Overrides
 
@@ -39,12 +39,4 @@ See the section below for the relevant configuration overrides to do so.
         existingSecretPasswordKey: password
         existingSecretPortKey: port
         existingSecretUserKey: user
-      
-      service:
-        annotations:
-          com.palantir.rubix.service.spp/v3: '{"endpoints":[{"name":"https","prefix":"/keycloak","domain-aliases":["DEFAULT"]}]}'
-
-      # Ensure the path you provide for this override ends in `/` and matches the frontdoor 
-      # mount path you specify via the service.annotations override
-      httpRelativePath: "/keycloak/"
 ```
