@@ -59,6 +59,12 @@ loki:
         active_index_directory: /var/loki/tsdb-shipper-active
         cache_location: /var/loki/tsdb-shipper-cache
         cache_ttl: 24h
+    limits_config:
+      # 18month retention period based on FedRAMP Guidance outlined in OMB M-21-31
+      retention_period: 550d
+    compactor:
+      retention_enabled: true
+      delete_request_store: s3
 
   # Disable chunks + results cache which use memcached (enabled by default)
   chunksCache:
