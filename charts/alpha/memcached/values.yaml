@@ -5,7 +5,7 @@ memcached:
     tag: 1.6.29-alpine
 
   args:
-    # - "-v" Verbose logs, add more 'v's to up the verbosity
+    # - "-v"  # Verbose logs, add more 'v's to up the verbosity
     - "--extended=modern"
     - "-Z"  # Enable TLS
     - "-ossl_chain_cert=/mnt/secrets/certs/tls.crt,ssl_key=/mnt/secrets/certs/tls.key,ssl_ca_cert=/mnt/secrets/certs/ca.crt,ssl_verify_mode=0"  # yamllint disable-line
