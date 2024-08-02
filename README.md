@@ -24,6 +24,7 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 | [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)       | Alpha  |
 | [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)           | Alpha  |
 | [Keycloak](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/keycloak)     | Alpha  |
+| [Memcached](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/memcached)   | Alpha  |
 
 ## Versioning
 

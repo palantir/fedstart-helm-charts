@@ -1,0 +1,69 @@
+memcached:
+  image:
+    registry: docker.io
+    repository: library/memcached
+    tag: 1.6.29-alpine
+
+  args:
+  # - "-v" # Verbose logs, add more 'v's to up the verbosity
+  - "--extended=modern"
+  - "-Z" # Enable TLS
+  - "-ossl_chain_cert=/mnt/secrets/certs/tls.crt,ssl_key=/mnt/secrets/certs/tls.key,ssl_ca_cert=/mnt/secrets/certs/ca.crt,ssl_verify_mode=0"
+  - "--memory-file=/cache-state/memory_file" # Recommended for HA Architecture Mode
+
+  global:
+    storageClass: "rubix-aws-provisioner-v5"
+
+  architecture: "high-availability"
+
+  autoscaling:
+    enabled: true
+
+  persistence:
+    enabled: true
+
+  networkPolicy:
+    enabled: false
+
+  containerSecurityContext:
+    runAsUser: 11211
+    seLinuxOptions: null
+
+  service:
+    annotations:
+      com.palantir.rubix.service/pod-cert: '{}'
+
+  extraVolumes:
+  - name: cert-secret-volume
+    secret:
+      secretName: cert-{{ $.Release.Name }}
+
+  extraVolumeMounts:
+  - name: cert-secret-volume
+    mountPath: "/mnt/secrets/certs"
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: com.palantir.rubix/instance-group
+            operator: In
+            values:
+            - fedstart
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: "{{ $.Release.Name }}"
+          topologyKey: topology.kubernetes.io/zone
+        weight: 100
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/instance
+            operator: In
+            values:
+            - "{{ $.Release.Name }}"
+        topologyKey: kubernetes.io/hostname
