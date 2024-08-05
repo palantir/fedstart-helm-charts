@@ -10,7 +10,7 @@ Refer to the Memcached [README](https://github.com/bitnami/charts/blob/main/bitn
 
 To enable TLS encryption support for memcached, it requires a special build flag to compile `openssl` dependencies into the binaries ([source](https://github.com/memcached/memcached/wiki/TLS)).
 
-**The bitnami image referenced in the upstream helm chart does *not* have the necessary `openssl` depdencnies to enable TLS encyrption support. This chart explicitly overrides the image registry, repository, and tag to utilize the official DockerHub image with TLS encryption support.**
+**The bitnami image referenced in the upstream helm chart does *not* have the necessary `openssl` depdencnies to enable TLS encryption support. This chart explicitly overrides the image registry, repository, and tag to utilize the official DockerHub image with TLS encryption support.**
 
 ```yaml
 image:

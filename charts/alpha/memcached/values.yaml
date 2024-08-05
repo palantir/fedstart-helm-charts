@@ -11,9 +11,6 @@ memcached:
     - "-ossl_chain_cert=/mnt/secrets/certs/tls.crt,ssl_key=/mnt/secrets/certs/tls.key,ssl_ca_cert=/mnt/secrets/certs/ca.crt,ssl_verify_mode=0"  # yamllint disable-line
     - "--memory-file=/cache-state/memory_file"  # Recommended for HA Architecture Mode
 
-  global:
-    storageClass: "rubix-aws-provisioner-v5"
-
   architecture: "high-availability"
 
   autoscaling:
