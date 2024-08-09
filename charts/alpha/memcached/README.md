@@ -6,7 +6,7 @@ A Palantir Fedstart compliant helm-chart that configures [memcached](https://git
 
 Refer to the Memcached [README](https://github.com/bitnami/charts/blob/main/bitnami/memcached/README.md) for all available upstream configuration options.
 
-## PLEASE READ: TLS Encryption Support
+## TLS Encryption Support
 
 To enable TLS encryption support for memcached, it requires a special build flag to compile `openssl` dependencies into the binaries ([source](https://github.com/memcached/memcached/wiki/TLS)).
 

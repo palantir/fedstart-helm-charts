@@ -1,5 +1,6 @@
 memcached:
   image:
+    # DockerHub image with TLS encryption support
     registry: docker.io
     repository: library/memcached
     tag: 1.6.29-alpine
