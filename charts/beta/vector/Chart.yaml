@@ -12,7 +12,7 @@ description: A Vector chart that can be used with Palantir FedStart
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-version: 0.34.0003
+version: 0.35.0001
 
 # Be aware that using helm dependencies has undesirable side affects, where you cannot remove
 # subchart config keys by setting them to null. If this type of configuration override is necessary,
@@ -20,5 +20,5 @@ version: 0.34.0003
 # https://github.com/helm/helm/issues/9027
 dependencies:
   - name: vector
-    version: "0.34.0"
+    version: "0.35.0"
     repository: https://helm.vector.dev
