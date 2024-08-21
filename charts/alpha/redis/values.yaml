@@ -18,16 +18,21 @@ redis:
           - podAffinityTerm:
               labelSelector:
                 matchLabels:
-                  rubix-app: "{{ $.Release.Name }}-master"
+                  app.kubernetes.io/component: master
+                  app.kubernetes.io/instance: "{{ $.Release.Name }}"
               topologyKey: topology.kubernetes.io/zone
             weight: 100
         requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-                - key: rubix-app
+                - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - "{{ $.Release.Name }}-master"
+                    - "{{ $.Release.Name }}"
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - master
             topologyKey: kubernetes.io/hostname
   replica:
     affinity:
@@ -44,14 +49,19 @@ redis:
           - podAffinityTerm:
               labelSelector:
                 matchLabels:
-                  rubix-app: "{{ $.Release.Name }}-replica"
+                  app.kubernetes.io/component: replica
+                  app.kubernetes.io/instance: "{{ $.Release.Name }}"
               topologyKey: topology.kubernetes.io/zone
             weight: 100
         requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-                - key: rubix-app
+                - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - "{{ $.Release.Name }}-replica"
+                    - "{{ $.Release.Name }}"
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - replica
             topologyKey: kubernetes.io/hostname
