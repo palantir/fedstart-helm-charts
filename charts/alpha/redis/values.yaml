@@ -25,14 +25,14 @@ redis:
         requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-                - key: app.kubernetes.io/instance
-                  operator: In
-                  values:
-                    - "{{ $.Release.Name }}"
                 - key: app.kubernetes.io/component
                   operator: In
                   values:
                     - master
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - "{{ $.Release.Name }}"
             topologyKey: kubernetes.io/hostname
   replica:
     affinity:
@@ -56,12 +56,12 @@ redis:
         requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-                - key: app.kubernetes.io/instance
-                  operator: In
-                  values:
-                    - "{{ $.Release.Name }}"
                 - key: app.kubernetes.io/component
                   operator: In
                   values:
                     - replica
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - "{{ $.Release.Name }}"
             topologyKey: kubernetes.io/hostname
