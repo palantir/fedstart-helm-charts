@@ -181,10 +181,6 @@ loki:
       publishNotReadyAddresses: true
 
   gateway:
-    image:
-      registry: docker.io
-      repository: nginxinc/nginx-unprivileged
-      tag: 1.27-alpine
     readinessProbe:
       httpGet:
         path: /
