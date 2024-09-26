@@ -12,7 +12,7 @@ description: A Prometheus chart that can be used with Palantir FedStart
 # pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
 
-version: 25.27.0001
+version: 25.27.0002
 
 # Be aware that using helm dependencies has undesirable side affects, where you cannot remove
 # subchart config keys by setting them to null. If this type of configuration override is necessary,

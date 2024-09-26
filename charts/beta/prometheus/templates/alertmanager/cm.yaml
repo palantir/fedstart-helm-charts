@@ -30,7 +30,7 @@ data:
       cert_file: /mnt/secrets/certs/tls.crt
       insecure_skip_verify: false
       key_file: /mnt/secrets/certs/tls.key
-      server_name: prometheus-alertmanager.{{ .Release.Namespace }}.svc
+      server_name: {{ include "alertmanager.fullname" .Subcharts.prometheus.Subcharts.alertmanager }}.{{ .Release.Namespace }}.svc
     tls_server_config:
       cert_file: /mnt/secrets/certs/tls.crt
       key_file: /mnt/secrets/certs/tls.key
