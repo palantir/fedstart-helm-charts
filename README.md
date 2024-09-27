@@ -97,6 +97,8 @@ $ apollo-cli publish helm-chart \
 Publishing product release com.palantir.vector:vector-aggregator:0.31.1001 into Apollo ... done
 ```
 
+Note, if using mirrored container images the generated manifest must have the mirrored image OCI paths.  The apollo-cli `--helm-values` flag allows you to specify a local values.yaml with image repository overrides to be used when generating the manifest.  This only applies to the generated manifest, the mirror repository will still need to set in Apollo configuration overrides.
+
 ## Release Process
 
 Charts in this repository are tagged and released using the [Release Charts](.github/workflows/release.yaml) Github workflow and corresponding [release script](./script/release.sh), where the release name is `<chart-name>-<chart-version>` (e.g. `grafana-7.3.7001`). Every commit to the `develop` branch will trigger the workflow and charts with __any__ changes since the latest git tag are evaluated for a potential release as follows:

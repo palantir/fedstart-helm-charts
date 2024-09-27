@@ -178,6 +178,8 @@ loki:
 
   memberlist:
     service:
+      annotations:
+        com.palantir.rubix.service/pod-cert: "{}"
       publishNotReadyAddresses: true
 
   gateway:
