@@ -99,6 +99,24 @@ Publishing product release com.palantir.vector:vector-aggregator:0.31.1001 into 
 
 Note, if using mirrored container images the generated manifest must have the mirrored image OCI paths.  The apollo-cli `--helm-values` flag allows you to specify a local values.yaml with image repository overrides to be used when generating the manifest.  This only applies to the generated manifest, the mirror repository will still need to set in Apollo configuration overrides.
 
+For example, if you mirror the vector container image from `timberio/vector:0.31.1-distroless-static` to `12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector:0.31.1-distroless-static` then the OCI path in the published manifest must be the ECR hosted path.  To accomplish this you could can provide the path overrides in a separate values.yaml file for use during release publication.  The separate `publish-values.yaml` for vector may look like:
+
+```yaml
+vector:
+  image:
+    repository: 12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector
+```
+
+And when publishing a new product release you would add `--helm-values <filename>` to the publish command like:
+
+```shell
+$ apollo-cli publish helm-chart \
+    --chart-file ./build/vector-0.31.1001.tgz \
+    --helm-repository-url "oci://12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector" \
+    --maven-coordinate "com.palantir.vector:vector-aggregator:0.31.1001" \
+    --helm-values publish-values.yaml
+```
+
 ## Release Process
 
 Charts in this repository are tagged and released using the [Release Charts](.github/workflows/release.yaml) Github workflow and corresponding [release script](./script/release.sh), where the release name is `<chart-name>-<chart-version>` (e.g. `grafana-7.3.7001`). Every commit to the `develop` branch will trigger the workflow and charts with __any__ changes since the latest git tag are evaluated for a potential release as follows:
