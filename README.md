@@ -127,6 +127,8 @@ Charts in this repository are tagged and released using the [Release Charts](.gi
 
 ## Minimizing Vulnerabilities
 
+### Base Images
+
 [Chainguard](https://www.chainguard.dev/) provides hardened container images for many of the charts included in this repository. If you are looking to minimize the number of vulnerabilities detected by Apollo when using these charts, we recommend browsing the [Chainguard Images](https://images.chainguard.dev/) to see if there is a suitable image for your chart (example - [Loki](https://images.chainguard.dev/directory/image/loki/versions).
 
 Apollo and FedStart require that all container images used must have a specific, unique version tag (e.g. version `2.1.9` is acceptable, tags such as `latest` are not). If you do not have a paid plan with Chainguard, only the `latest` tag of the Developer images will be made available for you to pull. If you are still interested in using Chainguard images, you will need to mirror the images into your own repository with specific tags on some frequency. Chainguard’s terms and policies can be found [here](https://www.chainguard.dev/software-license-agreement).
@@ -151,3 +153,9 @@ The push refers to repository [12345.dkr.ecr.us-east-1.amazonaws.com/loki]
 f748f769d4a8: Pushed
 1.2.3: digest: sha256:b541bc93df42889bfbd4e2897e75d8564a7cc97e93ac04760cfa186e262d5b14 size: 528
 ```
+
+### Updating Operating System Packages
+
+Operating system package CVEs with fix versions can be patched by running the appropriate package manager upgrade commands as part of your Dockerfile.
+
+The tool [copacetic](https://github.com/project-copacetic/copacetic) is an option that patches existing container images by adding another layer with the upgraded OS packages.  This may expedite and simplify your patching process since it does not require waiting on the upstream maintainer or forking the Dockerfile.
