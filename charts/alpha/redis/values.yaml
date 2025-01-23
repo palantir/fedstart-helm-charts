@@ -4,6 +4,8 @@ redis:
   # requirements of Rubix-auth, in that every egress statement must inclued at least one To: block.
     enabled: false
   master:
+    # Set shareProcessNamespace to true for https://github.com/bitnami/charts/issues/2441
+    shareProcessNamespace: true
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -35,6 +37,8 @@ redis:
                     - "{{ $.Release.Name }}"
             topologyKey: kubernetes.io/hostname
   replica:
+    # Set shareProcessNamespace to true for https://github.com/bitnami/charts/issues/2441
+    shareProcessNamespace: true
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
