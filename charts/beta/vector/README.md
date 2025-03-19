@@ -87,6 +87,7 @@ Make sure to update as appropriate for your use case.
 Note: make sure to replace the `<monitoring-namespace>` in the loki endpoint with the namespace where you installed loki.
 
 Sample override to ingest from cloudtrail:
+
 ```yaml
   overrides:
     vector:
