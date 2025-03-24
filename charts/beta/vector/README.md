@@ -86,7 +86,7 @@ Make sure to update as appropriate for your use case.
 
 Note: make sure to replace the `<monitoring-namespace>` in the loki endpoint with the namespace where you installed loki.
 
-Sample override to ingest from cloudtrail:
+Sample override to ingest from [AWS Cloudtrail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html):
 
 ```yaml
   overrides:
