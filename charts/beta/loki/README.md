@@ -22,7 +22,7 @@ The following config overrides must be applied to Loki when installing for the f
   overrides:
     fedstart:
       s3:
-        aws_role_arn: "arn:aws:iam::<account-number>:role/fedstart-default-role"
+        aws_role_arn: "arn:aws-us-gov:iam::<account-number>:role/fedstart-default-role"
     loki:
       loki:
         storage:
