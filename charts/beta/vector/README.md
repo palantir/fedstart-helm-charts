@@ -92,8 +92,6 @@ Sample override to ingest from [AWS Cloudtrail](https://docs.aws.amazon.com/awsc
   overrides:
     vector:
       sources:
-        daemonset:
-          enabled: false
         cloudtrail:
           enabled: true
           region: us-gov-west-1

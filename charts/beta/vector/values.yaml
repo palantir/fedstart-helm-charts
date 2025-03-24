@@ -10,8 +10,6 @@ vector:
 
   # sources -- Configure the sources of logs
   sources:
-    daemonset:
-      enabled: true
     cloudtrail:
       enabled: false
 #      region: REGION_OVERRIDE_ME

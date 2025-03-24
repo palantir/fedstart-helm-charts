@@ -14,7 +14,6 @@ data:
       playground: false
     # https://vector.dev/docs/reference/configuration/sources/vector/
     sources:
-    {{- if .Values.vector.sources.daemonset.enabled }}
       daemonset:
         type: vector
         address: 0.0.0.0:6000
@@ -25,7 +24,6 @@ data:
           ca_file: "/etc/ssl/rubix-ca/ca.pem"
           crt_file: "/mnt/secrets/certs/tls.crt"
           key_file: "/mnt/secrets/certs/tls.key"
-    {{- end }}
     {{- if .Values.vector.sources.cloudtrail.enabled }}
       cloudtrail:
         type: aws_s3
