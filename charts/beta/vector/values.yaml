@@ -32,13 +32,8 @@ vector:
       route:
         kube-pods: .source_type == "kubernetes_logs"
   # env -- Set environment variables for Vector containers.
-  env:
-    - name: AWS_SDK_LOAD_CONFIG
-      value: "true"
-    - name: AWS_CONFIG_FILE
-      value: /cloud-creds/config
-    - name: AWS_USE_FIPS_ENDPOINT
-      value: "true"
+  env: []
+
   # logLevel -- Log level for Vector.
   logLevel: "info"
 
@@ -70,8 +65,6 @@ vector:
       mountPath: "/mnt/secrets/certs"
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
-    - name: vector-aws
-      mountPath: /cloud-creds/
 
   # extraVolumes -- Additional Volumes to use with vector pods.
   extraVolumes:
@@ -84,10 +77,6 @@ vector:
         items:
           - key: ca.pem
             path: ca.pem
-    - name: vector-aws
-      configMap:
-        defaultMode: 420
-        name: vector-cloudtrail-aws-config
 
   # containerPorts -- Ports to use for vector containers.
   # These map 1:1 with the existingConfigMap ports for the API and daemonset respectively.

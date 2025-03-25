@@ -130,4 +130,35 @@ Sample override to ingest from [AWS Cloudtrail](https://docs.aws.amazon.com/awsc
             ca_file: /etc/ssl/rubix-ca/ca.pem
             crt_file: /mnt/secrets/certs/tls.crt
             key_file: /mnt/secrets/certs/tls.key
+      # extraVolumeMounts -- Additional Volumes to mount into vector containers.
+      extraVolumeMounts:
+        - name: cert-secret-volume
+          mountPath: "/mnt/secrets/certs"
+        - name: tls-external-ca-bundle
+          mountPath: "/etc/ssl/rubix-ca"
+        - name: vector-aws
+          mountPath: /cloud-creds/
+
+      # extraVolumes -- Additional Volumes to use with vector pods.
+      extraVolumes:
+        - name: cert-secret-volume
+          secret:
+            secretName: "cert-vector-aggregator"
+        - name: tls-external-ca-bundle
+          configMap:
+            name: "tls-external-ca-pem-bundle"
+            items:
+              - key: ca.pem
+                path: ca.pem
+        - name: vector-aws
+          configMap:
+            defaultMode: 420
+            name: vector-cloudtrail-aws-config
+      env:
+        - name: AWS_SDK_LOAD_CONFIG
+          value: "true"
+        - name: AWS_CONFIG_FILE
+          value: /cloud-creds/config
+        - name: AWS_USE_FIPS_ENDPOINT
+          value: "true"
 ```
