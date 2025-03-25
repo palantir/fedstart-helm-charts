@@ -85,3 +85,49 @@ Make sure to update as appropriate for your use case.
 ```
 
 Note: make sure to replace the `<monitoring-namespace>` in the loki endpoint with the namespace where you installed loki.
+
+Sample override to ingest from [AWS Cloudtrail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html):
+
+```yaml
+  overrides:
+    vector:
+      sources:
+        cloudtrail:
+          enabled: true
+          region: us-gov-west-1
+          sqs_url: https://sqs.us-gov-west-1.amazonaws.com/ACCOUNT/SQSNAME
+          cloudtrail_role_arn: CLOUDTRAIL_ROLE_ARN
+      transforms:
+        flatten-cloudtrail:
+          type: remap
+          inputs:
+            - cloudtrail
+          drop_on_error: false
+          drop_on_abort: false
+          source: |
+            . = .Records
+        # -- For simplicity, we didn't include daemonset source here so removing the `in` transform.
+        in: null
+      sinks:
+        # -- Forward logs to loki
+        loki:
+          type: loki
+          out_of_order_action: accept
+          encoding:
+            codec: json
+          inputs:
+            - flatten-cloudtrail
+          # -- Searchable labels that will be available in grafana
+          # -- (see https://grafana.com/docs/loki/latest/get-started/labels/bp-labels/)
+          labels:
+            aws_region: "{{ awsRegion }}"
+            event_category: "{{ eventCategory }}"
+            event_source: "{{ eventSource }}"
+            event_type: "{{ eventType }}"
+          # -- The loki gateway domain name
+          endpoint: https://loki-gateway.<monitoring-namespace>.svc.cluster.local
+          tls:
+            ca_file: /etc/ssl/rubix-ca/ca.pem
+            crt_file: /mnt/secrets/certs/tls.crt
+            key_file: /mnt/secrets/certs/tls.key
+```

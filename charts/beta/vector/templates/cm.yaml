@@ -24,6 +24,25 @@ data:
           ca_file: "/etc/ssl/rubix-ca/ca.pem"
           crt_file: "/mnt/secrets/certs/tls.crt"
           key_file: "/mnt/secrets/certs/tls.key"
+    {{- if .Values.vector.sources.cloudtrail.enabled }}
+      cloudtrail:
+        type: aws_s3
+        region: {{ .Values.vector.sources.cloudtrail.region }}
+        sqs:
+          queue_url: {{ .Values.vector.sources.cloudtrail.sqs_url }}
+          tls_options:
+            verify_certificate: true
+            ca_file: "/etc/ssl/rubix-ca/ca.pem"
+            crt_file: "/mnt/secrets/certs/tls.crt"
+            key_file: "/mnt/secrets/certs/tls.key"
+        tls_options:
+          verify_certificate: true
+          ca_file: "/etc/ssl/rubix-ca/ca.pem"
+          crt_file: "/mnt/secrets/certs/tls.crt"
+          key_file: "/mnt/secrets/certs/tls.key"
+        decoding:
+          codec: json
+    {{- end }}
     sinks:
     {{- if .Values.vector.sinks }}
       {{- toYaml .Values.vector.sinks | nindent 6 }}

@@ -8,6 +8,13 @@ vector:
   # fullnameOverride -- Application name for all resources.
   fullnameOverride: vector-aggregator
 
+  # sources -- Configure the sources of logs
+  sources:
+    cloudtrail:
+      enabled: false
+#      region: REGION_OVERRIDE_ME
+#      sqs_url: SQS_URL_OVERRIDE_ME
+#      cloudtrail_role_arn: SAMPLE_ARN_OVERRIDE_ME
   # sinks -- Sinks to push logs to
   sinks: {}
 
@@ -24,10 +31,14 @@ vector:
       reroute_unmatched: false
       route:
         kube-pods: .source_type == "kubernetes_logs"
-
   # env -- Set environment variables for Vector containers.
-  env: []
-
+  env:
+    - name: AWS_SDK_LOAD_CONFIG
+      value: "true"
+    - name: AWS_CONFIG_FILE
+      value: /cloud-creds/config
+    - name: AWS_USE_FIPS_ENDPOINT
+      value: "true"
   # logLevel -- Log level for Vector.
   logLevel: "info"
 
@@ -59,6 +70,8 @@ vector:
       mountPath: "/mnt/secrets/certs"
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
+    - name: vector-aws
+      mountPath: /cloud-creds/
 
   # extraVolumes -- Additional Volumes to use with vector pods.
   extraVolumes:
@@ -71,6 +84,11 @@ vector:
         items:
           - key: ca.pem
             path: ca.pem
+    - name: vector-aws
+      configMap:
+        defaultMode: 420
+        name: vector-cloudtrail-aws-config
+        optional: true
 
   # containerPorts -- Ports to use for vector containers.
   # These map 1:1 with the existingConfigMap ports for the API and daemonset respectively.

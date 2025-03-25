@@ -1,0 +1,13 @@
+{{- if .Values.vector.sources.cloudtrail.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vector-cloudtrail-aws-config
+data:
+  config: |
+    [default]
+    region                  = {{ .Values.vector.sources.cloudtrail.region }}
+    role_arn                = {{ .Values.vector.sources.cloudtrail.cloudtrail_role_arn }}
+    web_identity_token_file = /var/run/secrets/kubernetes.io/serviceaccount/token
+{{- end }}
