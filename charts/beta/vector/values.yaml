@@ -31,6 +31,7 @@ vector:
       reroute_unmatched: false
       route:
         kube-pods: .source_type == "kubernetes_logs"
+
   # env -- Set environment variables for Vector containers.
   env: []
 
