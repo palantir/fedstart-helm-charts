@@ -6,6 +6,8 @@ redis:
   master:
     # Set shareProcessNamespace to true for https://github.com/bitnami/charts/issues/2441
     shareProcessNamespace: true
+    containerSecurityContext:
+      enabled: false
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -39,6 +41,8 @@ redis:
   replica:
     # Set shareProcessNamespace to true for https://github.com/bitnami/charts/issues/2441
     shareProcessNamespace: true
+    containerSecurityContext:
+      enabled: false
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
