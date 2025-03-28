@@ -37,6 +37,10 @@ keycloak:
     usePem: true
     existingSecret: "cert-{{ .Release.Name }}"
 
+  extraEnvVars:
+    - name: KC_HTTPS_CERTIFICATES_RELOAD_PERIOD
+      value: '-1'
+
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
