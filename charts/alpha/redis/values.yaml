@@ -1,13 +1,23 @@
 redis:
   networkPolicy:
-  # we turn network policies off by default as the network policy included does not adhere to the minimum
-  # requirements of Rubix-auth, in that every egress statement must inclued at least one To: block.
+    # we turn network policies off by default as the network policy included does not adhere to the minimum
+    # requirements of Rubix-auth, in that every egress statement must inclued at least one To: block.
     enabled: false
+  tls:
+    authClients: false
+    enabled: true
+    existingSecret: cert-{{ $.Release.Name }}-4
+    certFilename: tls.crt
+    certKeyFilename: tls.key
+    certCAFilename: ca.crt
   master:
     # Set shareProcessNamespace to true for https://github.com/bitnami/charts/issues/2441
     shareProcessNamespace: true
     containerSecurityContext:
       enabled: false
+    service:
+      annotations:
+        com.palantir.rubix.service/pod-cert: '{"secretName": "{{ $.Release.Name }}", "statefulSets": [{"statefulSetName": "{{ $.Release.Name }}-master", "replicaCount": 1},{"statefulSetName": "{{ $.Release.Name }}-replicas","replicaCount": 3}]}'
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
