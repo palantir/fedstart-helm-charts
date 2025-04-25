@@ -6,7 +6,7 @@ vector:
   role: "Stateless-Aggregator"
 
   commonLabels:
-    # svc label to allow log remote write
+    # label that enables vector to dynamically accept logs as a remote sink
     apollo.palantir.com/telemetry-vector-sink: ""
   # fullnameOverride -- Application name for all resources.
   fullnameOverride: vector-aggregator
