@@ -5,6 +5,9 @@ vector:
   # role -- Run the aggregator as a Deployment instead of a Statefulset.
   role: "Stateless-Aggregator"
 
+  commonLabels:
+    # svc label to allow log remote write
+    apollo.palantir.com/telemetry-vector-sink: ""
   # fullnameOverride -- Application name for all resources.
   fullnameOverride: vector-aggregator
 
