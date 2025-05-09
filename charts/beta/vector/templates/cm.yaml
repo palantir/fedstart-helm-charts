@@ -43,6 +43,12 @@ data:
         decoding:
           codec: json
     {{- end }}
+    {{- if .Values.vector.sources.gcpAudit.enabled }}
+      gcp:
+        type: gcp_pubsub
+        project: {{.Values.vector.sources.gcpAudit.projectId}}
+        subscription: {{.Values.vector.sources.gcpAudit.subscriptionName}}
+    {{- end }}
     sinks:
     {{- if .Values.vector.sinks }}
       {{- toYaml .Values.vector.sinks | nindent 6 }}
