@@ -12,7 +12,8 @@ vector:
   sources:
     gcpAudit:
       enabled: false
-
+#      projectId: PROJECT_ID_OVERRIDE_ME
+#      subscriptionName: SUBSCRIPTION_NAME_OVERRIDE_ME
     cloudtrail:
       enabled: false
 #      region: REGION_OVERRIDE_ME
