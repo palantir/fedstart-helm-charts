@@ -14,15 +14,15 @@ prometheus:
 
     statefulSet:
       enabled: true
+      headless:
+        annotations:
+          com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":1}'
 
     persistentVolume:
       enabled: true
       size: 100Gi
 
     resources:
-      # limits:
-      #   cpu: 500m
-      #   memory: 512Mi
       requests:
         cpu: 500m
         memory: 1Gi
@@ -30,7 +30,7 @@ prometheus:
     extraFlags:
       - web.config.file=/etc/config/apollo/prometheus-web-config.yml
       - web.enable-remote-write-receiver
-      # Retention size here should be kept consistent with PVC since. Make retention 80% of PVC size as retention based
+      # Retention size here should be kept consistent with PVC size. Make retention 80% of PVC size as retention based
       # on size is only done on WAL truncation
       - storage.tsdb.retention.size=80GB
       - log.format=json
@@ -42,13 +42,13 @@ prometheus:
         mountPath: /etc/config/apollo
         configMap: prometheus-apollo-config
 
-
     containerSecurityContext:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
         - ALL
-      seccompProfile: null
+      seccompProfile:
+        type: RuntimeDefault
 
     service:
       annotations:
@@ -90,18 +90,12 @@ prometheus:
         com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":1}'
 
     securityContext:
-      runAsGroup: null
-      runAsUser: null
       allowPrivilegeEscalation: false
       capabilities:
         drop:
         - ALL
 
     podSecurityContext:
-      runAsUser: null
-      runAsNonRoot: true
-      runAsGroup: null
-      fsGroup: null
       seccompProfile:
         type: RuntimeDefault
 
