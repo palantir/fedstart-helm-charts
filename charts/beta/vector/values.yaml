@@ -79,7 +79,7 @@ vector:
       mountPath: "/mnt/secrets/certs"
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
-    - name: vector-aws
+    - name: vector-aws-cloudtrail-creds
       mountPath: /cloud-creds-aws/
     - name: vector-gcp-audit-creds
       mountPath: /cloud-creds-gcp/
@@ -95,7 +95,7 @@ vector:
         items:
           - key: ca.pem
             path: ca.pem
-    - name: vector-aws
+    - name: vector-aws-cloudtrail-creds
       configMap:
         defaultMode: 420
         name: vector-cloudtrail-aws-config
