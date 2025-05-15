@@ -44,7 +44,7 @@ data:
           codec: json
     {{- end }}
     {{- if .Values.vector.sources.gcpAudit.enabled }}
-      gcp:
+      gcpaudit:
         type: gcp_pubsub
         project: {{.Values.vector.sources.gcpAudit.projectId}}
         subscription: {{.Values.vector.sources.gcpAudit.subscriptionName}}

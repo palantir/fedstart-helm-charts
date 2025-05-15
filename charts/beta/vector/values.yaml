@@ -43,9 +43,11 @@ vector:
     - name: AWS_SDK_LOAD_CONFIG
       value: "true"
     - name: AWS_CONFIG_FILE
-      value: /cloud-creds/config
+      value: /cloud-creds-aws/config
     - name: AWS_USE_FIPS_ENDPOINT
       value: "true"
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /cloud-creds-gcp/credentials.json
   # logLevel -- Log level for Vector.
   logLevel: "info"
 
@@ -77,8 +79,10 @@ vector:
       mountPath: "/mnt/secrets/certs"
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
-    - name: vector-aws
-      mountPath: /cloud-creds/
+    - name: vector-aws-cloudtrail-creds
+      mountPath: /cloud-creds-aws/
+    - name: vector-gcp-audit-creds
+      mountPath: /cloud-creds-gcp/
 
   # extraVolumes -- Additional Volumes to use with vector pods.
   extraVolumes:
@@ -91,10 +95,15 @@ vector:
         items:
           - key: ca.pem
             path: ca.pem
-    - name: vector-aws
+    - name: vector-aws-cloudtrail-creds
       configMap:
         defaultMode: 420
         name: vector-cloudtrail-aws-config
+        optional: true
+    - name: vector-gcp-audit-creds
+      secret:
+        defaultMode: 420
+        secretName: player-reader-service-account-credentials
         optional: true
 
   # containerPorts -- Ports to use for vector containers.
