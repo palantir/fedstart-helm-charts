@@ -18,12 +18,12 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 
 | Helm Chart                                                                                          | Status |
 | --------------------------------------------------------------------------------------------------- | ------ |
-| [Prometheus](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/prometheus)  | Beta   |
-| [Loki](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/loki)              | Beta   |
-| [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/vector)          | Beta   |
-| [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)       | Alpha  |
+| [Prometheus](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/prometheus)  | GA     |
+| [Loki](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/loki)              | GA     |
+| [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/vector)          | GA     |
+| [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)       | GA     |
 | [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)           | Alpha  |
-| [Keycloak](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/keycloak)     | Alpha  |
+| [Keycloak](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/keycloak)     | Beta   |
 | [Memcached](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/memcached)   | Alpha  |
 
 ## Versioning
