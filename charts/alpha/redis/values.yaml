@@ -1,4 +1,9 @@
 redis:
+  # Disable Bitnami security check that blocks using mirrored container images
+  global:
+    security:
+      allowInsecureImages: true
+
   networkPolicy:
     # we turn network policies off by default as the network policy included does not adhere to the minimum
     # requirements of Rubix-auth, in that every egress statement must inclued at least one To: block.
