@@ -2,6 +2,14 @@
 
 ## Sub-chart value overrides
 vector:
+
+  image:
+    # Override if using mirrored container images
+    # repository: timberio/vector
+
+    # Use distroless-static images instead of distroless-libc to reduce CVE footprint
+    base: distroless-static
+
   # role -- Run the aggregator as a Deployment instead of a Statefulset.
   role: "Stateless-Aggregator"
 
@@ -155,10 +163,6 @@ vector:
     # limits:
     #   cpu: 200m
     #   memory: 256Mi
-
-  # Use distroless-static images instead of distroless-libc to reduce CVE footprint
-  image:
-    base: distroless-static
 
   # podSecurityContext -- Ensures the pod is not run as root.
   podSecurityContext:

@@ -8,6 +8,12 @@ fedstart:
 
 ## Sub-chart value overrides
 loki:
+
+  # Override if using mirrored container images
+  # image:
+  #   # -- Overrides the Docker registry globally for all images
+  #   registry: null
+
   nameOverride: loki
   fullnameOverride: loki
   serviceAccount:

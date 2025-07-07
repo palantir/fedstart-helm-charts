@@ -2,6 +2,11 @@
 
 ## Sub-chart value overrides
 grafana:
+  # Override if using mirrored container images
+  # global:
+  #   # -- Overrides the Docker registry globally for all images
+  #   imageRegistry: null
+
   # baseURL -- Configures the root URL for grafana (required)
   baseURL: "__REPLACE_ME_BASE_URL"
   contextPath: "/grafana"

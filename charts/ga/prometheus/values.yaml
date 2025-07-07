@@ -10,6 +10,10 @@ prometheus:
       scrape_configs: []
 
   server:
+    # Override if using mirrored container images
+    # image:
+    #   repository: quay.io/prometheus/prometheus
+
     fullnameOverride: prometheus
 
     statefulSet:
@@ -82,75 +86,6 @@ prometheus:
 
   alertmanager:
     enabled: false
-
-    replicaCount: 1
-
-    service:
-      annotations:
-        com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":1}'
-
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-
-    podSecurityContext:
-      seccompProfile:
-        type: RuntimeDefault
-
-    resources:
-      limits:
-        memory: 512Mi
-      requests:
-        cpu: 100m
-        memory: 256Mi
-
-    extraArgs:
-      web.config.file: /etc/config/apollo/alertmanager-web-config.yml
-      cluster.tls-config: /etc/config/apollo/alertmanager-cluster-config.yml
-      log.format: json
-      log.level: info
-
-    extraVolumes:
-      - name: alertmanager-apollo-config
-        configMap:
-          name: alertmanager-apollo-config
-      - name: cert-secret-volume
-        secret:
-          secretName: cert-prometheus-alertmanager-1
-      - name: rubix-ca-bundle
-        configMap:
-          name: "tls-external-ca-pem-bundle"
-          items:
-            - key: ca.pem
-              path: ca.pem
-
-    extraVolumeMounts:
-      - name: alertmanager-apollo-config
-        mountPath: /etc/config/apollo
-      - name: cert-secret-volume
-        mountPath: "/mnt/secrets/certs"
-      - name: rubix-ca-bundle
-        mountPath: "/etc/ssl/rubix-ca"
-
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-              - key: com.palantir.rubix/instance-group
-                operator: In
-                values:
-                  - fedstart
-
-    livenessProbe:
-      httpGet:
-        scheme: HTTPS
-
-    readinessProbe:
-      httpGet:
-        scheme: HTTPS
 
   configmapReload:
     prometheus:
