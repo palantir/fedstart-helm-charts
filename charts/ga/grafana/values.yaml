@@ -9,6 +9,8 @@ grafana:
 
   # baseURL -- Configures the root URL for grafana (required)
   baseURL: "__REPLACE_ME_BASE_URL"
+  # domainAlias -- mission manager domain alias for the baseURL
+  domainAlias: "DEFAULT"
   contextPath: "/grafana"
   fullnameOverride: grafana
 
@@ -78,7 +80,7 @@ grafana:
 
   service:
     annotations:
-      com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "service", "prefix": "{{ .Values.contextPath }}", "domain-aliases": ["DEFAULT"]}]}'
+      com.palantir.rubix.service.spp/v3: '{"endpoints": [{"name": "service", "prefix": "{{ .Values.contextPath }}", "domain-aliases": ["{{ .Values.domainAlias }}"]}]}'
       com.palantir.rubix.service/pod-cert: '{}'
   extraVolumeMounts:
     - name: tls-external-ca-bundle
