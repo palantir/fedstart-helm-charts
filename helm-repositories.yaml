@@ -1,7 +1,9 @@
 repositories:
-- name: grafana
-  url: https://grafana.github.io/helm-charts
-- name: prometheus
-  url: https://prometheus-community.github.io/helm-charts
-- name: vector
-  url: https://helm.vector.dev
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
+  - name: prometheus
+    url: https://prometheus-community.github.io/helm-charts
+  - name: prometheus-stackdriver-exporter
+    url: https://prometheus-community.github.io/helm-charts
+  - name: vector
+    url: https://helm.vector.dev
