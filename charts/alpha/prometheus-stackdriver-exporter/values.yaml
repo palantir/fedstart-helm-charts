@@ -1,0 +1,24 @@
+prometheus-stackdriver-exporter:
+  stackdriver:
+    projectIds: ["__REPLACE_ME_PROJECT_ID"]
+    # Waiting on https://github.com/prometheus-community/helm-charts/pull/5995
+    # make it easier to enable TLS and mount the credentials.json from a configMap.
+    serviceAccountSecret: "__REPLACE_ME_CREDENTIALS_JSON_SECRET"
+
+  serviceAccount:
+    create: true
+
+  service:
+    annotations:
+      com.palantir.rubix.service/pod-cert: "{}"
+
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  containerSecurityContext:
+    runAsUser: 5000
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
