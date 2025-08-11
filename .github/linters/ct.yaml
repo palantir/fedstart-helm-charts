@@ -3,8 +3,7 @@ remote: origin
 target-branch: develop
 debug: true
 validate-maintainers: false
-helm-lint-extra-args: '--strict'
-use-helmignore: true
+helm-lint-extra-args: '--strict --use-helmignore'
 chart-dirs:
   - charts/alpha
   - charts/beta
