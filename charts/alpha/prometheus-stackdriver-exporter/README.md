@@ -1,6 +1,6 @@
 # Prometheus Stackdriver Exporter
 
-A Palantir Fedstart compliant helm-chart that configures [prometheus-stackdriver-exporter](https://github.com/prometheus-community/stackdriver_exporter).
+A Palantir Fedstart compliant helm-chart that configures [prometheus-stackdriver-exporter](https://github.com/prometheus-community/stackdriver_exporter) for monitoring Google Cloud Platform metrics.
 
 ## Configuration
 
