@@ -16,15 +16,16 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 
 ## Current Charts
 
-| Helm Chart                                                                                          | Status |
-| --------------------------------------------------------------------------------------------------- | ------ |
-| [Prometheus](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/prometheus)  | GA     |
-| [Loki](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/loki)              | GA     |
-| [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/vector)          | GA     |
-| [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)       | GA     |
-| [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)           | Alpha  |
-| [Keycloak](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/keycloak)     | Beta   |
-| [Memcached](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/memcached)   | Alpha  |
+| Helm Chart                                                                                                                                    | Status |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| [Prometheus](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/prometheus)                                            | GA     |
+| [Prometheus Stackdriver Exporter](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/prometheus-stackdriver-exporter) | Alpha  |
+| [Loki](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/loki)                                                        | GA     |
+| [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/vector)                                                    | GA     |
+| [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana)                                                 | GA     |
+| [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)                                                     | Alpha  |
+| [Keycloak](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/keycloak)                                               | Beta   |
+| [Memcached](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/memcached)                                             | Alpha  |
 
 ## Versioning
 
@@ -97,9 +98,9 @@ $ apollo-cli publish helm-chart \
 Publishing product release com.palantir.vector:vector-aggregator:0.31.1001 into Apollo ... done
 ```
 
-Note, if using mirrored container images the generated manifest must have the mirrored image OCI paths.  The apollo-cli `--helm-values` flag allows you to specify a local values.yaml with image repository overrides to be used when generating the manifest.  This only applies to the generated manifest, the mirror repository will still need to set in Apollo configuration overrides.
+Note, if using mirrored container images the generated manifest must have the mirrored image OCI paths. The apollo-cli `--helm-values` flag allows you to specify a local values.yaml with image repository overrides to be used when generating the manifest. This only applies to the generated manifest, the mirror repository will still need to set in Apollo configuration overrides.
 
-For example, if you mirror the vector container image from `timberio/vector:0.31.1-distroless-static` to `12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector:0.31.1-distroless-static` then the OCI path in the published manifest must be the ECR hosted path.  To accomplish this you could can provide the path overrides in a separate values.yaml file for use during release publication.  The separate `publish-values.yaml` for vector may look like:
+For example, if you mirror the vector container image from `timberio/vector:0.31.1-distroless-static` to `12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector:0.31.1-distroless-static` then the OCI path in the published manifest must be the ECR hosted path. To accomplish this you could can provide the path overrides in a separate values.yaml file for use during release publication. The separate `publish-values.yaml` for vector may look like:
 
 ```yaml
 vector:
@@ -158,4 +159,4 @@ f748f769d4a8: Pushed
 
 Operating system package CVEs with fix versions can be patched by running the appropriate package manager upgrade commands as part of your Dockerfile.
 
-The tool [copacetic](https://github.com/project-copacetic/copacetic) is an option that patches existing container images by adding another layer with the upgraded OS packages.  This may expedite and simplify your patching process since it does not require waiting on the upstream maintainer or forking the Dockerfile.
+The tool [copacetic](https://github.com/project-copacetic/copacetic) is an option that patches existing container images by adding another layer with the upgraded OS packages. This may expedite and simplify your patching process since it does not require waiting on the upstream maintainer or forking the Dockerfile.
