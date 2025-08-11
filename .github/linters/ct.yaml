@@ -10,3 +10,5 @@ chart-dirs:
   - charts/ga
 chart-repos:
 # Repos get generated at CI time dynamically, see .github/workflows/lint.yaml
+excluded-changes:
+  - "README.md"
