@@ -1,4 +1,4 @@
-# Prometheus
+# Prometheus Stackdriver Exporter
 
 A Palantir Fedstart compliant helm-chart that configures [prometheus-stackdriver-exporter](https://github.com/prometheus-community/stackdriver_exporter).
 
