@@ -35,6 +35,14 @@ prometheus-stackdriver-exporter:
     - name: web-config-volume
       mountPath: /etc/web-config
 
+  livenessProbe:
+    httpGet:
+      scheme: HTTPS
+
+  readinessProbe:
+    httpGet:
+      scheme: HTTPS
+
   serviceAccount:
     create: true
 
