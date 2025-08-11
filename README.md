@@ -6,9 +6,9 @@ This repository provides reference implementations of open source helm charts wi
 
 Charts in this repository are organized into categories based on their production-readiness:
 
-- _Generally Available (GA)_ charts are deployed by one or more Palantir Fedstart partners and are expected to be production ready. Users can use these at their own discretion, with no need to ask Palantir before doing so. Generally Available charts are organized under the `charts/ga/<name of helm chart>` directory.
-- _Beta_ charts have been tested internally and are ready to be tested by Fedstart partners. Users who are interested in deploying a Beta chart should reach out to Palantir before doing so. Beta charts are organized under the `charts/beta/<name of helm chart>` directory.
-- _Alpha_ charts are works in progress, and have not passed internal Palantir testing. Users who are interested in deploying an Alpha chart should reach out to Palantir to provide details about your use case. Alpha charts are organized under the `charts/alpha/<name of helm chart>` directory.
+* _Generally Available (GA)_ charts are deployed by one or more Palantir Fedstart partners and are expected to be production ready. Users can use these at their own discretion, with no need to ask Palantir before doing so. Generally Available charts are organized under the `charts/ga/<name of helm chart>` directory.
+* _Beta_ charts have been tested internally and are ready to be tested by Fedstart partners. Users who are interested in deploying a Beta chart should reach out to Palantir before doing so. Beta charts are organized under the `charts/beta/<name of helm chart>` directory.
+* _Alpha_ charts are works in progress, and have not passed internal Palantir testing. Users who are interested in deploying an Alpha chart should reach out to Palantir to provide details about your use case. Alpha charts are organized under the `charts/alpha/<name of helm chart>` directory.
 
 Each helm chart is structured to have a base chart that contains the Palantir Fedstart specific values.yaml configurations, with the open source chart referenced as a subchart.
 
@@ -31,9 +31,9 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 
 This repository uses chart specific labels to tag versions of each chart. The label structure should following the following convention: `<chart-name>-<oss-version-number><fedstart-version-number>`. Ex: `prometheus-25.10.3002`, where:
 
-- `chart-name` is the name of the Helm Chart, and matches the `charts/<chart-name>` subdirectory. Ie: `prometheus`
-- `oss-version-number` is the Chart version number in the open source subchart; ie., the `version` found in `charts/prometheus/charts/prometheus/Chart.yaml`
-- `fedstart-version-number` is the version associated with the version of the outer chart found in `charts/<chart-name>` and should be the `version` found in the `chart/<chart-name>/Chart.yaml`. This number should be represented as a monotonically increasing integer with at most 3 digits of padding. The digits used for this version will be reduced if the `<oss-version-number>` uses more than one digit, such that the `<oss-version-number><fedstart-version-number>` portion is always exactly 4 digits.
+* `chart-name` is the name of the Helm Chart, and matches the `charts/<chart-name>` subdirectory. Ie: `prometheus`
+* `oss-version-number` is the Chart version number in the open source subchart; ie., the `version` found in `charts/prometheus/charts/prometheus/Chart.yaml`
+* `fedstart-version-number` is the version associated with the version of the outer chart found in `charts/<chart-name>` and should be the `version` found in the `chart/<chart-name>/Chart.yaml`. This number should be represented as a monotonically increasing integer with at most 3 digits of padding. The digits used for this version will be reduced if the `<oss-version-number>` uses more than one digit, such that the `<oss-version-number><fedstart-version-number>` portion is always exactly 4 digits.
 
 ## Packaging
 
@@ -120,7 +120,7 @@ $ apollo-cli publish helm-chart \
 
 ## Release Process
 
-Charts in this repository are tagged and released using the [Release Charts](.github/workflows/release.yaml) Github workflow and corresponding [release script](./script/release.sh), where the release name is `<chart-name>-<chart-version>` (e.g. `grafana-7.3.7001`). Every commit to the `develop` branch will trigger the workflow and charts with **any** changes since the latest git tag are evaluated for a potential release as follows:
+Charts in this repository are tagged and released using the [Release Charts](.github/workflows/release.yaml) Github workflow and corresponding [release script](./script/release.sh), where the release name is `<chart-name>-<chart-version>` (e.g. `grafana-7.3.7001`). Every commit to the `develop` branch will trigger the workflow and charts with __any__ changes since the latest git tag are evaluated for a potential release as follows:
 
 1. The chart name and version are extracted from the corresponding `Chart.yaml` to construct the desired release name
 2. If a release already exists with the desired name, then no release will be made for this chart.
