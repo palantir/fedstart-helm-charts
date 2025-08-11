@@ -28,7 +28,7 @@ jobs:
         run: yq '.repositories[] |  (" - " + .name + "=" + .url)' helm-repositories.yaml >> .github/linters/ct.yaml
 
       - name: Run chart-testing (lint)
-        run: ct lint --config .github/linters/ct.yaml
+        run: ct lint --config .github/linters/ct.yaml --use-helmignore
 
       - name: Run markdown lint
         uses: DavidAnson/markdownlint-cli2-action@v16
