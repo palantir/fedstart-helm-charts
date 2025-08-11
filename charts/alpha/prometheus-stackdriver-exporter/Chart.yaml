@@ -22,4 +22,3 @@ dependencies:
   - name: prometheus-stackdriver-exporter
     version: "4.9.0"
     repository: https://prometheus-community.github.io/helm-charts
-    condition: prometheus-stackdriver-exporter.enabled
