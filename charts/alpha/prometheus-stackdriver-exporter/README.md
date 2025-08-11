@@ -6,8 +6,8 @@ A Palantir Fedstart compliant helm-chart that configures [prometheus-stackdriver
 
 To configure this reference helm chart, you must substitute the following parameters:
 
-- `__REPLACE_ME_GCP_SERVICE_ACCOUNT_CREDENTIALS_CONFIGMAP`: The name of the GCP configmap which contains your `credentials.json` file.
 - `__REPLACE_ME_PROJECT_ID`: The GCP project ID.
+- `__REPLACE_ME_GCP_SERVICE_ACCOUNT_CREDENTIALS_CONFIGMAP`: The name of the GCP configmap which contains your `credentials.json` file.
 
 Review FedStart docs for how to configure this within your FedStart environment.
 
