@@ -1,0 +1,62 @@
+prometheus-stackdriver-exporter:
+  stackdriver:
+    projectIds: ["__REPLACE_ME_PROJECT_ID"]
+    metrics:
+      prefixes:
+        - "storage.googleapis.com/"
+        - "cloudsql.googleapis.com/"
+        - "redis.googleapis.com/"
+        - "bigquery.googleapis.com/"
+        - "pubsub.googleapis.com/"
+
+  extraEnv:
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /etc/credentials/credentials.json
+
+  extraArgs:
+    web.config.file: /etc/web-config/web-config.yaml
+
+  extraVolumes:
+    - name: credentials-volume
+      configMap:
+        name: __REPLACE_ME_GCP_SERVICE_ACCOUNT_CREDENTIALS_CONFIGMAP
+    - name: cert-volume
+      secret:
+        secretName: cert-prometheus-stackdriver-exporter
+    - name: web-config-volume
+      configMap:
+        name: prometheus-stackdriver-exporter-web-config
+
+  extraVolumeMounts:
+    - name: credentials-volume
+      mountPath: /etc/credentials
+    - name: cert-volume
+      mountPath: /etc/certs
+    - name: web-config-volume
+      mountPath: /etc/web-config
+
+  livenessProbe:
+    httpGet:
+      scheme: HTTPS
+
+  readinessProbe:
+    httpGet:
+      scheme: HTTPS
+
+  serviceAccount:
+    create: true
+
+  service:
+    annotations:
+      com.palantir.rubix.service/pod-cert: "{}"
+
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  containerSecurityContext:
+    runAsUser: 5000
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
