@@ -21,3 +21,7 @@
 .idea/
 *.tmproj
 .vscode/
+
+# Others
+README.md
+.helmignore
