@@ -5,6 +5,7 @@ on:
     paths:
       - 'charts/**'
       - '!charts/**/README.md'
+      - '!charts/**/.helmignore'
 
 jobs:
   lint:
