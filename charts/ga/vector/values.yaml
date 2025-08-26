@@ -2,7 +2,6 @@
 
 ## Sub-chart value overrides
 vector:
-
   image:
     # Override if using mirrored container images
     # repository: timberio/vector
@@ -21,15 +20,16 @@ vector:
 
   # sources -- Configure the sources of logs
   sources:
+    # For GCP and Cloudtrail audit logs, you will need to mount the GCP and/or AWS credentials to the pod. Review volumes and volume mounts configured in this chart below.
     gcpAudit:
       enabled: false
-#      projectId: PROJECT_ID_OVERRIDE_ME
-#      subscriptionName: SUBSCRIPTION_NAME_OVERRIDE_ME
+      # projectId: PROJECT_ID_OVERRIDE_ME
+      # subscriptionName: SUBSCRIPTION_NAME_OVERRIDE_ME
     cloudtrail:
       enabled: false
-#      region: REGION_OVERRIDE_ME
-#      sqs_url: SQS_URL_OVERRIDE_ME
-#      cloudtrail_role_arn: SAMPLE_ARN_OVERRIDE_ME
+      # region: REGION_OVERRIDE_ME
+      # sqs_url: SQS_URL_OVERRIDE_ME
+      # cloudtrail_role_arn: SAMPLE_ARN_OVERRIDE_ME
   # sinks -- Sinks to push logs to
   sinks: {}
 
@@ -87,10 +87,10 @@ vector:
       mountPath: "/mnt/secrets/certs"
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
-    - name: vector-aws-cloudtrail-creds
-      mountPath: /cloud-creds-aws/
-    - name: vector-gcp-audit-creds
-      mountPath: /cloud-creds-gcp/
+    # - name: vector-aws-cloudtrail-creds
+    #   mountPath: /cloud-creds-aws/
+    # - name: vector-gcp-audit-creds
+    #   mountPath: /cloud-creds-gcp/
 
   # extraVolumes -- Additional Volumes to use with vector pods.
   extraVolumes:
@@ -103,16 +103,16 @@ vector:
         items:
           - key: ca.pem
             path: ca.pem
-    - name: vector-aws-cloudtrail-creds
-      configMap:
-        defaultMode: 420
-        name: vector-cloudtrail-aws-config
-        optional: true
-    - name: vector-gcp-audit-creds
-      secret:
-        defaultMode: 420
-        secretName: player-reader-service-account-credentials
-        optional: true
+    # - name: vector-aws-cloudtrail-creds
+    #   configMap:
+    #     defaultMode: 420
+    #     name: vector-cloudtrail-aws-config
+    #     optional: true
+    # - name: vector-gcp-audit-creds
+    #   secret:
+    #     defaultMode: 420
+    #     secretName: GCP_CREDS_SECRET_NAME_OVERRIDE_ME (gcp-creds-<service account name>)
+    #     optional: true
 
   # containerPorts -- Ports to use for vector containers.
   # These map 1:1 with the existingConfigMap ports for the API and daemonset respectively.
