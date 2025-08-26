@@ -20,7 +20,8 @@ vector:
 
   # sources -- Configure the sources of logs
   sources:
-    # For GCP and Cloudtrail audit logs, you will need to mount the GCP and/or AWS credentials to the pod. Review volumes and volume mounts configured in this chart below.
+    # For GCP audit logs, be sure to review the extraVolumes section below and replace the
+    # secret name with the name of the secret associated with your pubsub service account.
     gcpAudit:
       enabled: false
       # projectId: PROJECT_ID_OVERRIDE_ME
@@ -87,10 +88,10 @@ vector:
       mountPath: "/mnt/secrets/certs"
     - name: tls-external-ca-bundle
       mountPath: "/etc/ssl/rubix-ca"
-    # - name: vector-aws-cloudtrail-creds
-    #   mountPath: /cloud-creds-aws/
-    # - name: vector-gcp-audit-creds
-    #   mountPath: /cloud-creds-gcp/
+    - name: vector-aws-cloudtrail-creds
+      mountPath: /cloud-creds-aws/
+    - name: vector-gcp-audit-creds
+      mountPath: /cloud-creds-gcp/
 
   # extraVolumes -- Additional Volumes to use with vector pods.
   extraVolumes:
@@ -103,16 +104,16 @@ vector:
         items:
           - key: ca.pem
             path: ca.pem
-    # - name: vector-aws-cloudtrail-creds
-    #   configMap:
-    #     defaultMode: 420
-    #     name: vector-cloudtrail-aws-config
-    #     optional: true
-    # - name: vector-gcp-audit-creds
-    #   secret:
-    #     defaultMode: 420
-    #     secretName: GCP_CREDS_SECRET_NAME_OVERRIDE_ME (gcp-creds-<service account name>)
-    #     optional: true
+    - name: vector-aws-cloudtrail-creds
+      configMap:
+        defaultMode: 420
+        name: vector-cloudtrail-aws-config
+        optional: true
+    - name: vector-gcp-audit-creds
+      secret:
+        defaultMode: 420
+        secretName: gcp-creds-override-me
+        optional: true
 
   # containerPorts -- Ports to use for vector containers.
   # These map 1:1 with the existingConfigMap ports for the API and daemonset respectively.
