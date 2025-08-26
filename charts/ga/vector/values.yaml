@@ -112,7 +112,7 @@ vector:
     - name: vector-gcp-audit-creds
       secret:
         defaultMode: 420
-        secretName: gcp-creds-override-me # Update with GCP PubSub service account secret
+        secretName: gcp-creds-override-me  # Update with GCP PubSub service account secret
         optional: true
 
   # containerPorts -- Ports to use for vector containers.
