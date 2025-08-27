@@ -2,7 +2,6 @@
 
 ## Sub-chart value overrides
 vector:
-
   image:
     # Override if using mirrored container images
     # repository: timberio/vector
@@ -21,15 +20,17 @@ vector:
 
   # sources -- Configure the sources of logs
   sources:
+    # For GCP audit logs, be sure to review the extraVolumes section below and replace the
+    # secret name with the name of the secret associated with your pubsub service account.
     gcpAudit:
       enabled: false
-#      projectId: PROJECT_ID_OVERRIDE_ME
-#      subscriptionName: SUBSCRIPTION_NAME_OVERRIDE_ME
+      # projectId: PROJECT_ID_OVERRIDE_ME
+      # subscriptionName: SUBSCRIPTION_NAME_OVERRIDE_ME
     cloudtrail:
       enabled: false
-#      region: REGION_OVERRIDE_ME
-#      sqs_url: SQS_URL_OVERRIDE_ME
-#      cloudtrail_role_arn: SAMPLE_ARN_OVERRIDE_ME
+      # region: REGION_OVERRIDE_ME
+      # sqs_url: SQS_URL_OVERRIDE_ME
+      # cloudtrail_role_arn: SAMPLE_ARN_OVERRIDE_ME
   # sinks -- Sinks to push logs to
   sinks: {}
 
@@ -111,7 +112,7 @@ vector:
     - name: vector-gcp-audit-creds
       secret:
         defaultMode: 420
-        secretName: player-reader-service-account-credentials
+        secretName: gcp-creds-override-me  # Update with GCP PubSub service account secret
         optional: true
 
   # containerPorts -- Ports to use for vector containers.
