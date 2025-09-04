@@ -8,58 +8,17 @@ Refer to the Vector [README](https://github.com/vectordotdev/helm-charts/tree/de
 
 ### Config Overrides
 
-This is an example configuration intended to show options when configuring vector.
-
-- Transform the kube pod logs, dropping the node_labels and namespace_labels
-- Forward the transformed pod logs to loki gateway service and configures searchable labels
-- The commented out sections which sample every 100th log message and print it to the vector pod logs which can be useful for debugging.
-
-Make sure to update as appropriate for your use case.
+This is an example configuration showing how to forward kube pod logs to your loki gateway service and configure the searchable labels.
 
 ```yaml
   overrides:
     vector:
-      # -- Configure vector's log level (useful for debugging)
-      # logLevel: 'debug'
-
-      # -- (optional) use the mirrored container registry
+      # -- (optional) use container image from a mirrored registry
       #image:
-      #  repository: example.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector
-
-      # -- (optional) Configure log transforms (see https://vector.dev/docs/reference/configuration/transforms/)
-      transforms:
-        # -- Example to sample every 100th log message (useful for debugging)
-        # sampled-kube-pods:
-        #   type: sample
-        #   inputs:
-        #     - in.kube-pods
-        #   rate: 100
-
-        # -- Drop kubernetes.node_labels and kubernetes.namespace_labels to reduce storage
-        kube-pods-json:
-          type: remap
-          inputs:
-            - in.kube-pods
-          drop_on_error: false
-          drop_on_abort: false
-          source: |
-            if exists(.kubernetes.node_labels) {
-              del(.kubernetes.node_labels)
-            }
-            if exists(.kubernetes.namespace_labels) {
-              del(.kubernetes.namespace_labels)
-            }
+      #  repository: example.dkr.ecr-fips.us-east-1.amazonaws.com/timberio/vector
 
       # -- Set destinations for the logs (see https://vector.dev/docs/reference/configuration/sinks/)
       sinks:
-        # -- write sampled logs to console (useful for debugging)
-        #stdout:
-        #  type: console
-        #  inputs:
-        #    - sampled-kube-pods
-        #  encoding:
-        #    codec: json
-
         # -- Forward logs to loki
         loki:
           type: loki
@@ -68,14 +27,14 @@ Make sure to update as appropriate for your use case.
             codec: json
           # -- The source inputs from transforms or raw 'in.kube-pods'
           inputs:
-            - kube-pods-json
+            - in.kube-pods
           # -- Searchable labels that will be available in grafana
           # -- (see https://grafana.com/docs/loki/latest/get-started/labels/bp-labels/)
           labels:
             k8s_namespace: "{{ kubernetes.pod_namespace }}"
             k8s_pod_name: "{{ kubernetes.pod_name }}"
             k8s_container_name: "{{ kubernetes.container_name }}"
-            apollo_entity_id: "{{ .kubernetes.pod_annotations.\"apollo.palantir.com/metadata.entity.id\" }}"
+            apollo_entity_id: "{{ .palantir.apolloEntityId }}"
           # -- The loki gateway domain name
           endpoint: https://loki-gateway.<monitoring-namespace>.svc.cluster.local
           tls:
