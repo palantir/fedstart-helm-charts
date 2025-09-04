@@ -8,13 +8,7 @@ Refer to the Vector [README](https://github.com/vectordotdev/helm-charts/tree/de
 
 ### Config Overrides
 
-This is an example configuration intended to show options when configuring vector.
-
-- Transform the kube pod logs, dropping the node_labels and namespace_labels
-- Forward the transformed pod logs to loki gateway service and configures searchable labels
-- The commented out sections which sample every 100th log message and print it to the vector pod logs which can be useful for debugging.
-
-Make sure to update as appropriate for your use case.
+This is an example configuration showing how to forward kube pod logs to your loki gateway service and configure the searchable labels.
 
 ```yaml
   overrides:
