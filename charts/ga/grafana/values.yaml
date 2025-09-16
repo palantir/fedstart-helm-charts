@@ -2,11 +2,26 @@
 
 ## Sub-chart value overrides
 grafana:
+
   # Override if using mirrored container images
   # global:
   #   # -- Overrides the Docker registry globally for all images
+  #   # Use only the base registry URL (e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com) - no /<repo>
   #   imageRegistry: null
 
+  # The `registry` value below will be overriden if the global.imageRegistry above is set.
+  # The `repository` value will be appended after the registry. 
+  # 
+  # If you put 123456789012.dkr.ecr.us-east-1.amazonaws.com/grafana for the registry and do not override the repository,
+  # the result will be "123456789012.dkr.ecr.us-east-1.amazonaws.com/grafana/grafana/grafana/3.5.3" (triple "grafana")
+  # 
+  # Please ensure that you override both the registry and the repository if needed.
+  #
+  image:
+    registry: docker.io
+    repository: grafana/grafana
+    tag: "3.5.3"
+  
   # baseURL -- Configures the root URL for grafana (required)
   baseURL: "__REPLACE_ME_BASE_URL"
   # domainAlias -- mission manager domain alias for the baseURL

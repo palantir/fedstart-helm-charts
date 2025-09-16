@@ -4,7 +4,8 @@
 vector:
   image:
     # Override if using mirrored container images
-    # repository: timberio/vector
+    repository: timberio/vector
+    tag: ""
 
     # Use distroless-static images instead of distroless-libc to reduce CVE footprint
     base: distroless-static

@@ -10,9 +10,11 @@ fedstart:
 loki:
 
   # Override if using mirrored container images
-  # image:
-  #   # -- Overrides the Docker registry globally for all images
-  #   registry: null
+  # Note: There are three of these in this file! Override all.
+  image:
+    registry: docker.io
+    repository: grafana/loki
+    tag: 3.5.3
 
   nameOverride: loki
   fullnameOverride: loki
@@ -189,6 +191,13 @@ loki:
       publishNotReadyAddresses: true
 
   gateway:
+
+    # Override if using mirrored container images
+    image:
+      registry: docker.io
+      repository: nginxinc/nginx-unprivileged
+      tag: 1.29-alpine
+
     readinessProbe:
       httpGet:
         path: /
@@ -239,6 +248,12 @@ loki:
                   - fedstart
 
   sidecar:
+
+    # Override if enabled & using mirrored container images
+    image:
+      repository: kiwigrid/k8s-sidecar
+      tag: 1.30.7
+
     rules:
       enabled: false
     securityContext:

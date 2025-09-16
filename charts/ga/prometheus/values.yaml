@@ -11,8 +11,9 @@ prometheus:
 
   server:
     # Override if using mirrored container images
-    # image:
-    #   repository: quay.io/prometheus/prometheus
+    image:
+      repository: quay.io/prometheus/prometheus
+      tag: ""
 
     fullnameOverride: prometheus
 
