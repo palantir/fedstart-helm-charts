@@ -34,22 +34,19 @@ The Apollo secret specified by `externalDatabase.existingSecret` should contain 
 
 | Key        | Value                                       |
 |------------|---------------------------------------------|
-| `db`       | Name of database you are using for Keycloak |
-| `host`     | Database endpoint                           |
-| `port`     | Database ingress port                       |
 | `user`     | Database user username                      |
 | `password` | Database user password                      |
 
 ## Sample Apollo Configuration Overrides
 
 ```yaml
-21.3.1006:
+25.2.0000:
   overrides:
     keycloak:
       image:
         registry: 1234.dkr.ecr-fips.us-gov-west-1.amazonaws.com
         repository: charts/keycloak
-        tag: 24.0.4-debian-12-r1
+        tag: 26.3.3-debian-12-r0
          
       # Set the admin user password using an existing secret
       auth:
@@ -57,5 +54,8 @@ The Apollo secret specified by `externalDatabase.existingSecret` should contain 
 
       # Configure the external DB connection settings using an existing secret
       externalDatabase:
+        host: "__REPLACE_ME_DATABASE_HOST_DOMAIN"
+        port: 5432
+        database: keycloak
         existingSecret: '{{ preprocess .Values.apollo.secrets.keycloakdb.k8sSecretName }}'
 ```
