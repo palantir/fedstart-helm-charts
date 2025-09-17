@@ -10,15 +10,16 @@ keycloak:
     enabled: false
 
   externalDatabase:
+    host: "__REPLACE_ME_DATABASE_HOST_DOMAIN"
+    port: 5432
+    database: keycloak
     existingSecret: secret
-    existingSecretDatabaseKey: db
-    existingSecretHostKey: host
-    existingSecretPortKey: port
     existingSecretPasswordKey: password
     existingSecretUserKey: user
 
-  containerSecurityContext:
-    seLinuxOptions: null
+  global:
+    compatibility:
+      omitEmptySeLinuxOptions: true
 
   service:
     headless:
@@ -34,7 +35,7 @@ keycloak:
 
   tls:
     enabled: true
-    usePem: true
+    usePemCerts: true
     existingSecret: "cert-{{ .Release.Name }}"
 
   extraEnvVars:
