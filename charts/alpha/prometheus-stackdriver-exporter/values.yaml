@@ -9,6 +9,7 @@ prometheus-stackdriver-exporter:
         - "bigquery.googleapis.com/"
         - "pubsub.googleapis.com/"
         - "cloudkms.googleapis.com/"
+        - "aiplatform.googleapis.com/"
 
   extraEnv:
     - name: GOOGLE_APPLICATION_CREDENTIALS
