@@ -1,0 +1,103 @@
+alloy:
+  global:
+    # podSecurityContext -- Ensures all future container additions are not run as root.
+    podSecurityContext:
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+
+  # subchart overrides for the alloy container
+  alloy:
+    # Config map deployed via helm that represents a pipeline in alloy river config language
+    # Can be used to configure data sources, transform stages, and sinks
+    # Example below scrapes alloy pod metrics and sends them to Prometheus in the same namespace
+    configMap:
+      create: true
+      content: |-
+        discovery.kubernetes "alloy_pods" {
+          namespaces {
+            names = ["{{ .Release.Namespace }}"]
+          }
+          role = "pod"
+          selectors {
+            role = "pod"
+            label = "app.kubernetes.io/name=alloy"
+          }
+        }
+
+        prometheus.remote_write "default" {
+          endpoint {
+            url = "https://prometheus.{{ .Release.Namespace }}.svc.cluster.local:80/api/v1/write"
+          }
+        }
+
+        prometheus.scrape "alloy_pods" {
+          targets         = discovery.kubernetes.alloy_pods.targets
+          metrics_path    = "/metrics"
+          scrape_interval = "30s"
+          scrape_timeout  = "10s"
+          forward_to      = [prometheus.remote_write.default.receiver]
+        }
+
+    # securityContext -- ensure the alloy container is not run as root.
+    # 473 is the default alloy UID.
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 473
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+    
+    reportUsage: false
+
+    # Mount Rubix custom CA cert to alloy container
+    mounts:
+      extra:
+        - name: tls-external-ca-bundle
+          mountPath: "/etc/ssl/rubix-ca"
+
+  # subchart overrides for the config-reloader container
+  configReloader:
+    # securityContext -- ensure the config reloader container is not run as root.
+    # 473 is the default alloy UID created by alloy docker image.
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+
+  controller:
+    # Run grafana alloy as a deployment
+    # Can be a 'deployment', 'daemonset', or 'statefulset'
+    type: deployment
+
+    # Ignored when controller.type is 'daemonset'.
+    replicas: 1
+
+    # Rubix custom CA cert as config map
+    volumes:
+      extra:
+        - name: tls-external-ca-bundle
+          configMap:
+            name: "tls-external-ca-pem-bundle"
+            items:
+              - key: ca.pem
+                path: ca.pem
+
+  rbac:
+    create: false
+
+  # affinity -- Configures the affinity for alloy pods.
+  # Ensures that workloads are mapped to nodes in the fedstart instance group.
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - fedstart
