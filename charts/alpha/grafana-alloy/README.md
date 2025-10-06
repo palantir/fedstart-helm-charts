@@ -6,9 +6,10 @@ A Palantir Fedstart compliant helm-chart that configures [grafana-alloy](https:/
 
 Refer to the upstream Grafana documentation for alloy [here](https://grafana.com/docs/alloy/latest/configure/kubernetes/) for all available upstream configuration options. Further information on alloy can also be found at the source repo [README](https://github.com/grafana/alloy/blob/main/README.md).
 
-### Defaults
+### Defaults
 
 Alloy in this helm chart has been configured with the following important defaults:
+
 - Runs as a deployment: alloy can be run as a stateful-set, deployment, or daemonset. This helm chart deploys allow as a deployment. This is overridden by the `alloy.controller.type` field.
 - Replicas: the deployment is given a single replica.
 - Collection: this deployment configures alloy to scrape it's own pods for metrics.
