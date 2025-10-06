@@ -48,7 +48,7 @@ alloy:
       capabilities:
         drop:
           - ALL
-    
+
     reportUsage: false
 
     # Mount Rubix custom CA cert to alloy container
