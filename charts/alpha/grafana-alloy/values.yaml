@@ -28,6 +28,9 @@ alloy:
         prometheus.remote_write "default" {
           endpoint {
             url = "https://prometheus.{{ .Release.Namespace }}.svc.cluster.local:80/api/v1/write"
+            tls_config {
+              ca_file = "/etc/ssl/rubix-ca/ca.pem"
+            }
           }
         }
 
