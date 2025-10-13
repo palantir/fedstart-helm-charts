@@ -96,7 +96,6 @@ $ apollo-cli product-release helm-chart init \
     --repository-url "oci://12345.dkr.ecr-fips.us-east-1.amazonaws.com/vector" \
     --maven-coordinate "com.palantir.vector:vector-aggregator:0.45.0002" \
     --output-dir ./build
-Publishing product release com.palantir.vector:vector-aggregator:0.45.0002 into Apollo ... done
 ```
 
 The manifest will be saved to the output directory specified by the `--output-dir` flag. This manifest can then be used to publish the helm-chart to an Apollo environment.
@@ -116,7 +115,7 @@ vector:
     repository: 12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector
 ```
 
-And when publishing a new product release you would add `--values <filename>` to the publish command like:
+And when publishing a new product release you would add `--values <filename>` to the product-release init command:
 
 ```shell
 $ apollo-cli product-release helm-chart init \
