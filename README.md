@@ -53,7 +53,7 @@ $ helm push ./build/<packaged-helm-chart> <helm-repository-url>
 
 ### Example: Using Amazon Elastic Container Registry (ECR)
 
-The following example packages the [vector](./charts/beta/vector) helm-chart, pushes it to ECR, and creates a new product-release in Apollo.
+The following example packages the [vector](./charts/ga/vector) helm-chart, pushes it to ECR, and creates a new product-release in Apollo.
 
 Pre-requisites:
 
@@ -66,7 +66,7 @@ From the root of this repository:
 
 ```shell
 # Build helm dependencies for the vector helm-chart
-$ helm dependency build ./charts/beta/vector --repository-config helm-repositories.yaml
+$ helm dependency build ./charts/ga/vector --repository-config helm-repositories.yaml
 Hang tight while we grab the latest from your chart repositories...
 ...Successfully got an update from the "vector" chart repository
 Update Complete. ⎈Happy Helming!⎈
@@ -75,30 +75,37 @@ Downloading vector from repo https://helm.vector.dev
 Deleting outdated charts
 
 # Package the vector helm-chart
-$ helm package -d ./build ./charts/beta/vector
-Successfully packaged chart and saved it to: build/vector-0.31.1001.tgz
+$ helm package -d ./build ./charts/ga/vector
+Successfully packaged chart and saved it to: build/vector-0.45.0002.tgz
 
 # Get an AWS access-token and log into ECR using helm
 $ aws ecr get-login-password | helm registry login --username AWS --password-stdin 12345.dkr.ecr-fips.us-east-1.amazonaws.com
 Login Succeeded
 
 # Push the packaged helm-chart to ECR
-$ helm push ./build/vector-0.31.1001.tgz 12345.dkr.ecr-fips.us-east-1.amazonaws.com
-Pushed: 12345.dkr.ecr-fips.us-east-1.amazonaws.com/vector:0.31.1001
+$ helm push ./build/vector-0.45.0002.tgz 12345.dkr.ecr-fips.us-east-1.amazonaws.com
+Pushed: 12345.dkr.ecr-fips.us-east-1.amazonaws.com/vector:0.45.0002
 Digest: sha256:83fde30c20f51e3e1a071bddc21d0f0b4662002678dc5eb3b62c666bd0d568b9
 ```
 
-Once the packaged helm-chart is pushed to the container registry, we can now create an Apollo product-release which will be used to create a helm-chart entity in an Apollo environment.
+Once the packaged helm-chart is pushed to the container registry, we can now create a manifest to be used in the Apollo product-release. This manifest will be used to create a helm-chart entity in an Apollo environment.
 
 ```shell
-$ apollo-cli publish helm-chart \
-    --chart-file ./build/vector-0.31.1001.tgz \
-    --helm-repository-url "oci://12345.dkr.ecr-fips.us-east-1.amazonaws.com/vector" \
-    --maven-coordinate "com.palantir.vector:vector-aggregator:0.31.1001"
-Publishing product release com.palantir.vector:vector-aggregator:0.31.1001 into Apollo ... done
+$ apollo-cli product-release helm-chart init \
+    --chart-path ./build/vector-0.45.0002.tgz \
+    --repository-url "oci://12345.dkr.ecr-fips.us-east-1.amazonaws.com/vector" \
+    --maven-coordinate "com.palantir.vector:vector-aggregator:0.45.0002" \
+    --output-dir ./build
 ```
 
-Note, if using mirrored container images the generated manifest must have the mirrored image OCI paths. The apollo-cli `--helm-values` flag allows you to specify a local values.yaml with image repository overrides to be used when generating the manifest. This only applies to the generated manifest, the mirror repository will still need to set in Apollo configuration overrides.
+The manifest will be saved to the output directory specified by the `--output-dir` flag. This manifest can then be used to publish the helm-chart to an Apollo environment.
+
+```shell
+$ apollo-cli product-release create \
+    --manifest-file ./build/manifest.yaml
+```
+
+Note, if using mirrored container images the generated manifest must have the mirrored image OCI paths. The apollo-cli `--values` flag allows you to specify a local values.yaml with image repository overrides to be used when generating the manifest. This only applies to the generated manifest, the mirror repository will still need to set in Apollo configuration overrides.
 
 For example, if you mirror the vector container image from `timberio/vector:0.31.1-distroless-static` to `12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector:0.31.1-distroless-static` then the OCI path in the published manifest must be the ECR hosted path. To accomplish this you could can provide the path overrides in a separate values.yaml file for use during release publication. The separate `publish-values.yaml` for vector may look like:
 
@@ -108,14 +115,15 @@ vector:
     repository: 12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector
 ```
 
-And when publishing a new product release you would add `--helm-values <filename>` to the publish command like:
+And when publishing a new product release you would add `--values <filename>` to the product-release init command:
 
 ```shell
-$ apollo-cli publish helm-chart \
-    --chart-file ./build/vector-0.31.1001.tgz \
-    --helm-repository-url "oci://12345.dkr.ecr-fips.us-east-1.amazonaws.com/timberio-vector" \
-    --maven-coordinate "com.palantir.vector:vector-aggregator:0.31.1001" \
-    --helm-values publish-values.yaml
+$ apollo-cli product-release helm-chart init \
+    --chart-path ./build/vector-0.45.0002.tgz \
+    --repository-url "oci://12345.dkr.ecr-fips.us-east-1.amazonaws.com/vector" \
+    --maven-coordinate "com.palantir.vector:vector-aggregator:0.45.0002" \
+    --output-dir ./build \
+    --values publish-values.yaml
 ```
 
 ## Release Process
