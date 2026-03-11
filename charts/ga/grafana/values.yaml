@@ -38,7 +38,7 @@ grafana:
       type: postgres
       host: "__REPLACE_ME_DATABASE_HOST_DOMAIN"
       name: grafana
-      ssl_mode: require
+      ssl_mode: verify-ca
       # note, database username and password set in environment variables set by secret
       ca_cert_path: /etc/ssl/rubix-ca/ca.pem
       client_cert_path: /mnt/secrets/certs/tls.crt
