@@ -1,8 +1,8 @@
 # Grafana
 
-A Palantir Fedstart compliant helm-chart that configures [Grafana](https://github.com/grafana/grafana).
+A Palantir Fedstart compliant helm-chart that configures [Grafana](https://github.com/grafana-community/helm-charts/tree/main/charts/grafana).
 
-High availability Grafana in FedStart requires using an external database for Grafana configuration, dashboards, etc.  Contact your Palantir representative to setup a postgres RDS instance for Grafana.
+High availability Grafana in FedStart requires using an external database for Grafana configuration, dashboards, etc.
 
 ## Configuration
 
@@ -30,7 +30,7 @@ The following are the minimal required configuration overrides:
           host: "example.us-gov-west-1.rds.amazonaws.com:5432"
 ```
 
-> Refer to the Grafana [README](https://github.com/grafana/helm-charts/tree/main/charts/grafana#configuration) for all available upstream configuration options.
+> Refer to the Grafana [README](https://github.com/grafana-community/helm-charts/tree/main/charts/grafana#configuration) for all available upstream configuration options.
 
 Sample Apollo configuration overrides with loki and prometheus datasources:
 
