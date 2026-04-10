@@ -55,6 +55,8 @@ loki:
     storage:
       type: s3
       s3:
+        http_config:
+          ca_file: /etc/ssl/rubix-ca/ca.pem
         region: us-gov-west-1
       bucketNames:
         # Enter the name(s) of the buckets to use

@@ -18,6 +18,10 @@ grafana:
   admin:
     existingSecret: "__REPLACE_ME_ADMIN_CREDENTIALS_SECRET_NAME"
 
+  # Set CA path for datasources
+  env:
+    SSL_CERT_FILE: "/etc/ssl/rubix-ca/ca.pem"
+
   # Load GF_DATABASE_USER and GF_DATABASE_PASSWORD environment variables from secret
   envFromSecrets:
     - name: "__REPLACE_ME_DB_CREDENTIALS_SECRET_NAME"
