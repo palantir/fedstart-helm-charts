@@ -27,6 +27,7 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 | [Prometheus Stackdriver Exporter](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/prometheus-stackdriver-exporter) | Alpha  |
 | [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)                                                     | Alpha  |
 | [Memcached](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/memcached)                                             | Alpha  |
+
 ## Versioning
 
 This repository uses chart specific labels to tag versions of each chart. The label structure should following the following convention: `<chart-name>-<oss-version-number><fedstart-version-number>`. Ex: `prometheus-25.10.3002`, where:
