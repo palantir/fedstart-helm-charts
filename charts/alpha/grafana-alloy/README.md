@@ -1,4 +1,4 @@
-# Grafana Agent
+# Grafana Alloy
 
 A Palantir Fedstart compliant helm-chart that configures [grafana-alloy](https://github.com/grafana/alloy).
 
