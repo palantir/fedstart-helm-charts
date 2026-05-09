@@ -11,7 +11,6 @@ data:
     api:
       enabled: true
       address: 0.0.0.0:8686
-      playground: false
     # https://vector.dev/docs/reference/configuration/sources/vector/
     sources:
       daemonset:
