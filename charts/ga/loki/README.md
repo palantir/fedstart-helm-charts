@@ -4,7 +4,7 @@ A Palantir Fedstart compliant helm-chart for [loki](https://github.com/grafana/l
 
 ## Configuration
 
-Refer to the Loki [documentation](https://grafana.com/docs/loki/next/setup/install/helm/reference/) or the sub-chart [values.yaml](https://github.com/grafana/loki/blob/main/production/helm/loki/values.yaml) for all available upstream configuration options
+Refer to the Loki [documentation](https://grafana.com/docs/loki/next/setup/install/helm/reference/) or the sub-chart [values.yaml](https://github.com/grafana-community/helm-charts/blob/main/charts/loki/values.yaml) for all available upstream configuration options
 
 ### Pre-requisites
 
@@ -22,7 +22,7 @@ The following config overrides must be applied to Loki when installing for the f
   overrides:
     fedstart:
       s3:
-        aws_role_arn: "arn:aws-us-gov:iam::<account-number>:role/fedstart-default-role"
+        aws_role_arn: "arn:aws-us-gov:iam::<account-number>:role/observability"
     loki:
       loki:
         storage:

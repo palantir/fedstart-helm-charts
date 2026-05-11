@@ -74,6 +74,7 @@ prometheus:
         type: RuntimeDefault
 
     service:
+      servicePort: 443
       annotations:
         com.palantir.rubix.service/pod-cert: '{"staticReplicaCount":1}'
 
