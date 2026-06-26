@@ -45,8 +45,6 @@ grafana:
       ssl_mode: verify-ca
       # note, database username and password set in environment variables set by secret
       ca_cert_path: /etc/ssl/rubix-ca/ca.pem
-      client_cert_path: /mnt/secrets/certs/tls.crt
-      client_key_path: /mnt/secrets/certs/tls.key
     auth.anonymous:
       enabled: false
     users:
