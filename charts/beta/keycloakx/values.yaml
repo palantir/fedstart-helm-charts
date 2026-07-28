@@ -1,0 +1,140 @@
+global:
+  fedstart:
+    hostname: "__REPLACE_ME_KEYCLOAK_URL"
+    contextPath: '/auth'
+    domainAlias: DEFAULT
+    instanceGroup: fedstart
+
+keycloakx:
+
+  # Override if using mirrored container images
+  # image:
+  #   repository: null
+
+  # Run in high availability mode
+  replicas: 2
+
+  # Configure the startup command
+  command:
+    - "/opt/keycloak/bin/kc.sh"
+    - "--verbose"
+    - "start"
+    - "--https-port=8443"
+    - "--http-enabled=false"
+    - "--spi-events-listener-jboss-logging-success-level=info"
+    - "--spi-events-listener-jboss-logging-error-level=warn"
+    - "--db-tls-mode=verify-server"
+    - "--db-tls-trust-store-file=/etc/ssl/rubix-ca/ca.pem"
+
+  extraEnv: |
+    # Set hostname for http-strict
+    - name: KC_HOSTNAME
+      value: "{{ .Values.global.fedstart.hostname | trimSuffix "/" }}{{ .Values.global.fedstart.contextPath }}"
+    # Configure TLS certificate
+    - name: KC_HTTPS_CERTIFICATE_FILE
+      value: "/mnt/secrets/certs/tls.crt"
+    - name: KC_HTTPS_CERTIFICATE_KEY_FILE
+      value: "/mnt/secrets/certs/tls.key"
+    - name: KC_HTTPS_CERTIFICATES_RELOAD_PERIOD
+      value: '-1'
+    # Set the truststore
+    - name: KC_TRUSTSTORE_PATHS
+      value: /etc/ssl/rubix-ca/ca.pem
+    - name: JAVA_OPTS_APPEND
+      value: >-
+        -XX:MaxRAMPercentage=50.0
+        -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+
+  # Load KC_BOOTSTRAP_ADMIN_USERNAME and KC_BOOTSTRAP_ADMIN_PASSWORD environment variables from secret
+  extraEnvFrom: |
+    - secretRef:
+        name: "__REPLACE_ME_ADMIN_CREDENTIALS_SECRET_NAME"
+
+  service:
+    annotations:
+      com.palantir.rubix.service/pod-cert: '{}'
+      com.palantir.rubix.service.spp/v3: '{"endpoints":[{"name":"https","prefix":"{{ .Values.global.fedstart.contextPath }}","domain-aliases":["{{ .Values.global.fedstart.domainAlias }}"]}]}'
+
+  serviceHeadless:
+    annotations:
+      com.palantir.rubix.service/pod-cert: '{}'
+
+  http:
+    relativePath: '{{ .Values.global.fedstart.contextPath | regexFind "^/.*" | required "global.fedstart.contextPath must start with /" }}'
+    internalScheme: HTTPS
+
+  # setup external postgres database
+  database:
+    vendor: postgres
+    hostname: "__REPLACE_ME_DATABASE_HOST_DOMAIN"
+    port: 5432
+    database: keycloak
+    username: postgres
+    existingSecret: "__REPLACE_ME_DB_CREDENTIALS_SECRET_NAME"
+    existingSecretKey: "rdspassword"
+
+  # mount the TLS certificate and truststore created from the pod-cert annotation
+  extraVolumes: |
+    - name: keycloak-tls-certs
+      secret:
+        secretName: cert-keycloakx-http
+    - name: tls-external-ca-bundle
+      configMap:
+        name: "tls-external-ca-pem-bundle"
+        items:
+          - key: ca.pem
+            path: ca.pem
+  extraVolumeMounts: |
+    - name: keycloak-tls-certs
+      mountPath: /mnt/secrets/certs
+      readOnly: true
+    - name: tls-external-ca-bundle
+      mountPath: "/etc/ssl/rubix-ca"
+
+  podSecurityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+
+  affinity: |
+    {{- if .Values.global.fedstart.instanceGroup }}
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: com.palantir.rubix/instance-group
+                operator: In
+                values:
+                  - {{ .Values.global.fedstart.instanceGroup }}
+    {{- end }}
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              {{- include "keycloak.selectorLabels" . | nindent 10 }}
+            matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: NotIn
+                values:
+                  - test
+          topologyKey: kubernetes.io/hostname
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                {{- include "keycloak.selectorLabels" . | nindent 12 }}
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: NotIn
+                  values:
+                    - test
+            topologyKey: topology.kubernetes.io/zone
