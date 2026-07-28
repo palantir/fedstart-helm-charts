@@ -23,6 +23,7 @@ Each Helm chart subdirectory should include the LICENSE of the original open sou
 | [Vector](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/ga/vector)                                                      | GA     |
 | [Grafana](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/ga/grafana)                                                    | GA     |
 | [Keycloak](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/keycloak)                                                | Beta   |
+| [Keycloakx](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/beta/keycloakx)                                              | Beta   |
 | [Grafana Alloy](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/grafana-alloy)                                     | Alpha  |
 | [Prometheus Stackdriver Exporter](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/prometheus-stackdriver-exporter) | Alpha  |
 | [Redis](https://github.com/palantir/fedstart-helm-charts/tree/develop/charts/alpha/redis)                                                     | Alpha  |
