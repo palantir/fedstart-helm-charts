@@ -20,5 +20,5 @@ version: 0.56.0001
 # https://github.com/helm/helm/issues/9027
 dependencies:
   - name: vector
-    version: "0.56.0"
+    version: "0.57.0"
     repository: https://helm.vector.dev
