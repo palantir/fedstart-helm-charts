@@ -105,6 +105,10 @@ loki:
     extraEnvFrom:
       - configMapRef:
           name: loki-aws-s3-config
+          optional: true
+      - configMapRef:
+          name: loki-azure-config
+          optional: true
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
@@ -137,6 +141,10 @@ loki:
     extraEnvFrom:
       - configMapRef:
           name: loki-aws-s3-config
+          optional: true
+      - configMapRef:
+          name: loki-azure-config
+          optional: true
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
@@ -169,6 +177,10 @@ loki:
     extraEnvFrom:
       - configMapRef:
           name: loki-aws-s3-config
+          optional: true
+      - configMapRef:
+          name: loki-azure-config
+          optional: true
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
@@ -230,6 +242,10 @@ loki:
     extraEnvFrom:
       - configMapRef:
           name: loki-aws-s3-config
+          optional: true
+      - configMapRef:
+          name: loki-azure-config
+          optional: true
     extraVolumeMounts:
       - name: cert-secret-volume
         mountPath: "/mnt/secrets/certs"
