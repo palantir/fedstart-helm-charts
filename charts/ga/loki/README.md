@@ -1,6 +1,6 @@
 # loki
 
-A Palantir FedStart-compliant Helm chart for [Loki](https://github.com/grafana/loki), deployed in [simple-scalable](https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable) mode with Amazon S3 (default) or Azure Blob Storage for object storage.
+A Palantir FedStart-compliant Helm chart for [Loki](https://github.com/grafana/loki), deployed in [simple-scalable](https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable) mode with Amazon S3 or Azure Blob Storage for object storage.
 
 ## Configuration
 
