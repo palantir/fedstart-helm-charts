@@ -35,12 +35,12 @@ See the Loki [Helm reference](https://grafana.com/docs/loki/next/setup/install/h
 
 Targets Azure Government; see the note below for commercial Azure.
 
-### Prerequisites
+### Prerequisites <!-- markdownlint-disable-line MD024 -->
 
 1. A storage account and blob container for the Loki data.
 2. A user-assigned identity granting the `monitoring:loki` service account the **Storage Blob Data Contributor** role on the account.
 
-### Override values
+### Override values <!-- markdownlint-disable-line MD024 -->
 
 Start from [`values-azure.yaml`](./values-azure.yaml) and fill in the `__REPLACE_ME_*` placeholders:
 
