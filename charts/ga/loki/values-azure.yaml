@@ -1,0 +1,35 @@
+# Example override for deploying this Loki chart against Azure Blob Storage (Azure Government)
+fedstart:
+  azure:
+    client_id: "__REPLACE_ME_AZURE_CLIENT_ID"   # user_assigned_identities.observability.client_id
+    tenant_id: "__REPLACE_ME_AZURE_TENANT_ID"   # tenant_id
+    # authority_host / cloud default to Azure Government (login.microsoftonline.us /
+    # AzureUSGovernmentCloud). Override here for Azure commercial.
+
+loki:
+  loki:
+    schemaConfig:
+      configs:
+        - from: "2024-04-01"
+          store: tsdb
+          object_store: azure
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    storage:
+      type: azure
+      bucketNames:
+        # For the azure backend these are blob CONTAINER names (become container_name).
+        chunks: "__REPLACE_ME_CONTAINER"
+        ruler: "__REPLACE_ME_CONTAINER"
+      use_thanos_objstore: true
+      object_store:
+        type: azure
+        azure:
+          account_name: "__REPLACE_ME_STORAGE_ACCOUNT"
+          endpoint_suffix: blob.core.usgovcloudapi.net   # Azure Government
+          use_federated_token: true
+    compactor:
+      retention_enabled: true
+      delete_request_store: azure

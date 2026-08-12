@@ -1,3 +1,4 @@
+{{- if eq .Values.loki.loki.storage.type "s3" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,3 +11,19 @@ data:
   AWS_USE_FIPS_ENDPOINT: {{ quote .Values.fedstart.s3.aws_use_fips }}
   AWS_WEB_IDENTITY_TOKEN_FILE: "/var/run/secrets/kubernetes.io/serviceaccount/token"
 ---
+{{- end }}
+{{- if .Values.fedstart.azure }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-azure-config
+  labels:
+    {{- include "loki.labels" .Subcharts.loki | nindent 4 }}
+data:
+  AZURE_CLIENT_ID: {{ .Values.fedstart.azure.client_id | quote }}
+  AZURE_TENANT_ID: {{ .Values.fedstart.azure.tenant_id | quote }}
+  AZURE_AUTHORITY_HOST: {{ .Values.fedstart.azure.authority_host | default "https://login.microsoftonline.us" | quote }}
+  AZURE_CLOUD: {{ .Values.fedstart.azure.cloud | default "AzureUSGovernmentCloud" | quote }}
+  AZURE_FEDERATED_TOKEN_FILE: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+---
+{{- end }}
