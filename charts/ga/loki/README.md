@@ -20,12 +20,12 @@ See the Loki [Helm reference](https://grafana.com/docs/loki/next/setup/install/h
   overrides:
     fedstart:
       s3:
-        aws_role_arn: "arn:aws-us-gov:iam::<account>:role/observability"
+        aws_role_arn: "arn:aws-us-gov:iam::<account-number>:role/observability"
     loki:
       loki:
         storage:
           s3:
-            region: us-gov-west-1
+            region: <region>
           bucketNames:
             chunks: <bucket-name>
             ruler: <bucket-name>
