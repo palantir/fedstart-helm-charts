@@ -42,8 +42,6 @@ Targets Azure Government; see the note below for commercial Azure.
 
 ### Override values <!-- markdownlint-disable-line MD024 -->
 
-Start from [`values-azure.yaml`](./values-azure.yaml) and fill in the `__REPLACE_ME_*` placeholders:
-
 ```yaml
 6.2.0004:
   overrides:
